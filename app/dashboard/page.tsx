@@ -207,6 +207,17 @@ export default function UserDashboard() {
   const [isActionModalOpen, setIsActionModalOpen] = useState(false);
   const [activeReq, setActiveReq] = useState<any>(null);
 
+  // STATE UNTUK ADDENDUM NPHD
+  const [isAddendumModalOpen, setIsAddendumModalOpen] = useState(false);
+  const [selectedHibahForAddendum, setSelectedHibahForAddendum] = useState<any>(null);
+  const [addendumForm, setAddendumForm] = useState({
+    nomor_addendum: '',
+    tanggal_addendum: '',
+    nominal_baru: '',
+    file_addendum: '' // Link Google Drive
+  });
+  const [isSubmittingAddendum, setIsSubmittingAddendum] = useState(false);
+
   const fetchData = async () => {
     setIsLoading(true);
     const { data: { user } } = await supabase.auth.getUser();
@@ -230,6 +241,8 @@ export default function UserDashboard() {
         setRequests(requestData);
         const activeId = requestData[0].id;
         fetchChildData(activeId);
+      } else {
+        setRequests([]);
       }
     }
     setIsLoading(false);
@@ -249,6 +262,43 @@ export default function UserDashboard() {
     await supabase.auth.signOut();
     router.push('/login');
   };
+
+  // --- HANDLER ADDENDUM NPHD ---
+  const handleNominalAddendumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, '');
+    const formatted = value ? Number(value).toLocaleString('id-ID') : '';
+    setAddendumForm({ ...addendumForm, nominal_baru: formatted });
+  };
+
+  const handleSubmitAddendum = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmittingAddendum(true);
+    
+    try {
+      const rawNominal = addendumForm.nominal_baru.replace(/[^0-9]/g, '');
+
+      const { error } = await supabase.from('nphd_addendum').insert({
+        hibah_request_id: selectedHibahForAddendum.id,
+        nomor_addendum: addendumForm.nomor_addendum,
+        tanggal_addendum: addendumForm.tanggal_addendum,
+        nominal_baru: Number(rawNominal),
+        file_addendum: addendumForm.file_addendum, // Link Google Drive
+        status: 'Menunggu Verifikasi'
+      });
+
+      if (error) throw error;
+
+      alert('Berhasil! Addendum NPHD telah diajukan dan sedang menunggu verifikasi Provinsi.');
+      setIsAddendumModalOpen(false);
+      setAddendumForm({ nomor_addendum: '', tanggal_addendum: '', nominal_baru: '', file_addendum: '' });
+      fetchData(); 
+    } catch (error: any) {
+      alert('Gagal mengajukan addendum: ' + error.message);
+    } finally {
+      setIsSubmittingAddendum(false);
+    }
+  };
+  // -----------------------------
 
   const openModalBaru = () => {
     setFormData({
@@ -871,6 +921,21 @@ export default function UserDashboard() {
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
 
+                                {/* TOMBOL ADDENDUM (Tampil jika sudah lewat NPHD / Tahap 4) */}
+                                {req.tahap_sekarang >= 4 && (
+                                  <button 
+                                    onClick={() => {
+                                      setSelectedHibahForAddendum(req);
+                                      setIsAddendumModalOpen(true);
+                                    }}
+                                    className="bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-300 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-colors flex items-center justify-center gap-1"
+                                    title="Ajukan Addendum NPHD"
+                                  >
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                    Addendum
+                                  </button>
+                                )}
+
                                 {req.status_tahap === 'Perlu Usulan' && (
                                   <button onClick={() => openActionModal(req)} className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors">
                                     Kirim ke Provinsi
@@ -1277,8 +1342,82 @@ export default function UserDashboard() {
                 )}
 
                 <div className="pt-4 border-t flex gap-3">
-                  <button type="button" onClick={() => setIsActionModalOpen(false)} className="flex-1 bg-white border py-3 rounded-xl text-sm">Batal`;</button>
+                  <button type="button" onClick={() => setIsActionModalOpen(false)} className="flex-1 bg-white border py-3 rounded-xl text-sm">Batal</button>
                   <button type="submit" disabled={isSubmitting} className="flex-[2] bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm shadow-md">Simpan & Majukan Tahap</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* MODAL FORM PENGAJUAN ADDENDUM NPHD */}
+        {isAddendumModalOpen && selectedHibahForAddendum && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-200">
+              <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-amber-50">
+                <div>
+                  <h3 className="text-lg font-bold text-amber-900">Form Addendum NPHD</h3>
+                  <p className="text-xs text-amber-700">Kegiatan: {selectedHibahForAddendum.nama_kegiatan}</p>
+                </div>
+                <button onClick={() => setIsAddendumModalOpen(false)} className="text-amber-500 hover:text-amber-700 font-bold text-lg">✕</button>
+              </div>
+
+              <form onSubmit={handleSubmitAddendum} className="p-6 space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Nomor Surat Addendum *</label>
+                  <input 
+                    type="text" required 
+                    value={addendumForm.nomor_addendum} 
+                    onChange={(e) => setAddendumForm({...addendumForm, nomor_addendum: e.target.value})} 
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                    placeholder="Cth: 900/123/Add-Pemkab/2026"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Tanggal Addendum *</label>
+                  <input 
+                    type="date" required 
+                    value={addendumForm.tanggal_addendum} 
+                    onChange={(e) => setAddendumForm({...addendumForm, tanggal_addendum: e.target.value})} 
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Pagu / Nominal Baru (Setelah Addendum) *</label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-2 text-slate-500 font-bold text-sm">Rp</span>
+                    <input 
+                      type="text" required 
+                      value={addendumForm.nominal_baru} 
+                      onChange={handleNominalAddendumChange}
+                      className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 font-bold text-emerald-700"
+                      placeholder="0"
+                    />
+                  </div>
+                  <p className="text-[10px] text-slate-500 mt-1">Isi dengan total nominal final setelah ditambahkan/dikurangi sesuai addendum.</p>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Link Dokumen Addendum (Google Drive) *</label>
+                  <input 
+                    type="url" required 
+                    value={addendumForm.file_addendum} 
+                    onChange={(e) => setAddendumForm({...addendumForm, file_addendum: e.target.value})} 
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    placeholder="https://drive.google.com/..."
+                  />
+                  <p className="text-[10px] text-slate-500 mt-1">Pastikan hak akses link Google Drive diatur menjadi "Siapa saja yang memiliki link".</p>
+                </div>
+
+                <div className="pt-4 flex gap-3">
+                  <button type="button" onClick={() => setIsAddendumModalOpen(false)} className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-lg text-sm transition-colors">
+                    Batal
+                  </button>
+                  <button type="submit" disabled={isSubmittingAddendum} className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 rounded-lg text-sm shadow-sm transition-all disabled:opacity-70 flex justify-center items-center">
+                    {isSubmittingAddendum ? 'Memproses...' : 'Kirim Pengajuan'}
+                  </button>
                 </div>
               </form>
             </div>

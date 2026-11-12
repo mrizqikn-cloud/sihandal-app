@@ -18,94 +18,18 @@ const TAHAPAN_HIBAH = [
   "Pertanggungjawaban & Pelaporan"
 ];
 
-function getDaftarInputTahap(tahap: number) {
-  switch (tahap) {
-    case 1:
-      return [
-        { key: 'file_ba_pleno', label: 'BA Pleno Persetujuan' },
-        { key: 'file_surat', label: 'Surat Permohonan Hibah' },
-        { key: 'file_tor', label: 'Proposal Hibah' },
-        { key: 'file_rab', label: 'RAB Hibah' }
-      ];
-    case 2:
-      return [
-        { key: 'file_surat', label: 'Surat Konsultasi Rencana Penerimaan' },
-        { key: 'file_rab', label: 'RAB Hibah sesuai nilai sepakat Pemda' },
-        { key: 'file_tor', label: 'Data Pegawai & BMN Eksisting' },
-        { key: 'file_ba_pleno', label: 'BA/Surat Penetapan/Perda Pemda' }
-      ];
-    case 3:
-      return [
-        { key: 'file_surat', label: 'Surat Permohonan Ijin Prinsip' },
-        { key: 'file_tor', label: 'Rencana Kerja & TOR/KAK per RO' },
-        { key: 'file_rab', label: 'RAB Hibah' },
-        { key: 'file_ba_pleno', label: 'HPS/Hasil Survei, Data Pegawai & BMN' }
-      ];
-    case 4:
-      return [
-        { key: 'file_surat', label: 'Surat Permohonan & Draf NPHD' },
-        { key: 'file_rab', label: 'RAB Lampiran NPHD' },
-        { key: 'file_tor', label: 'Surat Ijin Prinsip' }
-      ];
-    case 5:
-      return [
-        { key: 'file_surat', label: 'Surat Permohonan Register Hibah' },
-        { key: 'file_tor', label: 'Ringkasan Hibah & NPHD Dilegalisir' },
-        { key: 'file_rab', label: 'RAB yang Dilegalisir' }
-      ];
-    case 6:
-      return [
-        { key: 'file_surat', label: 'Surat Permohonan Pembuatan Rekening' },
-        { key: 'file_ba_pleno', label: 'BA Pleno Penetapan Bank' },
-        { key: 'file_tor', label: 'Nomor Register Hibah' }
-      ];
-    case 7:
-      return [
-        { key: 'file_surat', label: 'Surat Permohonan Pencairan & NPHD' },
-        { key: 'file_rab', label: 'RAB & Pakta Integritas / SPTJM' },
-        { key: 'file_tor', label: 'Surat Keterangan Bank & Fotokopi KTP KPA' }
-      ];
-    case 8:
-      return [
-        { key: 'file_surat', label: 'Surat Permohonan Revisi DIPA' },
-        { key: 'file_rab', label: 'NPHD & RAB Dilegalisir' },
-        { key: 'file_tor', label: 'Ringkasan, Register Hibah & Izin Rekening' }
-      ];
-    case 9:
-      return [
-        { key: 'file_rab', label: 'RAB & TOR/KAK' },
-        { key: 'file_tor', label: 'Kalender Kegiatan & Dokumen Pengadaan' }
-      ];
-    case 10:
-      return [
-        { key: 'file_surat', label: 'DRPP (Daftar Rincian Penggunaan Dana)' },
-        { key: 'file_tor', label: 'SPP, SP2HL, SP4HL' },
-        { key: 'file_rab', label: 'Bukti Setor/Transfer Sisa Hibah' }
-      ];
-    case 11:
-      return [
-        { key: 'file_surat', label: 'Surat Laporan Penggunaan Hibah' },
-        { key: 'file_tor', label: 'Karwas Penggunaan Hibah, SPHL, SP3HL' },
-        { key: 'file_rab', label: 'Bukti Pengembalian Sisa Hibah' }
-      ];
-    default:
-      return [
-        { key: 'file_surat', label: 'Dokumen Pendukung' }
-      ];
-  }
-}
-
 export default function VerifikatorDashboard() {
   const router = useRouter();
   const [profile, setProfile] = useState<any>(null);
   const [requests, setRequests] = useState<any[]>([]);
-  const [activeReq, setActiveReq] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   
-  const [activeMenu, setActiveMenu] = useState<'verifikasi' | 'monitoring'>('verifikasi');
+  const [realisasiList, setRealisasiList] = useState<any[]>([]);
+  const [transaksiList, setTransaksiList] = useState<any[]>([]);
 
-  const [isRevisiModalOpen, setIsRevisiModalOpen] = useState(false);
-  const [alasanRevisi, setAlasanRevisi] = useState('');
+  const [selectedReq, setSelectedReq] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [alasanPenolakan, setAlasanPenolakan] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchData = async () => {
@@ -116,23 +40,27 @@ export default function VerifikatorDashboard() {
     const { data: profileData } = await supabase.from('profiles').select('*').eq('id', user.id).single();
     setProfile(profileData);
 
-    if (profileData && profileData.role === 'user') {
+    if (profileData && profileData.role !== 'verifikator' && profileData.role !== 'admin') {
       return router.push('/dashboard');
     }
 
-    const { data: requestData, error } = await supabase
+    const { data: requestData } = await supabase
       .from('hibah_requests')
       .select('*, profiles(full_name, asal_instansi)')
       .order('created_at', { ascending: false });
-      
-    if (error) {
-      console.error("Error mengambil data usulan:", error);
-      alert("Gagal mengambil data usulan. Pesan error: " + error.message);
-    } else if (requestData) {
+
+    if (requestData) {
       setRequests(requestData);
     }
-    
     setIsLoading(false);
+  };
+
+  const fetchChildData = async (requestId: string) => {
+    const { data: realData } = await supabase.from('realisasi_bulanan').select('*').eq('hibah_request_id', requestId).order('created_at', { ascending: true });
+    if (realData) setRealisasiList(realData);
+
+    const { data: transData } = await supabase.from('transaksi_sp2hl_sp4hl').select('*').eq('hibah_request_id', requestId).order('created_at', { ascending: true });
+    if (transData) setTransaksiList(transData);
   };
 
   useEffect(() => { fetchData(); }, [router]);
@@ -142,16 +70,82 @@ export default function VerifikatorDashboard() {
     router.push('/login');
   };
 
-  const salinTautan = (url: string) => {
-    if (!url) return;
-    navigator.clipboard.writeText(url);
-    alert('Tautan berhasil disalin ke clipboard!');
+  const openVerifyModal = (req: any) => {
+    setSelectedReq(req);
+    fetchChildData(req.id);
+    setAlasanPenolakan(req.alasan_penolakan || '');
+    setIsModalOpen(true);
+  };
+
+  const handleSetuju = async () => {
+    if (!selectedReq) return;
+
+    if (selectedReq.status_tahap !== 'Diproses') {
+      alert(`Tidak dapat menyetujui. Kabupaten/Kota belum mengirimkan berkas/usulan untuk tahap ini (Status saat ini: "${selectedReq.status_tahap}").`);
+      return;
+    }
+
+    if (selectedReq.tahap_sekarang === 10) {
+      const hasSP4HL = transaksiList.some(t => t.tipe === 'SP4HL');
+      if (!hasSP4HL) {
+        alert('Peringatan: Dokumen SP4HL belum diinput oleh Kabupaten/Kota. Sesuai aturan, tahap 10 memerlukan dokumen SP4HL sebelum lanjut ke tahap 11.');
+        return;
+      }
+    }
+
+    const nextTahap = selectedReq.tahap_sekarang < 11 ? selectedReq.tahap_sekarang + 1 : 11;
+    const isSelesai = selectedReq.tahap_sekarang === 11;
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('hibah_requests').update({
+        tahap_sekarang: nextTahap,
+        status_tahap: isSelesai ? 'Selesai' : 'Perlu Usulan',
+        alasan_penolakan: null
+      }).eq('id', selectedReq.id);
+
+      if (error) throw error;
+
+      alert(`Berhasil! Usulan dilanjutkan ke Tahap ${nextTahap}.`);
+      setIsModalOpen(false);
+      fetchData();
+    } catch (err: any) {
+      alert('Gagal memproses: ' + err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleTolak = async () => {
+    if (!selectedReq) return;
+    if (!alasanPenolakan.trim()) {
+      alert('Harap isi alasan penolakan/revisi terlebih dahulu.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('hibah_requests').update({
+        status_tahap: 'Ditolak',
+        alasan_penolakan: alasanPenolakan
+      }).eq('id', selectedReq.id);
+
+      if (error) throw error;
+
+      alert('Usulan dikembalikan ke Kabupaten/Kota untuk diperbaiki.');
+      setIsModalOpen(false);
+      fetchData();
+    } catch (err: any) {
+      alert('Gagal menolak: ' + err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const formatTimestamp = (dateString: string) => {
-    if (!dateString) return '';
+    if (!dateString) return '-';
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) return '';
+    if (isNaN(date.getTime())) return '-';
     return date.toLocaleDateString('id-ID', {
       day: '2-digit',
       month: 'short',
@@ -161,366 +155,314 @@ export default function VerifikatorDashboard() {
     });
   };
 
-  const handleLoloskan = async () => {
-    if (!activeReq) return;
-    const konfirmasi = window.confirm(`Apakah Anda yakin ingin meloloskan usulan ini ke Tahap ${activeReq.tahap_sekarang + 1}?`);
-    if (!konfirmasi) return;
+  const renderDetailDataByTahap = (req: any) => {
+    const tahap = req.tahap_sekarang;
 
-    setIsSubmitting(true);
-    try {
-      const nextTahap = activeReq.tahap_sekarang + 1;
-      const isSelesai = nextTahap > 11;
-      
-      const fieldTahapIni = getDaftarInputTahap(activeReq.tahap_sekarang);
-      const historiBaru: any = { tahap: activeReq.tahap_sekarang, timestamp: new Date().toISOString() };
-      
-      fieldTahapIni.forEach(field => {
-        if (activeReq[field.key]) {
-          historiBaru[field.key] = activeReq[field.key];
-        }
-      });
-
-      const riwayatLama = activeReq.riwayat_berkas || [];
-      const riwayatBaru = [...riwayatLama, historiBaru];
-      
-      const { error } = await supabase.from('hibah_requests')
-        .update({
-          tahap_sekarang: isSelesai ? 11 : nextTahap,
-          status_tahap: isSelesai ? 'Selesai' : 'Perlu Usulan', 
-          alasan_penolakan: null,
-          riwayat_berkas: riwayatBaru,
-          file_ba_pleno: null,
-          file_surat: null,
-          file_tor: null,
-          file_rab: null
-        })
-        .eq('id', activeReq.id);
-
-      if (error) throw error;
-
-      alert(isSelesai ? 'Seluruh tahapan hibah telah selesai!' : `Berkas diloloskan! Histori Tahap ${activeReq.tahap_sekarang} tersimpan. Kab/Kota kini dapat mengunggah syarat Tahap ${nextTahap}.`);
-      setActiveReq(null);
-      fetchData();
-    } catch (err: any) {
-      alert('Gagal memperbarui status: ' + err.message);
-    } finally {
-      setIsSubmitting(false);
+    switch (tahap) {
+      case 1:
+        return (
+          <div className="space-y-1">
+            <div>• Nama Kegiatan: <b>{req.nama_kegiatan}</b></div>
+            <div>• Tujuan Hibah: <b>{req.tujuan_hibah}</b></div>
+            <div>• Estimasi RAB: <b>Rp {Number(req.nilai_rab || 0).toLocaleString('id-ID')}</b></div>
+            <div>• No. Surat Permohonan Hibah: <b>{req.no_surat || '-'}</b> (Tgl: {req.tgl_surat || '-'})</div>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="space-y-1">
+            <div>• No. Surat Konsultasi: <b>{req.no_surat || '-'}</b> (Tgl: {req.tgl_surat || '-'})</div>
+            <div>• RAB Sesuai Kesepakatan: <b>Rp {Number(req.nilai_rab || 0).toLocaleString('id-ID')}</b></div>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="space-y-1">
+            <div>• Surat Permohonan Izin Prinsip: <b>{req.no_surat || '-'}</b></div>
+            <div>• Nomor Penetapan Izin Prinsip: <b>{req.no_surat_izin_prinsip || '-'}</b> (Tgl: {req.tgl_surat_izin_prinsip || '-'})</div>
+          </div>
+        );
+      case 4:
+        return (
+          <div className="space-y-1">
+            <div>• Nomor NPHD: <b>{req.nomor_nphd || '-'}</b></div>
+            <div>• Nominal NPHD: <b>Rp {Number(req.nilai_rab || 0).toLocaleString('id-ID')}</b></div>
+            <div>• Tanggal NPHD: <b>{req.tanggal_nphd || '-'}</b></div>
+          </div>
+        );
+      case 5:
+        return (
+          <div className="space-y-1">
+            <div>• Surat Permohonan Register Hibah: <b>{req.surat_permohonan_register || '-'}</b></div>
+            <div>• Surat Penetapan Register Hibah: <b>{req.surat_penetapan_register || '-'}</b></div>
+            <div>• Nomor Register Hibah: <b>{req.nomor_register_hibah || '-'}</b></div>
+          </div>
+        );
+      case 6:
+        return (
+          <div className="space-y-1">
+            <div>• No. Surat Permohonan Pembukaan Rekening: <b>{req.no_surat_permohonan_rekening || '-'}</b></div>
+            <div>• No. Surat Izin Penetapan Rekening: <b>{req.no_surat_izin_penetapan_rekening || '-'}</b></div>
+            <div>• Nama Bank Padanan/Penampung: <span className="uppercase font-bold">{req.nama_bank_padanan || '-'}</span> (No. Rek: {req.no_rekening || '-'})</div>
+          </div>
+        );
+      case 7:
+        return (
+          <div className="space-y-1">
+            <div>• Nomor Surat Permohonan Pencairan: <b>{req.no_surat_pencairan || '-'}</b></div>
+            <div>• Nomor SP2D: <b>{req.nomor_sp2d || '-'}</b></div>
+          </div>
+        );
+      case 8:
+        return (
+          <div className="space-y-1">
+            <div>• Nomor Surat Pengajuan Revisi DIPA: <b>{req.no_surat_revisi_dipa || '-'}</b></div>
+            <div>• Nominal Revisi DIPA (Pagu Awal): <b>Rp {Number(req.nominal_revisi_dipa || req.nilai_rab || 0).toLocaleString('id-ID')}</b></div>
+          </div>
+        );
+      case 9:
+        return (
+          <div className="space-y-1">
+            <div>• Pagu DIPA Aktif: <b>Rp {Number(req.nominal_revisi_dipa || req.nilai_rab || 0).toLocaleString('id-ID')}</b></div>
+            <div>• Total Realisasi Tercatat: <b>Rp {realisasiList.reduce((acc, curr) => acc + Number(curr.nilai_realisasi || 0), 0).toLocaleString('id-ID')}</b></div>
+          </div>
+        );
+      case 10:
+        return (
+          <div className="space-y-1">
+            <div>• Total Dokumen SP2HL/SP4HL Tercatat: <b>{transaksiList.length} Dokumen</b></div>
+            <div>• Status SP4HL: <b className={transaksiList.some(t => t.tipe === 'SP4HL') ? 'text-emerald-600' : 'text-amber-600'}>{transaksiList.some(t => t.tipe === 'SP4HL') ? 'Sudah Diinput (Lengkap)' : 'Belum Diinput (Belum Lengkap)'}</b></div>
+          </div>
+        );
+      case 11:
+        return (
+          <div className="space-y-1">
+            <div>• No. Surat Laporan Pertanggungjawaban: <b>{req.no_surat || '-'}</b> (Tgl: {req.tgl_surat || '-'})</div>
+          </div>
+        );
+      default:
+        return <div>• Belum ada data spesifik.</div>;
     }
   };
 
-  const handleKirimRevisi = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!activeReq || !alasanRevisi.trim()) return;
-
-    setIsSubmitting(true);
-    try {
-      const { error } = await supabase.from('hibah_requests')
-        .update({
-          status_tahap: 'Ditolak',
-          alasan_penolakan: alasanRevisi
-        })
-        .eq('id', activeReq.id);
-
-      if (error) throw error;
-
-      alert('Permintaan revisi berhasil dikirim ke Kab/Kota.');
-      setIsRevisiModalOpen(false);
-      setAlasanRevisi('');
-      setActiveReq(null);
-      fetchData();
-    } catch (err: any) {
-      alert('Gagal mengirim revisi: ' + err.message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-500">Memuat Ruang Kerja Verifikator...</div>;
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-500">Memuat Panel Verifikator...</div>;
 
   return (
-    <div className="flex h-screen bg-[#f4f7fb] font-sans overflow-hidden selection:bg-emerald-100">
+    <div className="flex h-screen bg-[#f8fafc] font-sans overflow-hidden">
       
-      <aside className="w-64 bg-[#141b2d] text-slate-300 flex flex-col shadow-xl z-20 flex-shrink-0">
-        <div className="h-16 flex items-center px-6 border-b border-slate-800 bg-[#0f1422]">
-          <div className="w-8 h-8 rounded bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center font-bold text-white mr-3 shadow-sm">V</div>
+      <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 flex-shrink-0">
+        <div className="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
+          <div className="w-8 h-8 rounded bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center font-bold text-white mr-3 shadow-sm">V</div>
           <span className="font-bold text-white text-lg tracking-wide">SIHANDAL PROV</span>
         </div>
         
         <div className="px-4 mt-6 mb-2">
-          <div className="bg-[#1e2638] rounded-xl p-4 border border-[#2a3449] shadow-inner">
-            <div className="flex items-center mb-3 pb-3 border-b border-[#2a3449]">
-              <div className="w-10 h-10 rounded-full bg-emerald-700 flex items-center justify-center text-white font-bold text-lg shadow-inner">
+          <div className="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-inner">
+            <div className="flex items-center mb-3 pb-3 border-b border-slate-700">
+              <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-lg">
                 {profile?.full_name?.charAt(0) || 'V'}
               </div>
               <div className="ml-3 truncate">
-                <span className="px-2 py-0.5 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-400 uppercase tracking-wider border border-emerald-500/30">
-                  Verifikator Prov
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-400 uppercase tracking-wider">
+                  Verifikator Provinsi
                 </span>
               </div>
             </div>
-            <div className="font-bold text-white text-sm mb-0.5 truncate">{profile?.full_name}</div>
-            <div className="text-[11px] text-emerald-400 font-medium mb-1 truncate">{profile?.asal_instansi || 'Bawaslu Provinsi Jawa Barat'}</div>
+            <div className="font-medium text-white text-sm mb-1 truncate">{profile?.full_name}</div>
+            <div className="text-xs text-indigo-400 font-medium mb-3 truncate">Bawaslu Provinsi Jawa Barat</div>
           </div>
         </div>
 
         <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto">
-          <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-3 px-2 mt-2">Menu Kendali</div>
-          
-          <button 
-            onClick={() => { setActiveMenu('verifikasi'); setActiveReq(null); }}
-            className={`w-full flex items-center px-3 py-3 rounded-lg transition-colors shadow-sm mb-2 ${
-              activeMenu === 'verifikasi' ? 'bg-emerald-600 text-white' : 'hover:bg-[#1e2638] text-slate-400'
-            }`}
-          >
-            <svg className="w-5 h-5 mr-3 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-            <span className="text-sm font-semibold">Verifikasi Usulan</span>
-          </button>
-
-          <button 
-            onClick={() => { setActiveMenu('monitoring'); setActiveReq(null); }}
-            className={`w-full flex items-center px-3 py-3 rounded-lg transition-colors shadow-sm ${
-              activeMenu === 'monitoring' ? 'bg-blue-600 text-white' : 'hover:bg-[#1e2638] text-slate-400'
-            }`}
-          >
-            <svg className="w-5 h-5 mr-3 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span className="text-sm font-semibold">Monitoring Riwayat</span>
-          </button>
+          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 px-2 mt-2">Panel Utama</div>
+          <div className="w-full flex items-center px-3 py-2.5 rounded-lg bg-indigo-600 text-white shadow-sm">
+            <svg className="w-5 h-5 mr-3 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+            Verifikasi Usulan
+          </div>
         </nav>
       </aside>
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
-        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 z-10 flex-shrink-0 shadow-sm">
-          <div className="flex items-center text-xs text-slate-500 font-medium">
-            <span>Panel Provinsi</span><span className="mx-2">/</span>
-            <span className="text-slate-800">
-              {activeMenu === 'verifikasi' ? 'Verifikasi Usulan Bawaslu Kabupaten/Kota' : 'Monitoring Riwayat & Histori Berkas'}
-            </span>
+        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 z-10 flex-shrink-0">
+          <div className="flex items-center text-sm text-slate-500">
+            <span>Panel Verifikator</span><span className="mx-2">/</span>
+            <span className="font-medium text-slate-800">Daftar Masuk Usulan Hibah Kabupaten/Kota</span>
           </div>
-          <button onClick={handleLogout} className="text-xs font-bold text-rose-600 hover:text-rose-700 bg-rose-50 border border-rose-100 px-4 py-1.5 rounded-md transition-colors">Keluar</button>
+          <button onClick={handleLogout} className="text-sm font-medium text-rose-600 hover:text-rose-700 bg-rose-50 px-3 py-1.5 rounded-md transition-colors">Keluar</button>
         </header>
 
-        <main className="flex-1 overflow-hidden p-6 relative flex gap-6">
-          
-          <div className="w-1/3 flex flex-col bg-transparent">
-            <div className="mb-4">
-              <h1 className="text-xl font-bold text-slate-900">
-                {activeMenu === 'verifikasi' ? 'Daftar Usulan Masuk' : 'Daftar Kab/Kota'}
-              </h1>
-              <p className="text-slate-500 text-xs mt-1">
-                Pilih Bawaslu Kabupaten/Kota di bawah ini untuk melihat {activeMenu === 'verifikasi' ? 'berkas berjalan.' : 'rekam jejak historinya.'}
-              </p>
+        <main className="flex-1 overflow-y-auto p-8 relative">
+          <div className="max-w-7xl mx-auto space-y-6">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900">Verifikasi Berkas & Tahapan Hibah</h1>
+              <p className="text-slate-500 mt-1">Periksa kelengkapan dokumen, realisasi anggaran, serta transaksi SP2HL/SP4HL dari Bawaslu Kabupaten/Kota.</p>
             </div>
-            
-            <div className="text-xs font-bold text-slate-400 mb-3 tracking-wider">DAFTAR PENGAJU ({requests.length})</div>
-            
-            <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
-              {requests.map((req) => (
-                <div 
-                  key={req.id} 
-                  onClick={() => setActiveReq(req)}
-                  className={`p-4 rounded-xl cursor-pointer transition-all border shadow-sm relative overflow-hidden ${
-                    activeReq?.id === req.id 
-                      ? 'bg-[#1a2235] border-[#2a3449] text-white shadow-md' 
-                      : 'bg-white border-slate-200 hover:border-emerald-300 hover:shadow-md text-slate-800'
-                  }`}
-                >
-                  <div className={`absolute top-4 right-4 w-2 h-2 rounded-full ${
-                    req.status_tahap === 'Diproses' ? 'bg-amber-400 animate-pulse' : 
-                    req.status_tahap === 'Perlu Usulan' ? 'bg-slate-300' : 
-                    req.status_tahap === 'Ditolak' ? 'bg-rose-500' : 'bg-emerald-500'
-                  }`}></div>
 
-                  <h3 className={`font-bold text-sm pr-6 ${activeReq?.id === req.id ? 'text-white' : 'text-slate-800'}`}>
-                    {req.profiles?.asal_instansi || 'Bawaslu Kabupaten/Kota'}
-                  </h3>
-                  <p className={`text-[11px] mt-1 ${activeReq?.id === req.id ? 'text-slate-400' : 'text-slate-500'}`}>PIC: {req.profiles?.full_name}</p>
-                  
-                  <div className="flex items-center gap-2 mt-4">
-                    <span className={`px-2 py-1 rounded text-[10px] font-bold ${
-                      activeReq?.id === req.id ? 'bg-emerald-500 text-white' : 'bg-emerald-100 text-emerald-700'
-                    }`}>
-                      Posisi: Tahap {req.tahap_sekarang}
-                    </span>
-                    
-                    {req.status_tahap === 'Diproses' && (
-                      <span className="px-2 py-1 rounded text-[10px] font-bold bg-amber-500/20 text-amber-500 border border-amber-500/20">Perlu Verifikasi</span>
-                    )}
-                  </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+              {requests.length === 0 ? (
+                <div className="p-16 text-center text-slate-400">Belum ada usulan masuk dari Kabupaten/Kota.</div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-50/80 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                        <th className="p-4 font-semibold">Instansi Pengaju</th>
+                        <th className="p-4 font-semibold">Nama Kegiatan</th>
+                        <th className="p-4 font-semibold">Posisi Tahap</th>
+                        <th className="p-4 font-semibold">Status Berkas</th>
+                        <th className="p-4 font-semibold text-right">Aksi Verifikasi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-sm divide-y divide-slate-100">
+                      {requests.map((req) => (
+                        <tr key={req.id} className="hover:bg-slate-50/50">
+                          <td className="p-4 font-medium text-slate-800">{req.profiles?.asal_instansi || 'Kab/Kota'}</td>
+                          <td className="p-4">
+                            <div className="font-bold text-slate-800">{req.nama_kegiatan}</div>
+                            <div className="text-xs text-slate-500">RAB/Pagu: Rp {Number(req.nilai_rab || 0).toLocaleString('id-ID')}</div>
+                          </td>
+                          <td className="p-4">
+                            <span className="bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md text-xs font-bold border border-indigo-100">
+                              Tahap {req.tahap_sekarang}: {TAHAPAN_HIBAH[req.tahap_sekarang - 1]}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${
+                              req.status_tahap === 'Diproses' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                              req.status_tahap === 'Ditolak' ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            }`}>
+                              {req.status_tahap}
+                            </span>
+                          </td>
+                          <td className="p-4 text-right">
+                            <button onClick={() => openVerifyModal(req)} className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors">
+                              Verifikasi Detail
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              ))}
+              )}
             </div>
-          </div>
-
-          <div className="w-2/3 flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mt-16">
-            {!activeReq ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-slate-400 p-8 text-center">
-                <svg className="w-16 h-16 mb-4 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                <p>Pilih salah satu usulan di panel kiri untuk {activeMenu === 'verifikasi' ? 'melakukan verifikasi tahap berjalan.' : 'melihat detail riwayat tahap sebelumnya.'}</p>
-              </div>
-            ) : activeMenu === 'verifikasi' ? (
-              
-              <>
-                <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-start">
-                  <div>
-                    <h2 className="text-lg font-bold text-slate-800">Verifikasi: {activeReq.profiles?.asal_instansi}</h2>
-                    <p className="text-xs text-slate-500 mt-1">Diajukan oleh: <span className="font-semibold text-slate-700">{activeReq.profiles?.full_name}</span></p>
-                  </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
-                    activeReq.status_tahap === 'Diproses' ? 'bg-blue-50 text-blue-600 border-blue-200' :
-                    activeReq.status_tahap === 'Perlu Usulan' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' :
-                    'bg-rose-50 text-rose-600 border-rose-200'
-                  }`}>
-                    Status: {activeReq.status_tahap}
-                  </span>
-                </div>
-
-                <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                  <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl mb-6">
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="text-[10px] font-bold text-blue-500 uppercase tracking-wider">TAHAP SAAT INI</div>
-                      <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Tahap {activeReq.tahap_sekarang} / 11</span>
-                    </div>
-                    <div className="font-bold text-slate-800 text-base">{TAHAPAN_HIBAH[activeReq.tahap_sekarang - 1]}</div>
-                  </div>
-
-                  <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-3">DOKUMEN YANG HARUS DIPERIKSA (TAHAP {activeReq.tahap_sekarang})</div>
-                  <div className="space-y-3">
-                    {getDaftarInputTahap(activeReq.tahap_sekarang).map((field, index) => {
-                      const link = activeReq[field.key];
-                      return (
-                        <div key={field.key} className="flex items-center bg-white border border-slate-200 rounded-lg p-3 hover:border-blue-300 transition-colors">
-                          <div className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs mr-3">{index + 1}</div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-xs font-bold text-slate-700">{field.label}</div>
-                            {link ? (
-                              <a href={link} target="_blank" rel="noreferrer" className="text-[11px] text-blue-500 hover:underline truncate block mt-0.5">{link}</a>
-                            ) : (
-                              <div className="text-[11px] text-rose-500 italic mt-0.5">Tautan belum dilampirkan</div>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="p-4 border-t border-slate-200 bg-white flex items-center justify-between">
-                  <div className="text-[11px] text-slate-400">Pembaruan Terakhir: {activeReq.created_at ? new Date(activeReq.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-'}</div>
-                  
-                  {activeReq.status_tahap === 'Diproses' ? (
-                    <div className="flex gap-3">
-                      <button onClick={() => setIsRevisiModalOpen(true)} disabled={isSubmitting} className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm disabled:opacity-50">Minta Revisi</button>
-                      <button onClick={handleLoloskan} disabled={isSubmitting} className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm disabled:opacity-50">Loloskan ke Tahap Berikutnya</button>
-                    </div>
-                  ) : (
-                    <div className="text-xs font-bold text-slate-400 italic">
-                      {activeReq.status_tahap === 'Perlu Usulan' ? 'Menunggu pengunggahan berkas oleh Kab/Kota...' : 'Telah direvisi, menunggu perbaikan...'}
-                    </div>
-                  )}
-                </div>
-              </>
-              
-            ) : (
-              
-              <>
-                <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-                  <div>
-                    <h2 className="text-lg font-bold text-slate-800">Riwayat Berkas: {activeReq.profiles?.asal_instansi}</h2>
-                    <p className="text-xs text-slate-500 mt-1">Kegiatan: <span className="font-semibold text-slate-700">{activeReq.nama_kegiatan}</span></p>
-                  </div>
-                </div>
-
-                <div className="flex-1 overflow-y-auto p-6 bg-slate-50 custom-scrollbar relative">
-                  
-                  <div className="absolute left-[39px] top-6 bottom-6 w-0.5 bg-slate-200 z-0"></div>
-
-                  <div className="space-y-6 relative z-10">
-                    {activeReq.riwayat_berkas && activeReq.riwayat_berkas.length > 0 ? (
-                      activeReq.riwayat_berkas.map((histori: any, idx: number) => (
-                        <div key={idx} className="flex gap-4">
-                          <div className="w-8 h-8 rounded-full bg-emerald-100 border-2 border-emerald-500 flex flex-shrink-0 items-center justify-center z-10">
-                            <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
-                          </div>
-                          <div className="flex-1 bg-white p-4 border border-slate-200 rounded-xl shadow-sm">
-                            <div className="flex justify-between items-start mb-3 border-b border-slate-100 pb-2">
-                              <div>
-                                <div className="text-xs font-bold text-emerald-600 uppercase tracking-wide">Tahap {histori.tahap} Selesai</div>
-                                <div className="text-sm font-bold text-slate-800">{TAHAPAN_HIBAH[histori.tahap - 1]}</div>
-                              </div>
-                              
-                              {histori.timestamp && (
-                                <span className="text-[11px] font-mono text-slate-400 bg-slate-50 px-2 py-1 rounded border border-slate-100">
-                                  {formatTimestamp(histori.timestamp)}
-                                </span>
-                              )}
-                            </div>
-
-                            <ul className="space-y-2.5">
-                              {getDaftarInputTahap(histori.tahap).map((field) => (
-                                histori[field.key] && (
-                                  <li key={field.key} className="flex flex-col">
-                                    <span className="text-[10px] font-semibold text-slate-500">{field.label}</span>
-                                    <div className="flex items-center gap-2 mt-0.5">
-                                      <a href={histori[field.key]} target="_blank" rel="noreferrer" className="text-[11px] text-blue-500 hover:underline truncate w-full">
-                                        {histori[field.key]}
-                                      </a>
-                                      <button onClick={() => salinTautan(histori[field.key])} className="text-slate-400 hover:text-slate-700" title="Salin Tautan">
-                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                                      </button>
-                                    </div>
-                                  </li>
-                                )
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-center py-4">
-                        <p className="text-xs text-slate-400 italic">Belum ada histori tahap sebelumnya yang diselesaikan.</p>
-                      </div>
-                    )}
-
-                    <div className="flex gap-4 opacity-80">
-                      <div className="w-8 h-8 rounded-full bg-white border-2 border-blue-400 flex flex-shrink-0 items-center justify-center z-10">
-                        <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-                      </div>
-                      <div className="flex-1 bg-white p-4 border border-blue-200 border-dashed rounded-xl">
-                        <div className="text-xs font-bold text-blue-600 uppercase tracking-wide">Tahap Saat Ini (Tahap {activeReq.tahap_sekarang})</div>
-                        <div className="text-sm font-bold text-slate-800">{TAHAPAN_HIBAH[activeReq.tahap_sekarang - 1]}</div>
-                        <p className="text-[11px] text-slate-500 mt-1">
-                          Tahap ini sedang berjalan dan {activeReq.status_tahap === 'Diproses' ? 'menunggu verifikasi Anda di menu Verifikasi Usulan.' : 'menunggu kelengkapan dokumen dari Kab/Kota.'}
-                        </p>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </>
-            )}
           </div>
         </main>
 
-        {isRevisiModalOpen && (
+        {/* Modal Verifikasi */}
+        {isModalOpen && selectedReq && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden border border-slate-200">
-              <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <h3 className="text-sm font-bold text-slate-800">Tolak & Minta Revisi Berkas</h3>
-                <button onClick={() => setIsRevisiModalOpen(false)} className="text-slate-400 hover:text-slate-600">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl overflow-hidden border border-slate-200">
+              <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div>
+                  <h3 className="text-lg font-bold text-slate-800">Verifikasi Tahap {selectedReq.tahap_sekarang}: {TAHAPAN_HIBAH[selectedReq.tahap_sekarang - 1]}</h3>
+                  <p className="text-xs text-slate-500">{selectedReq.nama_kegiatan} ({selectedReq.profiles?.asal_instansi})</p>
+                </div>
+                <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">✕</button>
               </div>
-              
-              <form onSubmit={handleKirimRevisi} className="p-5">
-                <div className="mb-4">
-                  <label className="block text-xs font-bold text-slate-700 mb-2">Alasan Penolakan / Catatan Revisi <span className="text-rose-500">*</span></label>
-                  <textarea required value={alasanRevisi} onChange={(e) => setAlasanRevisi(e.target.value)} placeholder="Contoh: Tautan RAB tidak bisa dibuka (perlu akses)..." rows={4} className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none text-xs resize-none"></textarea>
+
+              <div className="p-6 max-h-[80vh] overflow-y-auto space-y-4 text-xs text-slate-700">
+                
+                {/* 1. Aspek Histori & Audit Trail */}
+                <div className="bg-slate-100 p-4 rounded-xl border border-slate-200 space-y-2">
+                  <div className="font-bold text-slate-900 uppercase text-[11px] tracking-wide flex items-center">
+                    <svg className="w-4 h-4 mr-1 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Histori & Jejak Audit (Audit Trail):
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <div>• Waktu Pengajuan Awal: <b>{formatTimestamp(selectedReq.created_at)}</b></div>
+                    <div>• Terakhir Diperbarui: <b>{formatTimestamp(selectedReq.updated_at || selectedReq.created_at)}</b></div>
+                    <div>• Posisi Tahap Aktif: <b>Tahap {selectedReq.tahap_sekarang}</b></div>
+                    <div>• Status Saat Ini: <b className={selectedReq.status_tahap === 'Ditolak' ? 'text-rose-600' : 'text-blue-600'}>{selectedReq.status_tahap}</b></div>
+                  </div>
+                  {selectedReq.alasan_penolakan && (
+                    <div className="mt-2 pt-2 border-t border-slate-200 text-rose-700">
+                      ⚠️ <b>Catatan Penolakan/Revisi Sebelumnya:</b> {selectedReq.alasan_penolakan}
+                    </div>
+                  )}
                 </div>
-                <div className="flex gap-2 pt-2">
-                  <button type="button" onClick={() => setIsRevisiModalOpen(false)} className="flex-1 bg-white border border-slate-300 text-slate-700 font-bold py-2.5 rounded-lg text-xs hover:bg-slate-50 transition-all">Batal</button>
-                  <button type="submit" disabled={isSubmitting} className="flex-1 bg-rose-600 text-white font-bold py-2.5 rounded-lg text-xs hover:bg-rose-700 transition-all shadow-md disabled:opacity-50">Kirim Revisi</button>
+
+                {/* 2. Rincian Data Dinamis Sesuai Tahapan Saat Ini */}
+                <div className="bg-slate-50 p-4 rounded-xl border space-y-2">
+                  <div className="font-bold text-slate-900 uppercase text-[11px]">Rincian Data Tahap {selectedReq.tahap_sekarang} ({TAHAPAN_HIBAH[selectedReq.tahap_sekarang - 1]}):</div>
+                  {renderDetailDataByTahap(selectedReq)}
                 </div>
-              </form>
+
+                {/* 3. Jika Tahap 9, tampilkan rincian realisasi bulanan */}
+                {selectedReq.tahap_sekarang === 9 && (
+                  <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-2">
+                    <div className="font-bold text-blue-900 uppercase text-[11px]">Riwayat Realisasi Bulanan Tercatat ({realisasiList.length} Bulan):</div>
+                    {realisasiList.length === 0 ? (
+                      <div className="italic text-slate-400">Belum ada input realisasi dari Kabupaten/Kota</div>
+                    ) : (
+                      <div className="space-y-1">
+                        {realisasiList.map((r, i) => (
+                          <div key={i} className="bg-white p-2 rounded border flex justify-between">
+                            <span><b>{r.bulan} {r.tahun}</b>: Rp {Number(r.nilai_realisasi).toLocaleString('id-ID')}</span>
+                            <span className="text-slate-500 italic">{r.keterangan_kegiatan}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* 4. Jika Tahap 10, tampilkan rincian transaksi SP2HL/SP4HL */}
+                {selectedReq.tahap_sekarang === 10 && (
+                  <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-2">
+                    <div className="font-bold text-emerald-900 uppercase text-[11px]">Riwayat Transaksi SP2HL / SP4HL ({transaksiList.length} Dokumen):</div>
+                    {transaksiList.length === 0 ? (
+                      <div className="italic text-slate-400">Belum ada transaksi SP2HL/SP4HL diinput</div>
+                    ) : (
+                      <div className="space-y-1">
+                        {transaksiList.map((t, i) => (
+                          <div key={i} className="bg-white p-2 rounded border flex justify-between">
+                            <span><b>{t.tipe} {t.tipe === 'SP2HL' ? `(Ke-${t.tahapan_ke})` : ''}</b> ({t.nomor_dokumen})</span>
+                            <span className="font-bold text-emerald-700">Rp {Number(t.nilai_transaksi).toLocaleString('id-ID')}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {!transaksiList.some(t => t.tipe === 'SP4HL') && (
+                      <div className="text-[11px] text-amber-700 bg-amber-50 p-2 rounded border border-amber-200">
+                        ⚠️ Perhatian: Dokumen SP4HL belum diinput. Anda tidak dapat meloloskan ke Tahap 11 sebelum SP4HL lengkap.
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="space-y-2 pt-2">
+                  <label className="block font-bold text-slate-800">Tautan Berkas Pendukung (Google Drive):</label>
+                  <div className="space-y-1 font-mono text-[11px]">
+                    {selectedReq.file_surat && <div>• Berkas Utama: <a href={selectedReq.file_surat} target="_blank" className="text-blue-600 underline truncate block">{selectedReq.file_surat}</a></div>}
+                    {selectedReq.file_rab && <div>• Berkas RAB/Rincian: <a href={selectedReq.file_rab} target="_blank" className="text-blue-600 underline truncate block">{selectedReq.file_rab}</a></div>}
+                    {selectedReq.file_tor && <div>• Berkas TOR/Proposal: <a href={selectedReq.file_tor} target="_blank" className="text-blue-600 underline truncate block">{selectedReq.file_tor}</a></div>}
+                  </div>
+                </div>
+
+                <div className="space-y-2 pt-3 border-t">
+                  <label className="block font-bold text-slate-800">Catatan / Alasan Penolakan (Jika Berkas Ditolak/Revisi):</label>
+                  <textarea rows={2} value={alasanPenolakan} onChange={(e) => setAlasanPenolakan(e.target.value)} placeholder="Tuliskan kekurangan berkas yang harus diperbaiki..." className="w-full p-2.5 border rounded-xl resize-none"></textarea>
+                </div>
+
+                <div className="pt-4 border-t flex gap-3">
+                  <button type="button" onClick={handleTolak} disabled={isSubmitting} className="flex-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold py-3 rounded-xl transition-colors">
+                    Tolak / Minta Revisi
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={handleSetuju} 
+                    disabled={isSubmitting || selectedReq.status_tahap !== 'Diproses'} 
+                    className={`flex-1 font-bold py-3 rounded-xl shadow-md transition-colors ${
+                      selectedReq.status_tahap === 'Diproses' 
+                        ? 'bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer' 
+                        : 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                    }`}
+                  >
+                    {selectedReq.status_tahap === 'Diproses' ? 'Setujui & Lanjut Tahap' : 'Menunggu Usulan User'}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}

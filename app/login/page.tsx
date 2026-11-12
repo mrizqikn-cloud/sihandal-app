@@ -31,19 +31,22 @@ export default function LoginPage() {
 
       if (profileError) throw profileError;
 
-      // LOGIKA REDIRECT SUDAH DIPISAH BERDASARKAN ROLE
-      if (profileData.role === 'pimpinan') {
-        router.push('/pimpinan');
-      } else if (profileData.role === 'admin') {
+      // LOGIKA REDIRECT DISESUAIKAN DENGAN ROLE BARU
+      const userRole = profileData.role;
+
+      if (userRole === 'admin') {
         router.push('/admin');
-      } else if (profileData.role === 'verifikator') {
+      } else if (userRole === 'verifikator') {
         router.push('/verifikator');
+      } else if (userRole === 'atasan_kabkot') {
+        router.push('/atasan-kabkot');
+      } else if (userRole === 'atasan_prov') {
+        router.push('/atasan-prov');
       } else {
-        router.push('/dashboard');
+        router.push('/dashboard'); // Staf / User biasa (Kabupaten/Kota)
       }
 
     } catch (error: any) {
-      // Diubah menggunakan kutip biasa agar tidak kena bug Turbopack
       alert("Login Gagal: " + error.message);
       setIsLoading(false);
     }
@@ -61,7 +64,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Sisi Kanan: Kartu Login Ala Facebook */}
+        {/* Sisi Kanan: Kartu Login */}
         <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 border border-slate-200/80">
           <form onSubmit={handleLogin} className="space-y-4">
             <div>

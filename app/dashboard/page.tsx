@@ -117,10 +117,10 @@ const DETAIL_PANDUAN_TAHAP = [
     tahap: 9,
     judul: "Pelaksanaan Anggaran",
     aplikasi: "SAKTI (Penatausahaan Belanja & Pajak)",
-    uraian: "Melaksanakan kegiatan sesuai NPHD, DIPA, TOR/KAK, serta melakukan pungut setor pajak.",
+    uraian: "Melaksanakan kegiatan sesuai NPHD, DIPA, TOR/KAK, serta melakukan pungut setor pajak secara berkala bulanan.",
     dokumen: [
       "RAB & TOR / Kerangka Acuan Kerja (KAK)",
-      "Kalender Kegiatan pelaksanaan hibah",
+      "Laporan Realisasi Penyerapan Bulanan",
       "Dokumen Pengadaan / SPK / SPJ"
     ]
   },
@@ -128,12 +128,11 @@ const DETAIL_PANDUAN_TAHAP = [
     tahap: 10,
     judul: "Pengajuan SP2HL dan SP4HL",
     aplikasi: "SAKTI ke KPPN Mitra Kerja",
-    uraian: "Pengajuan pengesahan penggunaan hibah (SP2HL) sekurang-kurangnya sekali dalam 2 bulan.",
+    uraian: "Pengajuan pengesahan penggunaan hibah (SP2HL) secara periodik dan diakhiri dengan SP4HL.",
     dokumen: [
       "DRPP (Daftar Rincian Penggunaan Dana)",
-      "SPP (Surat Permintaan Pembayaran)",
-      "Formulir SP2HL dan SP4HL",
-      "Bukti setor/transfer pengembalian sisa hibah"
+      "Formulir SP2HL (berkala hingga 6x)",
+      "Formulir SP4HL (Pengesahan Pengembalian)"
     ]
   },
   {
@@ -144,96 +143,21 @@ const DETAIL_PANDUAN_TAHAP = [
     dokumen: [
       "Surat Laporan Penggunaan Hibah",
       "Karwas Penggunaan Hibah (Pagu & Realisasi)",
-      "SPHL dan SP3HL",
-      "Bukti Pengembalian Sisa Hibah (jika ada)"
+      "SPHL dan SP3HL"
     ]
   }
 ];
-
-const getDaftarInputTahap = (tahap: number) => {
-  switch (tahap) {
-    case 1:
-      return [
-        { key: 'file_ba_pleno', label: 'Tautan GDrive BA Pleno Persetujuan' },
-        { key: 'file_surat', label: 'Tautan GDrive Surat Permohonan Hibah' },
-        { key: 'file_tor', label: 'Tautan GDrive Proposal Hibah' },
-        { key: 'file_rab', label: 'Tautan GDrive RAB Hibah' }
-      ];
-    case 2:
-      return [
-        { key: 'file_surat', label: 'Tautan GDrive Surat Konsultasi Rencana Penerimaan' },
-        { key: 'file_rab', label: 'Tautan GDrive RAB Hibah sesuai nilai sepakat Pemda' },
-        { key: 'file_tor', label: 'Tautan GDrive Data Pegawai & BMN Eksisting (bila ada)' },
-        { key: 'file_ba_pleno', label: 'Tautan GDrive BA/Surat Penetapan/Perda/Info Pemda' }
-      ];
-    case 3:
-      return [
-        { key: 'file_surat', label: 'Tautan GDrive Surat Permohonan Ijin Prinsip' },
-        { key: 'file_tor', label: 'Tautan GDrive Rencana Kerja & TOR/KAK per RO' },
-        { key: 'file_rab', label: 'Tautan GDrive RAB Hibah' },
-        { key: 'file_ba_pleno', label: 'Tautan GDrive HPS/Hasil Survei, Data Pegawai & BMN' }
-      ];
-    case 4:
-      return [
-        { key: 'file_surat', label: 'Tautan GDrive Surat Permohonan & Draf NPHD' },
-        { key: 'file_rab', label: 'Tautan GDrive RAB Lampiran NPHD' },
-        { key: 'file_tor', label: 'Tautan GDrive Surat Ijin Prinsip' }
-      ];
-    case 5:
-      return [
-        { key: 'file_surat', label: 'Tautan GDrive Surat Permohonan Register Hibah' },
-        { key: 'file_tor', label: 'Tautan GDrive Ringkasan Hibah & NPHD Dilegalisir' },
-        { key: 'file_rab', label: 'Tautan GDrive RAB yang Dilegalisir' }
-      ];
-    case 6:
-      return [
-        { key: 'file_surat', label: 'Tautan GDrive Surat Permohonan Pembuatan Rekening' },
-        { key: 'file_ba_pleno', label: 'Tautan GDrive BA Pleno Penetapan Bank' },
-        { key: 'file_tor', label: 'Tautan GDrive Nomor Register Hibah' }
-      ];
-    case 7:
-      return [
-        { key: 'file_surat', label: 'Tautan GDrive Surat Permohonan Pencairan & NPHD' },
-        { key: 'file_rab', label: 'Tautan GDrive RAB & Pakta Integritas / SPTJM' },
-        { key: 'file_tor', label: 'Tautan GDrive Surat Keterangan Bank & Fotokopi KTP KPA' }
-      ];
-    case 8:
-      return [
-        { key: 'file_surat', label: 'Tautan GDrive Surat Permohonan Revisi DIPA' },
-        { key: 'file_rab', label: 'Tautan GDrive NPHD & RAB Dilegalisir' },
-        { key: 'file_tor', label: 'Tautan GDrive Ringkasan, Register Hibah & Izin Rekening' }
-      ];
-    case 9:
-      return [
-        { key: 'file_rab', label: 'Tautan GDrive RAB & TOR/KAK' },
-        { key: 'file_tor', label: 'Tautan GDrive Kalender Kegiatan & Dokumen Pengadaan' }
-      ];
-    case 10:
-      return [
-        { key: 'file_surat', label: 'Tautan GDrive DRPP (Daftar Rincian Penggunaan Dana)' },
-        { key: 'file_tor', label: 'Tautan GDrive SPP, SP2HL, SP4HL' },
-        { key: 'file_rab', label: 'Tautan GDrive Bukti Setor/Transfer Sisa Hibah' }
-      ];
-    case 11:
-      return [
-        { key: 'file_surat', label: 'Tautan GDrive Surat Laporan Penggunaan Hibah' },
-        { key: 'file_tor', label: 'Tautan GDrive Karwas Penggunaan Hibah, SPHL, SP3HL' },
-        { key: 'file_rab', label: 'Tautan GDrive Bukti Pengembalian Sisa Hibah' }
-      ];
-    default:
-      return [
-        { key: 'file_surat', label: 'Tautan GDrive Dokumen Pendukung Tahap Ini' }
-      ];
-  }
-};
 
 export default function UserDashboard() {
   const router = useRouter();
   const [profile, setProfile] = useState<any>(null);
   const [requests, setRequests] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeMenu, setActiveMenu] = useState<'proses' | 'monitoring' | 'panduan'>('proses');
+  const [activeMenu, setActiveMenu] = useState<'proses' | 'monitoring' | 'panduan' | 'resume'>('proses');
   
+  const [realisasiList, setRealisasiList] = useState<any[]>([]);
+  const [transaksiList, setTransaksiList] = useState<any[]>([]);
+
   const [formData, setFormData] = useState({
     nama_kegiatan: '', 
     tujuan_hibah: '', 
@@ -241,7 +165,41 @@ export default function UserDashboard() {
     file_ba_pleno: '',
     file_surat: '',
     file_rab: '',
-    file_tor: ''
+    file_tor: '',
+    no_surat: '',
+    tgl_surat: '',
+    no_izin_prinsip: '',
+    no_surat_permohonan_ttd: '',
+    no_register: '',
+    no_surat_register: '',
+    no_surat_pengusulan_rekening: '',
+    no_surat_persetujuan_rekening: '',
+    no_rekening: '',
+    nama_rekening: '',
+    bank_rekening: 'mandiri',
+    nominal_revisi_dipa: '',
+    no_surat_izin_prinsip: '',
+    tgl_surat_izin_prinsip: '',
+    nomor_nphd: '',
+    tanggal_nphd: '',
+    surat_permohonan_register: '',
+    surat_penetapan_register: '',
+    nomor_register_hibah: '',
+    no_surat_permohonan_rekening: '',
+    no_surat_izin_penetapan_rekening: '',
+    nama_bank_padanan: '',
+    no_surat_pencairan: '',
+    nomor_sp2d: '',
+    no_surat_revisi_dipa: '',
+    bulan_realisasi: 'Januari',
+    tahun_realisasi: '2026',
+    nilai_realisasi_bulan: '',
+    keterangan_realisasi: '',
+    tipe_transaksi_sp: 'SP2HL',
+    tahapan_sp2d_ke: '1',
+    nomor_dokumen_sp: '',
+    nilai_transaksi_sp: '',
+    tanggal_sp: ''
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -268,9 +226,21 @@ export default function UserDashboard() {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
       
-      if (requestData) setRequests(requestData);
+      if (requestData && requestData.length > 0) {
+        setRequests(requestData);
+        const activeId = requestData[0].id;
+        fetchChildData(activeId);
+      }
     }
     setIsLoading(false);
+  };
+
+  const fetchChildData = async (requestId: string) => {
+    const { data: realData } = await supabase.from('realisasi_bulanan').select('*').eq('hibah_request_id', requestId).order('created_at', { ascending: true });
+    if (realData) setRealisasiList(realData);
+
+    const { data: transData } = await supabase.from('transaksi_sp2hl_sp4hl').select('*').eq('hibah_request_id', requestId).order('created_at', { ascending: true });
+    if (transData) setTransaksiList(transData);
   };
 
   useEffect(() => { fetchData(); }, [router]);
@@ -281,20 +251,60 @@ export default function UserDashboard() {
   };
 
   const openModalBaru = () => {
-    setFormData({ nama_kegiatan: '', tujuan_hibah: '', nilai_rab: '', file_ba_pleno: '', file_surat: '', file_rab: '', file_tor: '' });
+    setFormData({
+      nama_kegiatan: '', tujuan_hibah: '', nilai_rab: '',
+      file_ba_pleno: '', file_surat: '', file_rab: '', file_tor: '',
+      no_surat: '', tgl_surat: '', no_izin_prinsip: '', no_surat_permohonan_ttd: '',
+      no_register: '', no_surat_register: '', no_surat_pengusulan_rekening: '',
+      no_surat_persetujuan_rekening: '', no_rekening: '', nama_rekening: '', bank_rekening: 'mandiri',
+      nominal_revisi_dipa: '', no_surat_izin_prinsip: '', tgl_surat_izin_prinsip: '', nomor_nphd: '', tanggal_nphd: '',
+      surat_permohonan_register: '', surat_penetapan_register: '', nomor_register_hibah: '',
+      no_surat_permohonan_rekening: '', no_surat_izin_penetapan_rekening: '', nama_bank_padanan: '',
+      no_surat_pencairan: '', nomor_sp2d: '', no_surat_revisi_dipa: '',
+      bulan_realisasi: 'Januari', tahun_realisasi: '2026', nilai_realisasi_bulan: '', keterangan_realisasi: '',
+      tipe_transaksi_sp: 'SP2HL', tahapan_sp2d_ke: '1', nomor_dokumen_sp: '', nilai_transaksi_sp: '', tanggal_sp: ''
+    });
     setIsModalOpen(true);
   };
 
   const openActionModal = (req: any) => {
     setActiveReq(req);
+    fetchChildData(req.id);
     setFormData({
-      nama_kegiatan: req.nama_kegiatan,
-      tujuan_hibah: req.tujuan_hibah,
-      nilai_rab: req.nilai_rab,
+      nama_kegiatan: req.nama_kegiatan || '',
+      tujuan_hibah: req.tujuan_hibah || '',
+      nilai_rab: req.nilai_rab || '',
       file_ba_pleno: req.file_ba_pleno || '',
       file_surat: req.file_surat || '',
       file_rab: req.file_rab || '',
-      file_tor: req.file_tor || ''
+      file_tor: req.file_tor || '',
+      no_surat: req.no_surat || '',
+      tgl_surat: req.tgl_surat || '',
+      no_izin_prinsip: req.no_izin_prinsip || '',
+      no_surat_permohonan_ttd: req.no_surat_permohonan_ttd || '',
+      no_register: req.no_register || '',
+      no_surat_register: req.no_surat_register || '',
+      no_surat_pengusulan_rekening: req.no_surat_pengusulan_rekening || '',
+      no_surat_persetujuan_rekening: req.no_surat_persetujuan_rekening || '',
+      no_rekening: req.no_rekening || '',
+      nama_rekening: req.nama_rekening || '',
+      bank_rekening: req.bank_rekening || 'mandiri',
+      nominal_revisi_dipa: req.nominal_revisi_dipa || '',
+      no_surat_izin_prinsip: req.no_surat_izin_prinsip || '',
+      tgl_surat_izin_prinsip: req.tgl_surat_izin_prinsip || '',
+      nomor_nphd: req.nomor_nphd || '',
+      tanggal_nphd: req.tanggal_nphd || '',
+      surat_permohonan_register: req.surat_permohonan_register || '',
+      surat_penetapan_register: req.surat_penetapan_register || '',
+      nomor_register_hibah: req.nomor_register_hibah || '',
+      no_surat_permohonan_rekening: req.no_surat_permohonan_rekening || '',
+      no_surat_izin_penetapan_rekening: req.no_surat_izin_penetapan_rekening || '',
+      nama_bank_padanan: req.nama_bank_padanan || '',
+      no_surat_pencairan: req.no_surat_pencairan || '',
+      nomor_sp2d: req.nomor_sp2d || '',
+      no_surat_revisi_dipa: req.no_surat_revisi_dipa || '',
+      bulan_realisasi: 'Januari', tahun_realisasi: '2026', nilai_realisasi_bulan: '', keterangan_realisasi: '',
+      tipe_transaksi_sp: 'SP2HL', tahapan_sp2d_ke: '1', nomor_dokumen_sp: '', nilai_transaksi_sp: '', tanggal_sp: ''
     });
     setIsActionModalOpen(true);
   };
@@ -321,7 +331,9 @@ export default function UserDashboard() {
         file_ba_pleno: formData.file_ba_pleno,
         file_surat: formData.file_surat,
         file_rab: formData.file_rab,
-        file_tor: formData.file_tor
+        file_tor: formData.file_tor,
+        no_surat: formData.no_surat,
+        tgl_surat: formData.tgl_surat
       });
 
       if (error) throw error;
@@ -336,21 +348,115 @@ export default function UserDashboard() {
     }
   };
 
+  const handleTambahRealisasiBulanan = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!activeReq) return;
+    const nilaiNum = parseFloat(formData.nilai_realisasi_bulan.replace(/[^0-9]/g, ''));
+    if (isNaN(nilaiNum) || nilaiNum <= 0) {
+      alert('Masukkan nilai realisasi bulanan yang valid.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('realisasi_bulanan').insert({
+        hibah_request_id: activeReq.id,
+        bulan: formData.bulan_realisasi,
+        tahun: parseInt(formData.tahun_realisasi),
+        nilai_realisasi: nilaiNum,
+        keterangan_kegiatan: formData.keterangan_realisasi
+      });
+      if (error) throw error;
+      alert(`Realisasi bulan ${formData.bulan_realisasi} berhasil disimpan!`);
+      setFormData({...formData, nilai_realisasi_bulan: '', keterangan_realisasi: ''});
+      fetchChildData(activeReq.id);
+    } catch (err: any) {
+      alert('Gagal menambah realisasi: ' + err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleTambahTransaksiSP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!activeReq) return;
+    const nilaiNum = parseFloat(formData.nilai_transaksi_sp.replace(/[^0-9]/g, ''));
+    if (isNaN(nilaiNum) || nilaiNum <= 0) {
+      alert('Masukkan nilai transaksi yang valid.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('transaksi_sp2hl_sp4hl').insert({
+        hibah_request_id: activeReq.id,
+        tipe: formData.tipe_transaksi_sp,
+        tahapan_ke: formData.tipe_transaksi_sp === 'SP2HL' ? parseInt(formData.tahapan_sp2d_ke) : 0,
+        nomor_dokumen: formData.nomor_dokumen_sp,
+        nilai_transaksi: nilaiNum,
+        tanggal: formData.tanggal_sp
+      });
+      if (error) throw error;
+      alert(`Transaksi ${formData.tipe_transaksi_sp} berhasil ditambahkan!`);
+      setFormData({...formData, nomor_dokumen_sp: '', nilai_transaksi_sp: '', tanggal_sp: ''});
+      fetchChildData(activeReq.id);
+    } catch (err: any) {
+      alert('Gagal menambah transaksi SP: ' + err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleUpdateBerkasTahap = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeReq) return;
 
+    if (activeReq.tahap_sekarang === 10) {
+      const hasSP4HL = transaksiList.some(t => t.tipe === 'SP4HL');
+      if (!hasSP4HL) {
+        const lanjut = window.confirm("Anda belum menginput dokumen SP4HL (pengesahan pengembalian/nihil). Apakah Anda yakin ingin lanjut ke tahap berikutnya tanpa SP4HL?");
+        if (!lanjut) return;
+      }
+    }
+
     setIsSubmitting(true);
     try {
+      const updatePayload: any = {
+        status_tahap: 'Diproses',
+        alasan_penolakan: null,
+        file_ba_pleno: formData.file_ba_pleno,
+        file_surat: formData.file_surat,
+        file_rab: formData.file_rab,
+        file_tor: formData.file_tor,
+        no_surat: formData.no_surat,
+        tgl_surat: formData.tgl_surat,
+        no_izin_prinsip: formData.no_izin_prinsip,
+        no_surat_permohonan_ttd: formData.no_surat_permohonan_ttd,
+        no_register: formData.no_register,
+        no_surat_register: formData.no_surat_register,
+        no_surat_pengusulan_rekening: formData.no_surat_pengusulan_rekening,
+        no_surat_persetujuan_rekening: formData.no_surat_persetujuan_rekening,
+        no_rekening: formData.no_rekening,
+        nama_rekening: formData.nama_rekening,
+        bank_rekening: formData.bank_rekening,
+        nominal_revisi_dipa: formData.nominal_revisi_dipa,
+        no_surat_izin_prinsip: formData.no_surat_izin_prinsip,
+        tgl_surat_izin_prinsip: formData.tgl_surat_izin_prinsip,
+        nomor_nphd: formData.nomor_nphd,
+        tanggal_nphd: formData.tanggal_nphd,
+        surat_permohonan_register: formData.surat_permohonan_register,
+        surat_penetapan_register: formData.surat_penetapan_register,
+        nomor_register_hibah: formData.nomor_register_hibah,
+        no_surat_permohonan_rekening: formData.no_surat_permohonan_rekening,
+        no_surat_izin_penetapan_rekening: formData.no_surat_izin_penetapan_rekening,
+        nama_bank_padanan: formData.nama_bank_padanan,
+        no_surat_pencairan: formData.no_surat_pencairan,
+        nomor_sp2d: formData.nomor_sp2d,
+        no_surat_revisi_dipa: formData.no_surat_revisi_dipa
+      };
+
       const { error } = await supabase.from('hibah_requests')
-        .update({
-          status_tahap: 'Diproses',
-          alasan_penolakan: null,
-          file_ba_pleno: formData.file_ba_pleno,
-          file_surat: formData.file_surat,
-          file_rab: formData.file_rab,
-          file_tor: formData.file_tor
-        })
+        .update(updatePayload)
         .eq('id', activeReq.id);
 
       if (error) throw error;
@@ -394,12 +500,261 @@ export default function UserDashboard() {
     });
   };
 
+  const renderDynamicInputsForTahap = (tahap: number) => {
+    switch (tahap) {
+      case 1:
+        return (
+          <div className="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-slate-200">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">No. Surat Permohonan Hibah *</label>
+              <input type="text" required placeholder="Cth: 001/BAWASLU-KAB/..." value={formData.no_surat} onChange={(e) => setFormData({...formData, no_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Surat *</label>
+              <input type="date" required value={formData.tgl_surat} onChange={(e) => setFormData({...formData, tgl_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-slate-200">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">No. Surat Konsultasi *</label>
+              <input type="text" required placeholder="No. Surat Konsultasi" value={formData.no_surat} onChange={(e) => setFormData({...formData, no_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Surat *</label>
+              <input type="date" required value={formData.tgl_surat} onChange={(e) => setFormData({...formData, tgl_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+          </div>
+        );
+      case 3: 
+        return (
+          <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Surat Permohonan Izin Prinsip *</label>
+              <input type="text" required placeholder="No. Surat Permohonan Izin Prinsip" value={formData.no_surat} onChange={(e) => setFormData({...formData, no_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Penetapan Izin Prinsip *</label>
+                <input type="text" required placeholder="No. Penetapan Izin Prinsip" value={formData.no_surat_izin_prinsip} onChange={(e) => setFormData({...formData, no_surat_izin_prinsip: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Penetapan *</label>
+                <input type="date" required value={formData.tgl_surat_izin_prinsip} onChange={(e) => setFormData({...formData, tgl_surat_izin_prinsip: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              </div>
+            </div>
+          </div>
+        );
+      case 4: 
+        return (
+          <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor NPHD *</label>
+              <input type="text" required placeholder="Nomor NPHD" value={formData.nomor_nphd} onChange={(e) => setFormData({...formData, nomor_nphd: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nominal NPHD (Rp) *</label>
+                <input type="text" required placeholder="Cth: 500000000" value={formData.nilai_rab} onChange={(e) => setFormData({...formData, nilai_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal NPHD *</label>
+                <input type="date" required value={formData.tanggal_nphd} onChange={(e) => setFormData({...formData, tanggal_nphd: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              </div>
+            </div>
+          </div>
+        );
+      case 5: 
+        return (
+          <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Surat Permohonan Register Hibah *</label>
+              <input type="text" required placeholder="No. Surat Permohonan Register" value={formData.surat_permohonan_register} onChange={(e) => setFormData({...formData, surat_permohonan_register: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Surat Penetapan Register Hibah *</label>
+              <input type="text" required placeholder="No. Surat Penetapan Register" value={formData.surat_penetapan_register} onChange={(e) => setFormData({...formData, surat_penetapan_register: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Register Hibah *</label>
+              <input type="text" required placeholder="Nomor Register Resmi" value={formData.nomor_register_hibah} onChange={(e) => setFormData({...formData, nomor_register_hibah: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+          </div>
+        );
+      case 6: 
+        return (
+          <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Permohonan Pembukaan Rekening *</label>
+              <input type="text" required placeholder="No. Surat Permohonan Rekening" value={formData.no_surat_permohonan_rekening} onChange={(e) => setFormData({...formData, no_surat_permohonan_rekening: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Izin Penetapan Rekening *</label>
+              <input type="text" required placeholder="No. Surat Izin Penetapan Rekening" value={formData.no_surat_izin_penetapan_rekening} onChange={(e) => setFormData({...formData, no_surat_izin_penetapan_rekening: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nama Bank Padanan / Penampung *</label>
+              <input type="text" required placeholder="Cth: Bank Mandiri / Bank BJB" value={formData.nama_bank_padanan} onChange={(e) => setFormData({...formData, nama_bank_padanan: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+          </div>
+        );
+      case 7: 
+        return (
+          <div className="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-slate-200">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Permohonan Pencairan *</label>
+              <input type="text" required placeholder="No. Surat Permohonan Pencairan" value={formData.no_surat_pencairan} onChange={(e) => setFormData({...formData, no_surat_pencairan: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor SP2D *</label>
+              <input type="text" required placeholder="Nomor SP2D Pencairan" value={formData.nomor_sp2d} onChange={(e) => setFormData({...formData, nomor_sp2d: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+          </div>
+        );
+      case 8: 
+        return (
+          <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Pengajuan Revisi DIPA *</label>
+              <input type="text" required placeholder="No. Surat Pengajuan Revisi DIPA" value={formData.no_surat_revisi_dipa} onChange={(e) => setFormData({...formData, no_surat_revisi_dipa: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nominal Revisi DIPA / Pagu Awal (Rp) *</label>
+              <input type="text" required placeholder="Cth: 150000000" value={formData.nominal_revisi_dipa} onChange={(e) => setFormData({...formData, nominal_revisi_dipa: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+          </div>
+        );
+      case 9: 
+        return (
+          <div className="space-y-3 mt-3 pt-3 border-t border-slate-200 bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+            <div className="font-bold text-xs text-blue-900 uppercase">Input Realisasi Penyerapan Bulanan (Dapat Diisi Berulang)</div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Bulan *</label>
+                <select value={formData.bulan_realisasi} onChange={(e) => setFormData({...formData, bulan_realisasi: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white">
+                  {['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'].map(b => (
+                    <option key={b} value={b}>{b}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Tahun *</label>
+                <input type="text" value={formData.tahun_realisasi} onChange={(e) => setFormData({...formData, tahun_realisasi: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nilai Realisasi (Rp) *</label>
+              <input type="text" placeholder="Cth: 25000000" value={formData.nilai_realisasi_bulan} onChange={(e) => setFormData({...formData, nilai_realisasi_bulan: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Keterangan / Uraian Kegiatan</label>
+              <input type="text" placeholder="Cth: Pembayaran honorarium pengawas bulan berjalan" value={formData.keterangan_realisasi} onChange={(e) => setFormData({...formData, keterangan_realisasi: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
+            </div>
+            <button type="button" onClick={handleTambahRealisasiBulanan} disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-xs shadow-sm transition-colors">
+              + Tambah / Simpan Realisasi Bulan Ini
+            </button>
+
+            <div className="mt-3 pt-3 border-t border-blue-200">
+              <div className="text-[11px] font-bold text-slate-700 mb-2">Riwayat Realisasi Tercatat ({realisasiList.length} Bulan):</div>
+              <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                {realisasiList.map((r, idx) => (
+                  <div key={idx} className="bg-white p-2 rounded border border-slate-200 flex justify-between text-xs">
+                    <span><b>{r.bulan} {r.tahun}</b>: Rp {Number(r.nilai_realisasi).toLocaleString('id-ID')}</span>
+                    <span className="text-slate-500 italic truncate max-w-[150px]">{r.keterangan_realisasi}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      case 10: 
+        return (
+          <div className="space-y-3 mt-3 pt-3 border-t border-slate-200 bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
+            <div className="font-bold text-xs text-emerald-900 uppercase">Input Dokumen SP2HL (Hingga 6x) & SP4HL (Final)</div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Jenis Dokumen *</label>
+                <select value={formData.tipe_transaksi_sp} onChange={(e) => setFormData({...formData, tipe_transaksi_sp: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white">
+                  <option value="SP2HL">SP2HL (Pengesahan Pendapatan)</option>
+                  <option value="SP4HL">SP4HL (Pengesahan Pengembalian / Nihil)</option>
+                </select>
+              </div>
+              {formData.tipe_transaksi_sp === 'SP2HL' ? (
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Tahapan SP2HL Ke- *</label>
+                  <select value={formData.tahapan_sp2d_ke} onChange={(e) => setFormData({...formData, tahapan_sp2d_ke: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white">
+                    {[1,2,3,4,5,6].map(n => <option key={n} value={n}>SP2HL Ke-{n}</option>)}
+                  </select>
+                </div>
+              ) : (
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Status Dokumen</label>
+                  <div className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-2 rounded-lg">Finalisasi / Nihil</div>
+                </div>
+              )}
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Dokumen *</label>
+                <input type="text" placeholder="Cth: SP2HL-01/..." value={formData.nomor_dokumen_sp} onChange={(e) => setFormData({...formData, nomor_dokumen_sp: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nilai Transaksi (Rp) *</label>
+                <input type="text" placeholder="Cth: 50000000" value={formData.nilai_transaksi_sp} onChange={(e) => setFormData({...formData, nilai_transaksi_sp: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Dokumen *</label>
+              <input type="date" value={formData.tanggal_sp} onChange={(e) => setFormData({...formData, tanggal_sp: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
+            </div>
+            <button type="button" onClick={handleTambahTransaksiSP} disabled={isSubmitting} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-lg text-xs shadow-sm transition-colors">
+              + Tambah Transaksi {formData.tipe_transaksi_sp}
+            </button>
+
+            <div className="mt-3 pt-3 border-t border-emerald-200">
+              <div className="text-[11px] font-bold text-slate-700 mb-2">Riwayat Transaksi SP Tercatat ({transaksiList.length} Dokumen):</div>
+              <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                {transaksiList.map((t, idx) => (
+                  <div key={idx} className="bg-white p-2 rounded border border-slate-200 flex justify-between text-xs">
+                    <span><b>{t.tipe} {t.tipe === 'SP2HL' ? `(Ke-${t.tahapan_ke})` : ''}</b> - {t.nomor_dokumen}</span>
+                    <span className="font-bold text-emerald-700">Rp {Number(t.nilai_transaksi).toLocaleString('id-ID')}</span>
+                  </div>
+                ))}
+              </div>
+              {!transaksiList.some(t => t.tipe === 'SP4HL') && (
+                <div className="mt-2 text-[10px] text-amber-700 bg-amber-50 p-2 rounded border border-amber-200">
+                  ⚠️ Catatan: Step 10 baru bisa diselesaikan/dilanjut ke Tahap 11 setelah Anda menginput dokumen **SP4HL**.
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      case 11:
+        return (
+          <div className="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-slate-200">
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">No. Surat Laporan Penggunaan *</label>
+              <input type="text" required placeholder="No. Surat Laporan" value={formData.no_surat} onChange={(e) => setFormData({...formData, no_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Surat *</label>
+              <input type="date" required value={formData.tgl_surat} onChange={(e) => setFormData({...formData, tgl_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   if (isLoading) return <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-500">Memuat Ruang Kerja...</div>;
 
   return (
     <div className="flex h-screen bg-[#f8fafc] font-sans overflow-hidden selection:bg-blue-100">
       
-      <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 flex-shrink-0">
+      <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 flex-shrink-0 print:hidden">
         <div className="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
           <div className="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center font-bold text-white mr-3 shadow-sm">S</div>
           <span className="font-bold text-white text-lg tracking-wide">SIHANDAL</span>
@@ -435,6 +790,11 @@ export default function UserDashboard() {
             Monitoring Usulan
           </button>
 
+          <button onClick={() => setActiveMenu('resume')} className={`w-full flex items-center px-3 py-2.5 rounded-lg transition-colors ${activeMenu === 'resume' ? 'bg-blue-600 text-white shadow-sm' : 'hover:bg-slate-800 hover:text-white'}`}>
+            <svg className="w-5 h-5 mr-3 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            Resume Laporan
+          </button>
+
           <button onClick={() => setActiveMenu('panduan')} className={`w-full flex items-center px-3 py-2.5 rounded-lg transition-colors ${activeMenu === 'panduan' ? 'bg-blue-600 text-white shadow-sm' : 'hover:bg-slate-800 hover:text-white'}`}>
             <svg className="w-5 h-5 mr-3 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253"></path></svg>
             Panduan 11 Tahap
@@ -443,11 +803,11 @@ export default function UserDashboard() {
       </aside>
 
       <div className="flex-1 flex flex-col overflow-hidden relative">
-        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 z-10 flex-shrink-0">
+        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 z-10 flex-shrink-0 print:hidden">
           <div className="flex items-center text-sm text-slate-500">
             <span>Dashboard</span><span className="mx-2">/</span>
             <span className="font-medium text-slate-800">
-              {activeMenu === 'proses' ? 'Usulan Hibah' : activeMenu === 'monitoring' ? 'Monitoring Usulan' : 'Panduan 11 Tahap'}
+              {activeMenu === 'proses' ? 'Usulan Hibah' : activeMenu === 'monitoring' ? 'Monitoring Usulan' : activeMenu === 'resume' ? 'Resume Laporan Resmi' : 'Panduan 11 Tahap'}
             </span>
           </div>
           <button onClick={handleLogout} className="text-sm font-medium text-rose-600 hover:text-rose-700 bg-rose-50 px-3 py-1.5 rounded-md transition-colors">Keluar</button>
@@ -456,8 +816,8 @@ export default function UserDashboard() {
         <main className="flex-1 overflow-y-auto p-8 relative">
           
           {activeMenu === 'proses' && (
-            <div className="max-w-6xl mx-auto">
-              <div className="mb-6 flex justify-between items-end">
+            <div className="max-w-6xl mx-auto space-y-6">
+              <div className="flex justify-between items-end">
                 <div>
                   <h1 className="text-2xl font-bold text-slate-900">Usulan Hibah Non-Pemilihan</h1>
                   <p className="text-slate-500 mt-1">Kelola tahapan, perbarui tautan berkas GDrive, dan ajukan ke Bawaslu Provinsi.</p>
@@ -491,13 +851,6 @@ export default function UserDashboard() {
                             <td className="p-4">
                               <div className="font-bold text-slate-800">{req.nama_kegiatan}</div>
                               <div className="text-xs text-slate-500 mt-1">Rp {Number(req.nilai_rab).toLocaleString('id-ID')}</div>
-                              
-                              <div className="mt-2 flex gap-2 flex-wrap">
-                                {req.file_ba_pleno && <a href={req.file_ba_pleno} target="_blank" rel="noreferrer" className="text-[10px] bg-slate-100 text-blue-600 px-2 py-1 rounded border border-slate-200 hover:bg-blue-50">🔗 Berkas 1</a>}
-                                {req.file_surat && <a href={req.file_surat} target="_blank" rel="noreferrer" className="text-[10px] bg-slate-100 text-blue-600 px-2 py-1 rounded border border-slate-200 hover:bg-blue-50">🔗 Berkas 2</a>}
-                                {req.file_rab && <a href={req.file_rab} target="_blank" rel="noreferrer" className="text-[10px] bg-slate-100 text-blue-600 px-2 py-1 rounded border border-slate-200 hover:bg-blue-50">🔗 Berkas 3</a>}
-                                {req.file_tor && <a href={req.file_tor} target="_blank" rel="noreferrer" className="text-[10px] bg-slate-100 text-blue-600 px-2 py-1 rounded border border-slate-200 hover:bg-blue-50">🔗 Berkas 4</a>}
-                              </div>
                             </td>
                             <td className="p-4">
                               <span className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md text-xs font-bold border border-blue-100">
@@ -526,13 +879,14 @@ export default function UserDashboard() {
                                 
                                 {req.status_tahap === 'Ditolak' && (
                                   <button onClick={() => openActionModal(req)} className="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-sm transition-colors flex items-center">
-                                    <svg className="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                     Usulkan Ulang
                                   </button>
                                 )}
                                 
                                 {req.status_tahap === 'Diproses' && (
-                                  <span className="text-[11px] font-medium text-slate-400 italic mr-2 border border-slate-100 px-3 py-1.5 rounded-lg bg-slate-50">Menunggu Provinsi</span>
+                                  <button onClick={() => openActionModal(req)} className="bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-xs font-semibold border border-blue-200 transition-colors">
+                                    Update Step / Berkas
+                                  </button>
                                 )}
                               </div>
                             </td>
@@ -541,6 +895,188 @@ export default function UserDashboard() {
                       </tbody>
                     </table>
                   </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeMenu === 'resume' && (
+            <div className="max-w-4xl mx-auto space-y-6">
+              <div className="flex justify-between items-center print:hidden">
+                <div>
+                  <h1 className="text-2xl font-bold text-slate-900">Resume Laporan Resmi</h1>
+                  <p className="text-slate-500 mt-1">Format ringkasan kompilasi 11 tahap hibah.</p>
+                </div>
+                <button onClick={() => window.print()} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-md transition-colors flex items-center">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                  Cetak / Download PDF
+                </button>
+              </div>
+
+              {/* FORMAT LEMBAR RESMI */}
+              <div className="bg-white p-10 rounded-2xl shadow-sm border border-slate-200 space-y-6 print:shadow-none print:border-none print:p-0">
+                
+                {/* Kop Instansi Resmi */}
+                <div className="text-center border-b-2 border-slate-800 pb-5 space-y-1">
+                  <div className="font-bold text-slate-900 text-sm tracking-wide">BADAN PENGAWAS PEMILIHAN UMUM</div>
+                  <div className="font-extrabold text-slate-900 text-base uppercase">PROVINSI JAWA BARAT</div>
+                  <div className="text-[11px] text-slate-600">Jalan Turangga Nomor 25 Bandung 40264</div>
+                  <div className="text-[11px] text-slate-600">Telepon 022-7332604 Email: set.jabar@bawaslu.go.id</div>
+                  <div className="text-[11px] text-slate-600">Laman: http://jabar.bawaslu.go.id/</div>
+                </div>
+
+                <div className="text-center font-bold text-slate-900 text-sm uppercase tracking-wider py-2">
+                  RINGKASAN PENGELOLAAN HIBAH NON-PEMILIHAN
+                </div>
+
+                {requests.length === 0 ? (
+                  <div className="text-center py-12 text-slate-400 text-sm">Belum ada data usulan untuk disusun dalam ringkasan laporan.</div>
+                ) : (
+                  requests.map((req) => {
+                    const totalRealisasi = realisasiList.reduce((acc, curr) => acc + Number(curr.nilai_realisasi || 0), 0);
+                    const paguAwal = Number(req.nominal_revisi_dipa || req.nilai_rab || 0);
+                    const sisaAnggaran = paguAwal - totalRealisasi;
+
+                    return (
+                      <div key={req.id} className="space-y-6">
+                        <div className="space-y-3 text-xs text-slate-800">
+                          <div className="grid grid-cols-12 gap-2">
+                            <div className="col-span-1 font-bold">1.</div>
+                            <div className="col-span-4 text-slate-600">Nama Pemberi Hibah</div>
+                            <div className="col-span-7 font-semibold">: Pemerintah Daerah / Instansi Terkait</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2">
+                            <div className="col-span-1 font-bold">2.</div>
+                            <div className="col-span-4 text-slate-600">Nama Kegiatan</div>
+                            <div className="col-span-7 font-semibold">: {req.nama_kegiatan}</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2">
+                            <div className="col-span-1 font-bold">3.</div>
+                            <div className="col-span-4 text-slate-600">Instansi Pengaju</div>
+                            <div className="col-span-7 font-semibold">: {profile?.asal_instansi}</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2">
+                            <div className="col-span-1 font-bold">4.</div>
+                            <div className="col-span-4 text-slate-600">Posisi Tahap Saat Ini</div>
+                            <div className="col-span-7 font-semibold">: Tahap {req.tahap_sekarang} ({TAHAPAN_HIBAH[req.tahap_sekarang - 1]})</div>
+                          </div>
+                          <div className="grid grid-cols-12 gap-2">
+                            <div className="col-span-1 font-bold">5.</div>
+                            <div className="col-span-4 text-slate-600">Pagu Awal DIPA</div>
+                            <div className="col-span-7 font-semibold">: Rp {paguAwal.toLocaleString('id-ID')},-</div>
+                          </div>
+                        </div>
+
+                        {/* Tabel Kompilasi Rincian 11 Tahapan */}
+                        <div className="pt-4">
+                          <div className="font-bold text-xs uppercase text-slate-900 mb-2">Rincian Kompilasi Data & Nomor Surat Tiap Tahapan:</div>
+                          <div className="border border-slate-300 rounded-lg overflow-hidden text-xs">
+                            <table className="w-full text-left border-collapse">
+                              <thead>
+                                <tr className="bg-slate-100 text-slate-800 uppercase text-[10px] border-b border-slate-300">
+                                  <th className="p-2.5 w-14 text-center border-r border-slate-300">Tahap</th>
+                                  <th className="p-2.5 w-48 border-r border-slate-300">Nama Tahapan</th>
+                                  <th className="p-2.5">Kompilasi Rincian Data & Nomor Surat</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-slate-200">
+                                {TAHAPAN_HIBAH.map((namaTahap, i) => {
+                                  const stepNum = i + 1;
+                                  return (
+                                    <tr key={i} className={stepNum === req.tahap_sekarang ? 'bg-blue-50/40 font-medium' : ''}>
+                                      <td className="p-2.5 text-center font-bold text-slate-600 border-r border-slate-200">{stepNum}</td>
+                                      <td className="p-2.5 font-semibold text-slate-800 border-r border-slate-200">{namaTahap}</td>
+                                      <td className="p-2.5 text-slate-700">
+                                        {stepNum === 1 && <div>No. Surat Permohonan Hibah: <b>{req.no_surat || '-'}</b> (Tgl: {req.tgl_surat || '-'})</div>}
+                                        {stepNum === 2 && <div>No. Surat Konsultasi: <b>{req.no_surat || '-'}</b> (Tgl: {req.tgl_surat || '-'})</div>}
+                                        {stepNum === 3 && (
+                                          <div>
+                                            Surat Permohonan Izin Prinsip: <b>{req.no_surat || '-'}</b><br />
+                                            Nomor Penetapan Izin Prinsip: <b>{req.no_surat_izin_prinsip || '-'}</b> (Tgl: {req.tgl_surat_izin_prinsip || '-'})
+                                          </div>
+                                        )}
+                                        {stepNum === 4 && (
+                                          <div>
+                                            Nomor NPHD: <b>{req.nomor_nphd || '-'}</b><br />
+                                            Nominal NPHD: <b>Rp {Number(req.nilai_rab || 0).toLocaleString('id-ID')},-</b><br />
+                                            Tanggal NPHD: <b>{req.tanggal_nphd || '-'}</b>
+                                          </div>
+                                        )}
+                                        {stepNum === 5 && (
+                                          <div>
+                                            Surat Permohonan Register Hibah: <b>{req.surat_permohonan_register || '-'}</b><br />
+                                            Surat Penetapan Register Hibah: <b>{req.surat_penetapan_register || '-'}</b><br />
+                                            Nomor Register Hibah: <b>{req.nomor_register_hibah || '-'}</b>
+                                          </div>
+                                        )}
+                                        {stepNum === 6 && (
+                                          <div>
+                                            No. Surat Permohonan Pembukaan Rekening: <b>{req.no_surat_permohonan_rekening || '-'}</b><br />
+                                            No. Surat Izin Penetapan Rekening: <b>{req.no_surat_izin_penetapan_rekening || '-'}</b><br />
+                                            Nama Bank Padanan/Penampung: <span className="uppercase font-bold">{req.nama_bank_padanan || '-'}</span> (No. Rek: {req.no_rekening || '-'})
+                                          </div>
+                                        )}
+                                        {stepNum === 7 && (
+                                          <div>
+                                            Nomor Surat Permohonan Pencairan: <b>{req.no_surat_pencairan || '-'}</b><br />
+                                            Nomor SP2D: <b>{req.nomor_sp2d || '-'}</b>
+                                          </div>
+                                        )}
+                                        {stepNum === 8 && (
+                                          <div>
+                                            Nomor Surat Pengajuan Revisi DIPA: <b>{req.no_surat_revisi_dipa || '-'}</b><br />
+                                            Nominal Revisi DIPA (Pagu Awal): <b>Rp {paguAwal.toLocaleString('id-ID')},-</b>
+                                          </div>
+                                        )}
+                                        {stepNum === 9 && (
+                                          <div className="space-y-1.5">
+                                            <div>• <b>Pagu Awal DIPA</b>: Rp {paguAwal.toLocaleString('id-ID')},-</div>
+                                            <div>• <b>Akumulasi Realisasi s.d. Bulan Berjalan</b>: Rp {totalRealisasi.toLocaleString('id-ID')},-</div>
+                                            <div className={`font-bold ${sisaAnggaran < 0 ? 'text-rose-600' : 'text-emerald-700'}`}>
+                                              • <b>Sisa Anggaran</b>: Rp {sisaAnggaran.toLocaleString('id-ID')},-
+                                            </div>
+                                            {realisasiList.length > 0 && (
+                                              <div className="mt-2 pt-2 border-t border-slate-200">
+                                                <div className="text-[11px] font-bold text-slate-700 mb-1">Rincian Realisasi Bulanan:</div>
+                                                <ul className="space-y-1 pl-2 border-l-2 border-blue-200">
+                                                  {realisasiList.map((r, ri) => (
+                                                    <li key={ri}>• <b>{r.bulan} {r.tahun}</b>: Rp {Number(r.nilai_realisasi).toLocaleString('id-ID')} ({r.keterangan_realisasi || '-'})</li>
+                                                  ))}
+                                                </ul>
+                                              </div>
+                                            )}
+                                          </div>
+                                        )}
+                                        {stepNum === 10 && (
+                                          <div>
+                                            {transaksiList.length === 0 ? (
+                                              <span className="text-slate-400 italic">Belum ada transaksi SP2HL / SP4HL tercatat</span>
+                                            ) : (
+                                              <ul className="space-y-1 pl-2 border-l-2 border-emerald-200">
+                                                {transaksiList.map((t, ti) => (
+                                                  <li key={ti}>• <b>{t.tipe} {t.tipe === 'SP2HL' ? `(Ke-${t.tahapan_ke})` : ''}</b> ({t.nomor_dokumen}): <b>Rp {Number(t.nilai_transaksi).toLocaleString('id-ID')}</b></li>
+                                                ))}
+                                              </ul>
+                                            )}
+                                          </div>
+                                        )}
+                                        {stepNum === 11 && <div>No. Surat Laporan Pertanggungjawaban: <b>{req.no_surat || '-'}</b> (Tgl: {req.tgl_surat || '-'})</div>}
+                                        {stepNum > req.tahap_sekarang && <span className="text-slate-400 italic">Belum mencapai tahap ini</span>}
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+
+                        <div className="text-xs text-slate-700 leading-relaxed pt-2">
+                          Kami menyatakan dengan sesungguhnya bahwa ringkasan naskah perjanjian hibah ini disusun berdasarkan dokumen dan bukti-bukti yang ada pada Pejabat Pembuat Komitmen sebagai dasar pengajuan dan penatausahaan hibah sebagaimana diusulkan dalam rangka mendukung kelancaran pengawasan pemilihan dan kegiatan non-pemilihan Bawaslu.
+                        </div>
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </div>
@@ -585,58 +1121,47 @@ export default function UserDashboard() {
                               const isSelesai = stepNumber < req.tahap_sekarang;
                               const isAktif = stepNumber === req.tahap_sekarang;
 
+                              // Logika khusus step 10: Tuntas jika SP4HL sudah ada, meski tahap masih aktif
+                              const isStep10Tuntas = stepNumber === 10 && transaksiList.some(t => t.tipe === 'SP4HL');
+
                               return (
                                 <td key={index} className="p-2 border-r border-slate-100 text-center min-w-[160px]">
-                                  {isSelesai && (
+                                  {(isSelesai || isStep10Tuntas) ? (
                                     <div className="w-full bg-slate-50 border border-slate-200 rounded-lg flex flex-col items-center justify-center text-emerald-600 p-2.5">
                                       <div className="flex items-center space-x-1 mb-1">
                                         <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                                         <span className="text-[10px] font-bold">Tuntas</span>
                                       </div>
-                                      {/* Menggunakan updated_at atau created_at sebagai waktu tuntas */}
                                       <span className="text-[9px] text-slate-500 font-mono leading-tight">
                                         {formatTimestamp(req.updated_at || req.created_at)}
                                       </span>
                                     </div>
-                                  )}
-                                  
-                                  {isAktif && req.status_tahap === 'Perlu Usulan' && (
-                                    <div className="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-lg flex flex-col items-center justify-center p-2.5">
-                                      <span className="text-[10px] font-bold">Giliran Anda</span>
-                                      <span className="text-[9px] mt-0.5 text-emerald-500">(Kirim Berkas)</span>
-                                    </div>
-                                  )}
-
-                                  {isAktif && req.status_tahap === 'Diproses' && (
-                                    <div className="w-full bg-blue-500 text-white rounded-lg shadow-sm flex flex-col items-center justify-center p-2.5">
-                                      <div className="flex items-center space-x-1 mb-1">
-                                        <svg className="w-4 h-4 animate-spin flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                        <span className="text-[10px] font-bold">Verifikasi...</span>
+                                  ) : isAktif ? (
+                                    req.status_tahap === 'Perlu Usulan' ? (
+                                      <div className="w-full bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-lg flex flex-col items-center justify-center p-2.5">
+                                        <span className="text-[10px] font-bold">Giliran Anda</span>
+                                        <span className="text-[9px] mt-0.5 text-emerald-500">(Kirim Berkas)</span>
                                       </div>
-                                      <span className="text-[9px] text-blue-100 font-mono leading-tight">
-                                        {formatTimestamp(req.updated_at || req.created_at)}
-                                      </span>
-                                    </div>
-                                  )}
-
-                                  {isAktif && req.status_tahap === 'Ditolak' && (
-                                    <div className="w-full bg-rose-500 text-white rounded-lg shadow-sm flex flex-col items-center justify-center group relative cursor-pointer p-2.5">
-                                      <div className="flex items-center space-x-1 mb-1">
-                                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                        <span className="text-[10px] font-bold">Direvisi</span>
+                                    ) : req.status_tahap === 'Diproses' ? (
+                                      <div className="w-full bg-blue-500 text-white rounded-lg shadow-sm flex flex-col items-center justify-center p-2.5">
+                                        <div className="flex items-center space-x-1 mb-1">
+                                          <span className="text-[10px] font-bold">Verifikasi...</span>
+                                        </div>
+                                        <span className="text-[9px] text-blue-100 font-mono leading-tight">
+                                          {formatTimestamp(req.updated_at || req.created_at)}
+                                        </span>
                                       </div>
-                                      <span className="text-[9px] text-rose-100 font-mono leading-tight">
-                                        {formatTimestamp(req.updated_at)}
-                                      </span>
-                                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-48 bg-slate-900 text-white text-xs p-3 rounded shadow-lg z-50 text-center whitespace-normal">
-                                        <span className="block font-bold text-rose-300 mb-1">Catatan Provinsi:</span>
-                                        {req.alasan_penolakan || 'Perlu perbaikan berkas.'}
-                                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></div>
+                                    ) : (
+                                      <div className="w-full bg-rose-500 text-white rounded-lg shadow-sm flex flex-col items-center justify-center p-2.5">
+                                        <div className="flex items-center space-x-1 mb-1">
+                                          <span className="text-[10px] font-bold">Direvisi</span>
+                                        </div>
+                                        <span className="text-[9px] text-rose-100 font-mono leading-tight">
+                                          {formatTimestamp(req.updated_at)}
+                                        </span>
                                       </div>
-                                    </div>
-                                  )}
-
-                                  {stepNumber > req.tahap_sekarang && (
+                                    )
+                                  ) : (
                                     <div className="w-full h-[65px] bg-slate-50/50 border border-slate-200 border-dashed rounded-lg flex items-center justify-center text-slate-300">
                                       <span className="font-black opacity-30">-</span>
                                     </div>
@@ -657,8 +1182,8 @@ export default function UserDashboard() {
           {activeMenu === 'panduan' && (
             <div className="max-w-4xl mx-auto">
               <div className="mb-6">
-                <h1 className="text-2xl font-bold text-slate-900">Panduan & Dokumen 11 Tahap Hibah Non-Pemilihan</h1>
-                <p className="text-slate-500 mt-1">Standar operasional dan rincian berkas yang perlu disiapkan oleh Bawaslu Kabupaten/Kota.</p>
+                <h1 className="text-2xl font-bold text-slate-900">Panduan & Dokumen 11 Tahap Hibah</h1>
+                <p className="text-slate-500 mt-1">Standar operasional dan rincian berkas yang perlu disiapkan.</p>
               </div>
 
               <div className="space-y-4">
@@ -675,20 +1200,15 @@ export default function UserDashboard() {
                         {item.aplikasi}
                       </span>
                     </div>
-
-                    <p className="text-xs text-slate-600 mb-4 leading-relaxed">{item.uraian}</p>
-
-                    <div>
-                      <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Dokumen / Syarat yang Disiapkan:</h4>
-                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {item.dokumen.map((doc, idx) => (
-                          <li key={idx} className="flex items-start text-xs text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100">
-                            <span className="text-blue-600 mr-2 font-bold">•</span>
-                            <span>{doc}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    <p className="text-xs text-slate-600 mb-4">{item.uraian}</p>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {item.dokumen.map((doc, idx) => (
+                        <li key={idx} className="flex items-start text-xs text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                          <span className="text-blue-600 mr-2 font-bold">•</span>
+                          <span>{doc}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
               </div>
@@ -701,61 +1221,36 @@ export default function UserDashboard() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden border border-slate-200">
               <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-800">Tahap 1: {TAHAPAN_HIBAH[0]}</h3>
-                  <p className="text-xs text-slate-500 mt-0.5">Sesuai Alur Resmi Bawaslu (Aplikasi SIPD)</p>
-                </div>
-                <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+                <h3 className="text-lg font-bold text-slate-800">Tahap 1: {TAHAPAN_HIBAH[0]}</h3>
+                <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">✕</button>
               </div>
-              
-              <form onSubmit={handleSubmitPermohonan} className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <div className="bg-blue-50 border border-blue-100 p-3 rounded-lg text-xs text-blue-700 mb-2">
-                      <span className="font-bold">Informasi:</span> Lengkapi data kegiatan dan usulan permohonan ke Pemda.
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Judul / Nama Kegiatan</label>
-                      <input type="text" required value={formData.nama_kegiatan} onChange={(e) => setFormData({...formData, nama_kegiatan: e.target.value})} placeholder="Cth: Dukungan Pengawasan Pilkada" className="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Tujuan Hibah</label>
-                      <textarea required value={formData.tujuan_hibah} onChange={(e) => setFormData({...formData, tujuan_hibah: e.target.value})} placeholder="Jelaskan tujuan ringkas penggunaan dana" rows={2} className="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm resize-none"></textarea>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1.5">Estimasi Nilai RAB (Rp)</label>
-                      <input type="text" required value={formData.nilai_rab} onChange={(e) => setFormData({...formData, nilai_rab: e.target.value})} placeholder="Cth: 150000000" className="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-100 max-h-[380px] overflow-y-auto">
-                    <div className="text-xs text-slate-500 mb-3 pb-2 border-b border-slate-200">
-                      Upload berkas ke <b>Google Drive</b>, ubah akses menjadi <b>"Siapa saja yang memiliki tautan"</b>.
-                    </div>
-                    
-                    {getDaftarInputTahap(1).map((field, idx) => (
-                      <div key={field.key}>
-                        <label className="block text-[12px] font-bold text-slate-700 mb-1">{idx + 1}. {field.label} <span className="text-rose-500">*</span></label>
-                        <input 
-                          type="url" 
-                          required 
-                          placeholder="https://drive.google.com/..." 
-                          value={formData[field.key as keyof typeof formData] || ''}
-                          onChange={(e) => setFormData({...formData, [field.key]: e.target.value})}
-                          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-xs" 
-                        />
-                      </div>
-                    ))}
-                  </div>
+              <form onSubmit={handleSubmitPermohonan} className="p-6 max-h-[80vh] overflow-y-auto space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Judul / Nama Kegiatan</label>
+                  <input type="text" required value={formData.nama_kegiatan} onChange={(e) => setFormData({...formData, nama_kegiatan: e.target.value})} placeholder="Cth: Dukungan Pengawasan Pilkada" className="w-full px-4 py-2.5 border rounded-xl text-sm" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Tujuan Hibah</label>
+                  <textarea required value={formData.tujuan_hibah} onChange={(e) => setFormData({...formData, tujuan_hibah: e.target.value})} rows={2} className="w-full px-4 py-2.5 border rounded-xl text-sm resize-none"></textarea>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Estimasi Nilai RAB (Rp)</label>
+                  <input type="text" required value={formData.nilai_rab} onChange={(e) => setFormData({...formData, nilai_rab: e.target.value})} placeholder="Cth: 150000000" className="w-full px-4 py-2.5 border rounded-xl text-sm" />
                 </div>
 
-                <div className="pt-6 mt-4 border-t border-slate-100 flex gap-3">
-                  <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 bg-white border border-slate-300 text-slate-700 font-semibold py-3 rounded-xl text-sm hover:bg-slate-50 transition-all">Batal</button>
-                  <button type="submit" disabled={isSubmitting} className="flex-[2] bg-blue-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-blue-700 transition-all disabled:opacity-70 shadow-md">
-                    {isSubmitting ? 'Menyimpan...' : 'Simpan & Kirim Tahap 1'}
-                  </button>
+                {renderDynamicInputsForTahap(1)}
+
+                <div className="bg-slate-50 p-4 rounded-xl border space-y-3 mt-4">
+                  <div className="text-xs font-bold text-slate-700">Tautan Berkas Google Drive:</div>
+                  <input type="url" required placeholder="BA Pleno Persetujuan" value={formData.file_ba_pleno} onChange={(e) => setFormData({...formData, file_ba_pleno: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                  <input type="url" required placeholder="Surat Permohonan Hibah" value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                  <input type="url" required placeholder="Proposal Hibah" value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                  <input type="url" required placeholder="RAB Hibah" value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                </div>
+
+                <div className="pt-4 border-t flex gap-3">
+                  <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 bg-white border py-3 rounded-xl text-sm">Batal</button>
+                  <button type="submit" disabled={isSubmitting} className="flex-[2] bg-blue-600 text-white font-bold py-3 rounded-xl text-sm shadow-md">Simpan & Kirim</button>
                 </div>
               </form>
             </div>
@@ -766,50 +1261,24 @@ export default function UserDashboard() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl overflow-hidden border border-slate-200">
               <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-800">
-                    {activeReq.status_tahap === 'Ditolak' ? 'Usulan Ulang' : 'Kirim Berkas'} Tahap {activeReq.tahap_sekarang}
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">{TAHAPAN_HIBAH[activeReq.tahap_sekarang - 1]}</p>
-                </div>
-                <button onClick={() => setIsActionModalOpen(false)} className="text-slate-400 hover:text-slate-600">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+                <h3 className="text-lg font-bold text-slate-800">Kelola Tahap {activeReq.tahap_sekarang}: {TAHAPAN_HIBAH[activeReq.tahap_sekarang - 1]}</h3>
+                <button onClick={() => setIsActionModalOpen(false)} className="text-slate-400 hover:text-slate-600">✕</button>
               </div>
+              <form onSubmit={handleUpdateBerkasTahap} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+                {renderDynamicInputsForTahap(activeReq.tahap_sekarang)}
 
-              <form onSubmit={handleUpdateBerkasTahap} className="p-6 space-y-4">
-                {activeReq.status_tahap === 'Ditolak' ? (
-                  <div className="bg-rose-50 border border-rose-100 p-4 rounded-xl">
-                    <div className="text-xs font-bold text-rose-800 mb-1">Catatan Revisi dari Provinsi:</div>
-                    <div className="text-xs text-rose-700 whitespace-pre-wrap">{activeReq.alasan_penolakan || 'Mohon periksa kembali kelengkapan dokumen.'}</div>
-                  </div>
-                ) : (
-                  <div className="bg-blue-50 border border-blue-100 p-3 rounded-lg text-xs text-blue-700">
-                    Lengkapi seluruh tautan berkas persyaratan untuk Tahap {activeReq.tahap_sekarang} sebelum dikirim ke Bawaslu Provinsi.
+                {activeReq.tahap_sekarang !== 9 && activeReq.tahap_sekarang !== 10 && (
+                  <div className="space-y-3 pt-2">
+                    <div className="text-xs font-bold text-slate-700">Tautan Berkas Google Drive:</div>
+                    <input type="url" required placeholder="Tautan Berkas 1" value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                    <input type="url" required placeholder="Tautan Berkas 2" value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                    <input type="url" required placeholder="Tautan Berkas 3" value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
                   </div>
                 )}
 
-                <div className="space-y-3 max-h-[350px] overflow-y-auto pr-1 mt-2">
-                  {getDaftarInputTahap(activeReq.tahap_sekarang).map((field, idx) => (
-                    <div key={field.key}>
-                      <label className="block text-[12px] font-bold text-slate-700 mb-1">{idx + 1}. {field.label} <span className="text-rose-500">*</span></label>
-                      <input 
-                        type="url" 
-                        required 
-                        placeholder="https://drive.google.com/..." 
-                        value={formData[field.key as keyof typeof formData] || ''}
-                        onChange={(e) => setFormData({...formData, [field.key]: e.target.value})}
-                        className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-xs" 
-                      />
-                    </div>
-                  ))}
-                </div>
-
-                <div className="pt-4 border-t border-slate-100 flex gap-3">
-                  <button type="button" onClick={() => setIsActionModalOpen(false)} className="flex-1 bg-white border border-slate-300 text-slate-700 font-semibold py-3 rounded-xl text-sm hover:bg-slate-50 transition-all">Batal</button>
-                  <button type="submit" disabled={isSubmitting} className="flex-[2] bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-emerald-700 transition-all disabled:opacity-70 shadow-md">
-                    {isSubmitting ? 'Mengirim...' : (activeReq.status_tahap === 'Ditolak' ? 'Kirim Ulang ke Provinsi' : `Kirim Tahap ${activeReq.tahap_sekarang}`)}
-                  </button>
+                <div className="pt-4 border-t flex gap-3">
+                  <button type="button" onClick={() => setIsActionModalOpen(false)} className="flex-1 bg-white border py-3 rounded-xl text-sm">Batal`;</button>
+                  <button type="submit" disabled={isSubmitting} className="flex-[2] bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm shadow-md">Simpan & Majukan Tahap</button>
                 </div>
               </form>
             </div>

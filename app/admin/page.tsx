@@ -17,9 +17,9 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState<Profile[]>([]);
   const [isLoadingFetch, setIsLoadingFetch] = useState(true);
   
-  // State default diset ke user_biasa
+  // State default diubah dari 'user_biasa' ke 'user'
   const [formData, setFormData] = useState({
-    name: '', email: '', password: '', role: 'user_biasa', instansi: ''
+    name: '', email: '', password: '', role: 'user', instansi: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -59,7 +59,7 @@ export default function AdminDashboard() {
       if (!response.ok) alert(`Gagal: ${result.error}`);
       else {
         alert('Pengguna baru berhasil ditambahkan!');
-        setFormData({ name: '', email: '', password: '', role: 'user_biasa', instansi: '' });
+        setFormData({ name: '', email: '', password: '', role: 'user', instansi: '' });
         fetchUsers();
       }
     } catch (error: any) {
@@ -106,6 +106,20 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       alert('Terjadi kesalahan sistem.');
+    }
+  };
+
+  // Helper untuk melabeli dan mewarnai badge role
+  const getRoleBadge = (role: string) => {
+    switch (role) {
+      case 'atasan_kabkot':
+        return { label: 'Atasan Kab/Kota', bg: 'bg-emerald-50 text-emerald-700 border-emerald-100', dot: 'bg-emerald-500' };
+      case 'atasan_prov':
+        return { label: 'Atasan Provinsi', bg: 'bg-purple-50 text-purple-700 border-purple-100', dot: 'bg-purple-500' };
+      case 'verifikator':
+        return { label: 'Verifikator', bg: 'bg-orange-50 text-orange-700 border-orange-100', dot: 'bg-orange-500' };
+      default:
+        return { label: 'Staf Pengaju', bg: 'bg-blue-50 text-blue-700 border-blue-100', dot: 'bg-blue-500' };
     }
   };
 
@@ -165,13 +179,14 @@ export default function AdminDashboard() {
                       <input type="text" required minLength={6} value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} placeholder="Minimal 6 karakter" className="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm" />
                     </div>
                     
-                    {/* Perubahan Dropdown Role */}
+                    {/* Dropdown Role */}
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1.5">Peran Akses</label>
                       <select value={formData.role} onChange={(e) => setFormData({...formData, role: e.target.value})} className="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm bg-white">
-                        <option value="user_biasa">User Biasa (Pengaju)</option>
-                        <option value="verifikator">Verifikator (Pemeriksa)</option>
-                        <option value="Pimpinan">Pimpinan (Pemantau)</option>
+                        <option value="user">Staf Pengaju (Kabupaten/Kota)</option>
+                        <option value="atasan_kabkot">Atasan Kabupaten/Kota (Pimpinan Wilayah)</option>
+                        <option value="atasan_prov">Atasan Provinsi (Pemantau Lintas Wilayah)</option>
+                        <option value="verifikator">Verifikator Provinsi</option>
                       </select>
                     </div>
 
@@ -210,48 +225,41 @@ export default function AdminDashboard() {
                         ) : users.length === 0 ? (
                           <tr><td colSpan={3} className="p-8 text-center text-slate-500">Belum ada pengguna terdaftar.</td></tr>
                         ) : (
-                          users.map((u) => (
-                            <tr key={u.id} className="hover:bg-slate-50/80 transition-colors">
-                              <td className="p-4">
-                                <div className="flex items-center">
-                                  <div className="w-9 h-9 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-sm mr-3 border border-slate-200">
-                                    {u.full_name?.charAt(0) || 'U'}
+                          users.map((u) => {
+                            const badge = getRoleBadge(u.role);
+                            return (
+                              <tr key={u.id} className="hover:bg-slate-50/80 transition-colors">
+                                <td className="p-4">
+                                  <div className="flex items-center">
+                                    <div className="w-9 h-9 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-sm mr-3 border border-slate-200">
+                                      {u.full_name?.charAt(0) || 'U'}
+                                    </div>
+                                    <div>
+                                      <div className="font-semibold text-slate-800">{u.full_name}</div>
+                                      <div className="text-slate-500 text-xs mt-0.5">{u.asal_instansi}</div>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <div className="font-semibold text-slate-800">{u.full_name}</div>
-                                    <div className="text-slate-500 text-xs mt-0.5">{u.asal_instansi}</div>
+                                </td>
+                                <td className="p-4">
+                                  {/* Badge Role Dinamis */}
+                                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${badge.bg}`}>
+                                    <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${badge.dot}`}></span>
+                                    {badge.label}
+                                  </span>
+                                </td>
+                                <td className="p-4 text-right">
+                                  <div className="flex justify-end gap-2">
+                                    <button onClick={() => handleUpdatePassword(u.id, u.full_name)} className="text-blue-600 hover:text-blue-800 font-medium text-xs px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                                      Ubah Sandi
+                                    </button>
+                                    <button onClick={() => handleDeleteUser(u.id, u.full_name)} className="text-rose-600 hover:text-rose-800 font-medium text-xs px-3 py-1.5 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors">
+                                      Hapus
+                                    </button>
                                   </div>
-                                </div>
-                              </td>
-                              <td className="p-4">
-                                {/* Warna Badge Berdasarkan Tipe Akun Baru */}
-                                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${
-                                  u.role === 'atasan' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 
-                                  u.role === 'verifikator' ? 'bg-orange-50 text-orange-700 border-orange-100' : 
-                                  'bg-blue-50 text-blue-700 border-blue-100'
-                                }`}>
-                                  <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
-                                    u.role === 'atasan' ? 'bg-emerald-500' : 
-                                    u.role === 'verifikator' ? 'bg-orange-500' : 
-                                    'bg-blue-500'
-                                  }`}></span>
-                                  {u.role === 'atasan' ? 'Atasan' : 
-                                   u.role === 'verifikator' ? 'Verifikator' : 
-                                   'User Biasa'}
-                                </span>
-                              </td>
-                              <td className="p-4 text-right">
-                                <div className="flex justify-end gap-2">
-                                  <button onClick={() => handleUpdatePassword(u.id, u.full_name)} className="text-blue-600 hover:text-blue-800 font-medium text-xs px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
-                                    Ubah Sandi
-                                  </button>
-                                  <button onClick={() => handleDeleteUser(u.id, u.full_name)} className="text-rose-600 hover:text-rose-800 font-medium text-xs px-3 py-1.5 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors">
-                                    Hapus
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          ))
+                                </td>
+                              </tr>
+                            );
+                          })
                         )}
                       </tbody>
                     </table>

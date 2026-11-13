@@ -287,7 +287,7 @@ export default function AtasanKabkotDashboard() {
         {/* LOGO RESMI SIHANDAL */}
         <div className="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
           <img 
-            src="/logo-sihandal.jpeg" 
+            src="/logo-sihandal.png" 
             alt="Logo SIHANDAL" 
             className="h-9 w-auto object-contain bg-white p-1 rounded-lg" 
           />

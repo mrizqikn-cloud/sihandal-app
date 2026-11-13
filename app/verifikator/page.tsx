@@ -298,11 +298,13 @@ export default function VerifikatorDashboard() {
     <div className="flex h-screen bg-[#f8fafc] font-sans overflow-hidden">
       
       <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 flex-shrink-0">
-  {/* LOGO / BRANDING SIDEBAR */}
+  {/* LOGO RESMI GAMBAR DI SIDEBAR VERIFIKATOR */}
   <div className="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
-    <div className="bg-white px-2.5 py-1 rounded-lg shadow-sm">
-      <span className="text-base font-black tracking-wider text-rose-600">SIHANDAL</span>
-    </div>
+    <img 
+      src="/logo-sihandal.png" 
+      alt="Logo SIHANDAL" 
+      className="h-9 w-auto object-contain bg-white p-1 rounded-lg" 
+    />
   </div>
         
         <div className="px-4 mt-6 mb-2">

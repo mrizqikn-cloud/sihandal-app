@@ -58,10 +58,11 @@ export default function LoginPage() {
         {/* Sisi Kiri: Logo & Branding Resmi */}
         <div className="flex-1 text-center md:text-left px-4 space-y-4">
           <div className="flex justify-center md:justify-start">
-            <div className="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 inline-block">
-              <span className="text-xl font-black tracking-wider text-rose-600">SIHANDAL</span>
-              <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Bawaslu Jabar</div>
-            </div>
+            <img 
+              src="/logo-sihandal.png" 
+              alt="Logo SIHANDAL" 
+              className="h-24 md:h-28 w-auto object-contain bg-white p-2 rounded-2xl shadow-sm border border-slate-200" 
+            />
           </div>
           <p className="text-base text-slate-600 leading-relaxed font-medium">
             Sistem Informasi Hibah, Administrasi dan Pengendalian terintegrasi untuk Bawaslu.

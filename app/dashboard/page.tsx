@@ -136,7 +136,7 @@ const DETAIL_PANDUAN_TAHAP = [
     tahap: 10,
     judul: "Tahap Pengajuan SP2HL dan SP4HL",
     aplikasi: "SAKTI ke KPPN Mitra Kerja",
-    uraian: "Bawaslu Provinsi/Kabupaten/Kota mengajukan SP2HL dan SP4HL kepada KPPN mitra kerja sebagai pertanggungjawaban atas penggunaan dan/atau pengembalian sisa hibah.",
+    uraian: "Bawaslu Provinsi/Kabupaten/Kota mengajukan SP2HL dan SP4HL kepada KPPN mitra kerja sebagai pertanggungjawaban atas penggunaan dan/oder pengembalian sisa hibah.",
     dokumen: [
       "DRPP (Daftar Rincian Penggunaan Dana)",
       "SPP (Surat Permintaan Pembayaran)",
@@ -226,7 +226,7 @@ export default function UserDashboard() {
     nomor_addendum: '',
     tanggal_addendum: '',
     nominal_baru: '',
-    file_addendum: '' // Link Google Drive
+    file_addendum: ''
   });
   const [isSubmittingAddendum, setIsSubmittingAddendum] = useState(false);
 
@@ -275,7 +275,6 @@ export default function UserDashboard() {
     router.push('/login');
   };
 
-  // --- HANDLER ADDENDUM NPHD ---
   const handleNominalAddendumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
     const formatted = value ? Number(value).toLocaleString('id-ID') : '';
@@ -294,7 +293,7 @@ export default function UserDashboard() {
         nomor_addendum: addendumForm.nomor_addendum,
         tanggal_addendum: addendumForm.tanggal_addendum,
         nominal_baru: Number(rawNominal),
-        file_addendum: addendumForm.file_addendum, // Link Google Drive
+        file_addendum: addendumForm.file_addendum,
         status: 'Menunggu Verifikasi'
       });
 
@@ -310,7 +309,6 @@ export default function UserDashboard() {
       setIsSubmittingAddendum(false);
     }
   };
-  // -----------------------------
 
   const openModalBaru = () => {
     setFormData({
@@ -823,7 +821,6 @@ export default function UserDashboard() {
     <div className="flex h-screen bg-[#f8fafc] font-sans overflow-hidden selection:bg-blue-100">
       
       <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 flex-shrink-0 print:hidden">
-        {/* LOGO RESMI DI SIDEBAR */}
         <div className="h-20 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
           <img 
             src="/logo-sihandal.png" 
@@ -943,7 +940,6 @@ export default function UserDashboard() {
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
 
-                                {/* TOMBOL ADDENDUM (Tampil jika sudah lewat NPHD / Tahap 4) */}
                                 {req.tahap_sekarang >= 4 && (
                                   <button 
                                     onClick={() => {
@@ -1000,10 +996,8 @@ export default function UserDashboard() {
                 </button>
               </div>
 
-              {/* FORMAT LEMBAR RESMI */}
               <div className="bg-white p-10 rounded-2xl shadow-sm border border-slate-200 space-y-6 print:shadow-none print:border-none print:p-0">
                 
-                {/* Kop Instansi Resmi */}
                 <div className="text-center border-b-2 border-slate-800 pb-5 space-y-1">
                   <div className="font-bold text-slate-900 text-sm tracking-wide">BADAN PENGAWAS PEMILIHAN UMUM</div>
                   <div className="font-extrabold text-slate-900 text-base uppercase">PROVINSI JAWA BARAT</div>
@@ -1054,7 +1048,6 @@ export default function UserDashboard() {
                           </div>
                         </div>
 
-                        {/* Tabel Kompilasi Rincian 11 Tahapan */}
                         <div className="pt-4">
                           <div className="font-bold text-xs uppercase text-slate-900 mb-2">Rincian Kompilasi Data & Nomor Surat Tiap Tahapan:</div>
                           <div className="border border-slate-300 rounded-lg overflow-hidden text-xs">
@@ -1207,7 +1200,6 @@ export default function UserDashboard() {
                               const stepNumber = index + 1;
                               const isSelesai = stepNumber < req.tahap_sekarang;
                               const isAktif = stepNumber === req.tahap_sekarang;
-
                               const isStep10Tuntas = stepNumber === 10 && transaksiList.some(t => t.tipe === 'SP4HL');
 
                               return (
@@ -1272,7 +1264,6 @@ export default function UserDashboard() {
                   <h1 className="text-2xl font-bold text-slate-900">Panduan & Infografis 11 Tahap Hibah</h1>
                   <p className="text-slate-500 mt-1 text-sm">Infografis resmi alur pengelolaan hibah non-pemilihan Bawaslu Jabar.</p>
                 </div>
-                {/* Tombol Download Master Excel Dokumen di Atas */}
                 <a 
                   href="/SIHANDAL_Ceklis_Kelengkapan_Dokumen_Penerimaan_Hibah_Non_Pemilihan.xlsx" 
                   download 
@@ -1283,7 +1274,6 @@ export default function UserDashboard() {
                 </a>
               </div>
 
-              {/* 1. INFOGRAFIS UTAMA / ALUR KESELURUHAN (TAHAP 0) */}
               <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
                 <div className="flex items-center space-x-3 pb-4 border-b border-slate-100">
                   <span className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-base shadow-sm">
@@ -1303,7 +1293,6 @@ export default function UserDashboard() {
                 </div>
               </div>
 
-              {/* 2. DAFTAR DETAIL INFOGRAFIS PER TAHAP (TANPA TOMBOL DOWNLOAD DIBAWAHNYA) */}
               <div className="space-y-8">
                 {DETAIL_PANDUAN_TAHAP.map((item) => (
                   <div key={item.tahap} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
@@ -1317,7 +1306,6 @@ export default function UserDashboard() {
                       </div>
                     </div>
 
-                    {/* TAMPILAN GAMBAR INFOGRAFIS PER TAHAP */}
                     <div className="bg-slate-950 rounded-xl overflow-hidden border border-slate-800 p-2 flex justify-center items-center shadow-inner">
                       <img 
                         src={`/infografis/tahap-${item.tahap}.jpg`} 
@@ -1357,11 +1345,23 @@ export default function UserDashboard() {
                 {renderDynamicInputsForTahap(1)}
 
                 <div className="bg-slate-50 p-4 rounded-xl border space-y-3 mt-4">
-                  <div className="text-xs font-bold text-slate-700">Tautan Berkas Google Drive:</div>
-                  <input type="url" required placeholder="BA Pleno Persetujuan" value={formData.file_ba_pleno} onChange={(e) => setFormData({...formData, file_ba_pleno: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
-                  <input type="url" required placeholder="Surat Permohonan Hibah" value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
-                  <input type="url" required placeholder="Proposal Hibah" value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
-                  <input type="url" required placeholder="RAB Hibah" value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                  <div className="text-xs font-bold text-slate-700">Tautan Berkas Google Drive Wajib (Tahap 1):</div>
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-1">1. BA Pleno Persetujuan</label>
+                    <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_ba_pleno} onChange={(e) => setFormData({...formData, file_ba_pleno: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-1">2. Surat Permohonan Hibah</label>
+                    <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-1">3. Proposal Hibah</label>
+                    <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-slate-600 mb-1">4. RAB Hibah</label>
+                    <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                  </div>
                 </div>
 
                 <div className="pt-4 border-t flex gap-3">
@@ -1385,10 +1385,164 @@ export default function UserDashboard() {
 
                 {activeReq.tahap_sekarang !== 9 && activeReq.tahap_sekarang !== 10 && (
                   <div className="space-y-3 pt-2">
-                    <div className="text-xs font-bold text-slate-700">Tautan Berkas Google Drive:</div>
-                    <input type="url" required placeholder="Tautan Berkas 1" value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
-                    <input type="url" required placeholder="Tautan Berkas 2" value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
-                    <input type="url" required placeholder="Tautan Berkas 3" value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                    <div className="text-xs font-bold text-slate-700">Tautan Berkas Google Drive Wajib (Tahap {activeReq.tahap_sekarang}):</div>
+                    
+                    {activeReq.tahap_sekarang === 1 && (
+                      <>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">1. Link BA Pleno Persetujuan</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_ba_pleno} onChange={(e) => setFormData({...formData, file_ba_pleno: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">2. Link Surat Permohonan Hibah</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">3. Link Proposal Hibah</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">4. Link RAB Hibah</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                      </>
+                    )}
+
+                    {activeReq.tahap_sekarang === 2 && (
+                      <>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">1. Link Surat Permohonan Konsultasi Rencana Penerimaan</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">2. Link RAB & TOR/KAK Hibah</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">3. Link Dokumen Pendukung (BA/Surat Pemda / Data BMN)</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                      </>
+                    )}
+
+                    {activeReq.tahap_sekarang === 3 && (
+                      <>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">1. Link Surat Permohonan Persetujuan & Perubahan Rencana Kerja</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">2. Link RAB, TOR/KAK, & SPTJM (Ttd KPA/PPK)</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">3. Link HPS/Survei & Data Pegawai/BMN Eksisting</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                      </>
+                    )}
+
+                    {activeReq.tahap_sekarang === 4 && (
+                      <>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">1. Link Surat Permohonan TTD & Draf NPHD</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">2. Link RAB Lampiran NPHD</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">3. Link Surat Ijin Prinsip Bawaslu RI</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                      </>
+                    )}
+
+                    {activeReq.tahap_sekarang === 5 && (
+                      <>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">1. Link Surat Permohonan Penerbitan Nomor Register & Ringkasan Hibah</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">2. Link NPHD Dilegalisir (Halaman Tanda Tangan)</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">3. Link RAB Dilegalisir (Lampiran NPHD)</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                      </>
+                    )}
+
+                    {activeReq.tahap_sekarang === 6 && (
+                      <>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">1. Link BA Pleno Penetapan Bank Penampungan</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_ba_pleno} onChange={(e) => setFormData({...formData, file_ba_pleno: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">2. Link Surat Permohonan Pembukaan Rekening RPDHL/RPDH</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">3. Link Surat Penerbitan Nomor Register Hibah (Kanwil DJPb)</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                      </>
+                    )}
+
+                    {activeReq.tahap_sekarang === 7 && (
+                      <>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">1. Link Surat Permohonan Pencairan & NPHD/RAB</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">2. Link Pakta Integritas / SPTJM & Keterangan Bank/KTP KPA</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">3. Link Dokumen Pendukung Lainnya Sesuai NPHD</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                      </>
+                    )}
+
+                    {activeReq.tahap_sekarang === 8 && (
+                      <>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">1. Link Surat Permohonan Revisi DIPA & Ringkasan Hibah</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">2. Link NPHD & RAB Dilegalisir</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">3. Link Surat Register & Surat Ijin Pembukaan Rekening</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                      </>
+                    )}
+
+                    {activeReq.tahap_sekarang === 11 && (
+                      <>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">1. Link Surat Laporan Penggunaan Hibah</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">2. Link Karwas Penggunaan & SPHL / SP3HL</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_rab} onChange={(e) => setFormData({...formData, file_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">3. Link Bukti Pengembalian Sisa Hibah (Jika Ada)</label>
+                          <input type="url" required placeholder="https://drive.google.com/..." value={formData.file_tor} onChange={(e) => setFormData({...formData, file_tor: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
 
@@ -1401,7 +1555,6 @@ export default function UserDashboard() {
           </div>
         )}
 
-        {/* MODAL FORM PENGAJUAN ADDENDUM NPHD */}
         {isAddendumModalOpen && selectedHibahForAddendum && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-200">

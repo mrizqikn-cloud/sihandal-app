@@ -26,7 +26,7 @@ export default function VerifikatorDashboard() {
   
   const [realisasiList, setRealisasiList] = useState<any[]>([]);
   const [transaksiList, setTransaksiList] = useState<any[]>([]);
-  const [addendumList, setAddendumList] = useState<any[]>([]); // State untuk Addendum
+  const [addendumList, setAddendumList] = useState<any[]>([]);
 
   const [selectedReq, setSelectedReq] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,7 +63,6 @@ export default function VerifikatorDashboard() {
     const { data: transData } = await supabase.from('transaksi_sp2hl_sp4hl').select('*').eq('hibah_request_id', requestId).order('created_at', { ascending: true });
     if (transData) setTransaksiList(transData);
 
-    // Fetch Addendum Data
     const { data: addendumData } = await supabase.from('nphd_addendum').select('*').eq('hibah_request_id', requestId).order('created_at', { ascending: true });
     if (addendumData) setAddendumList(addendumData);
   };
@@ -82,25 +81,22 @@ export default function VerifikatorDashboard() {
     setIsModalOpen(true);
   };
 
-  // --- HANDLER UNTUK ADDENDUM ---
   const handleSetujuAddendum = async (addendumId: string, nominalBaru: number) => {
     const confirm = window.confirm("Apakah Anda yakin menyetujui Addendum ini?\nPagu/Nilai RAB kegiatan ini akan otomatis diperbarui sesuai nominal addendum baru.");
     if (!confirm) return;
 
     setIsSubmitting(true);
     try {
-      // 1. Ubah status addendum jadi disetujui
       await supabase.from('nphd_addendum').update({ status: 'Disetujui' }).eq('id', addendumId);
       
-      // 2. Update Pagu di tabel hibah_requests utama
       await supabase.from('hibah_requests').update({ 
         nilai_rab: nominalBaru,
-        nominal_revisi_dipa: nominalBaru // Kita sinkronkan juga kesini
+        nominal_revisi_dipa: nominalBaru 
       }).eq('id', selectedReq.id);
       
       alert("Addendum berhasil disetujui! Pagu kegiatan telah diperbarui.");
-      fetchData(); // Refresh list utama
-      fetchChildData(selectedReq.id); // Refresh detail di dalam modal
+      fetchData(); 
+      fetchChildData(selectedReq.id); 
     } catch (error: any) {
       alert("Gagal menyetujui addendum: " + error.message);
     } finally {
@@ -110,7 +106,7 @@ export default function VerifikatorDashboard() {
 
   const handleTolakAddendum = async (addendumId: string) => {
     const alasan = window.prompt("Masukkan alasan penolakan addendum ini:");
-    if (alasan === null) return; // Batal jika user klik cancel
+    if (alasan === null) return;
     
     setIsSubmitting(true);
     try {
@@ -123,7 +119,6 @@ export default function VerifikatorDashboard() {
       setIsSubmitting(false);
     }
   };
-  // ------------------------------
 
   const handleSetuju = async () => {
     if (!selectedReq) return;
@@ -225,29 +220,29 @@ export default function VerifikatorDashboard() {
       case 3:
         return (
           <div className="space-y-1">
-            <div>Surat Permohonan Izin Prinsip: <b>{req.no_surat || '-'}</b></div>
-            <div>Nomor Penetapan Izin Prinsip: <b>{req.no_surat_izin_prinsip || '-'}</b> (Tgl: {req.tgl_surat_izin_prinsip || '-'})</div>
+            <div>Surat Permohonan Izin Prinsip ke Bawaslu RI: <b>{req.no_surat || '-'}</b> (Tgl: {req.tgl_surat || '-'})</div>
           </div>
         );
       case 4:
         return (
           <div className="space-y-1">
-            <div>Nomor NPHD: <b>{req.nomor_nphd || '-'}</b></div>
+            <div>Nomor Surat Persetujuan / Izin Prinsip Bawaslu RI: <b>{req.no_surat_izin_prinsip || '-'}</b> (Tgl: {req.tgl_surat_izin_prinsip || '-'})</div>
+            <div>Nomor NPHD: <b>{req.nomor_nphd || '-'}</b> (Tgl: {req.tanggal_nphd || '-'})</div>
             <div>Nominal NPHD: <b>Rp {Number(req.nilai_rab || 0).toLocaleString('id-ID')}</b></div>
-            <div>Tanggal NPHD: <b>{req.tanggal_nphd || '-'}</b></div>
           </div>
         );
       case 5:
         return (
           <div className="space-y-1">
-            <div>Surat Permohonan Register Hibah: <b>{req.surat_permohonan_register || '-'}</b></div>
-            <div>Surat Penetapan Register Hibah: <b>{req.surat_penetapan_register || '-'}</b></div>
-            <div>Nomor Register Hibah: <b>{req.nomor_register_hibah || '-'}</b></div>
+            <div>Nomor Surat Permohonan Register Hibah ke Kanwil DJPb: <b>{req.surat_permohonan_register || '-'}</b></div>
+            <div>Tanggal Surat Permohonan: <b>{req.tgl_surat || '-'}</b></div>
           </div>
         );
       case 6:
         return (
           <div className="space-y-1">
+            <div>Nomor Surat Penetapan Register (Kanwil DJPb): <b>{req.surat_penetapan_register || '-'}</b></div>
+            <div>Nomor Register Hibah Resmi: <b className="text-blue-600">{req.nomor_register_hibah || '-'}</b></div>
             <div>No. Surat Permohonan Pembukaan Rekening: <b>{req.no_surat_permohonan_rekening || '-'}</b></div>
             <div>No. Surat Izin Penetapan Rekening: <b>{req.no_surat_izin_penetapan_rekening || '-'}</b></div>
             <div>Nama Bank Padanan/Penampung: <span className="uppercase font-bold">{req.nama_bank_padanan || '-'}</span> (No. Rek: {req.no_rekening || '-'})</div>
@@ -298,14 +293,13 @@ export default function VerifikatorDashboard() {
     <div className="flex h-screen bg-[#f8fafc] font-sans overflow-hidden">
       
       <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 flex-shrink-0">
-  {/* LOGO RESMI GAMBAR DI SIDEBAR VERIFIKATOR */}
-  <div className="h-20 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
-  <img 
-    src="/logo-sihandal.png" 
-    alt="Logo SIHANDAL" 
-    className="h-12 md:h-14 w-auto object-contain bg-white px-2.5 py-1.5 rounded-xl shadow-sm" 
-  />
-</div>
+        <div className="h-20 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
+          <img 
+            src="/logo-sihandal.png" 
+            alt="Logo SIHANDAL" 
+            className="h-12 md:h-14 w-auto object-contain bg-white px-2.5 py-1.5 rounded-xl shadow-sm" 
+          />
+        </div>
         
         <div className="px-4 mt-6 mb-2">
           <div className="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-inner">
@@ -400,7 +394,6 @@ export default function VerifikatorDashboard() {
           </div>
         </main>
 
-        {/* Modal Verifikasi */}
         {isModalOpen && selectedReq && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl overflow-hidden border border-slate-200">
@@ -414,7 +407,6 @@ export default function VerifikatorDashboard() {
 
               <div className="p-6 max-h-[80vh] overflow-y-auto space-y-4 text-xs text-slate-700">
                 
-                {/* 1. Aspek Histori & Audit Trail */}
                 <div className="bg-slate-100 p-4 rounded-xl border border-slate-200 space-y-2">
                   <div className="font-bold text-slate-900 uppercase text-[11px] tracking-wide flex items-center">
                     <svg className="w-4 h-4 mr-1 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -433,13 +425,11 @@ export default function VerifikatorDashboard() {
                   )}
                 </div>
 
-                {/* 2. Rincian Data Dinamis Sesuai Tahapan Saat Ini */}
                 <div className="bg-slate-50 p-4 rounded-xl border space-y-2">
                   <div className="font-bold text-slate-900 uppercase text-[11px]">Rincian Data Tahap {selectedReq.tahap_sekarang} ({TAHAPAN_HIBAH[selectedReq.tahap_sekarang - 1]}):</div>
                   {renderDetailDataByTahap(selectedReq)}
                 </div>
 
-                {/* 3. Panel Addendum (Tampil jika ada riwayat Addendum untuk kegiatan ini) */}
                 {addendumList.length > 0 && (
                   <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 space-y-2">
                     <div className="font-bold text-amber-900 uppercase text-[11px]">Riwayat Pengajuan Addendum NPHD ({addendumList.length}):</div>
@@ -465,7 +455,6 @@ export default function VerifikatorDashboard() {
                             </div>
                           </div>
 
-                          {/* Tombol aksi khusus Addendum */}
                           {addendum.status === 'Menunggu Verifikasi' && (
                             <div className="flex gap-2 pt-3 mt-2 border-t border-slate-100">
                               <button onClick={() => handleTolakAddendum(addendum.id)} disabled={isSubmitting} className="flex-1 bg-rose-50 text-rose-600 hover:bg-rose-100 text-xs font-bold py-2 rounded-lg border border-rose-200 transition-colors">
@@ -482,7 +471,6 @@ export default function VerifikatorDashboard() {
                   </div>
                 )}
 
-                {/* 4. Jika Tahap 9, tampilkan rincian realisasi bulanan */}
                 {selectedReq.tahap_sekarang === 9 && (
                   <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-2">
                     <div className="font-bold text-blue-900 uppercase text-[11px]">Riwayat Realisasi Bulanan Tercatat ({realisasiList.length} Bulan):</div>
@@ -501,7 +489,6 @@ export default function VerifikatorDashboard() {
                   </div>
                 )}
 
-                {/* 5. Jika Tahap 10, tampilkan rincian transaksi SP2HL/SP4HL */}
                 {selectedReq.tahap_sekarang === 10 && (
                   <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-2">
                     <div className="font-bold text-emerald-900 uppercase text-[11px]">Riwayat Transaksi SP2HL / SP4HL ({transaksiList.length} Dokumen):</div>

@@ -60,7 +60,7 @@ export default function LoginPage() {
         <div className="flex-1 text-center md:text-left px-4 space-y-4">
           <div className="flex justify-center md:justify-start">
             <img 
-              src="/logo-sihandal.jpeg" 
+              src="//sihandal-logo.png" 
               alt="Logo SIHANDAL" 
               className="h-24 md:h-28 w-auto object-contain bg-white p-2 rounded-2xl shadow-sm border border-slate-200" 
             />

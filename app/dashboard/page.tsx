@@ -477,18 +477,10 @@ export default function UserDashboard() {
     e.preventDefault();
     if (!activeReq) return;
 
-    if (activeReq.tahap_sekarang === 10) {
-      const hasSP4HL = transaksiList.some(t => t.tipe === 'SP4HL');
-      if (!hasSP4HL) {
-        alert('⚠️ Dokumen SP4HL (Pengesahan Pengembalian / Nihil) belum diinput! Anda baru bisa melanjutkan ke Tahap 11 setelah dokumen SP4HL dimasukkan ke dalam daftar.');
-        return;
-      }
-    }
-
     setIsSubmitting(true);
     try {
       const updatePayload: any = {
-        status_tahap: 'Diproses',
+        status_tahap: 'Diproses', // Status wajib 'Diproses' agar menunggu verifikasi Provinsi
         alasan_penolakan: null,
         file_ba_pleno: formData.file_ba_pleno,
         file_surat: formData.file_surat,
@@ -503,13 +495,8 @@ export default function UserDashboard() {
         updatePayload.tgl_surat_izin_prinsip = formData.tgl_surat_izin_prinsip;
         updatePayload.nomor_nphd = formData.nomor_nphd;
         updatePayload.tanggal_nphd = formData.tanggal_nphd;
-
         if (formData.nilai_rab) {
-          const cleanedNilai = String(formData.nilai_rab).replace(/[^0-9]/g, '');
-          const numericNPHD = parseFloat(cleanedNilai);
-          if (!isNaN(numericNPHD) && numericNPHD > 0) {
-            updatePayload.nominal_nphd = numericNPHD;
-          }
+          updatePayload.nominal_nphd = parseFloat(String(formData.nilai_rab).replace(/[^0-9]/g, ''));
         }
       }
 
@@ -531,28 +518,28 @@ export default function UserDashboard() {
 
       if (activeReq.tahap_sekarang === 8) {
         updatePayload.no_surat_revisi_dipa = formData.no_surat_revisi_dipa;
-        const cleanedPagu = String(formData.nominal_revisi_dipa).replace(/[^0-9]/g, '');
-        const numericPagu = parseFloat(cleanedPagu);
+        const numericPagu = parseFloat(String(formData.nominal_revisi_dipa).replace(/[^0-9]/g, ''));
         if (!isNaN(numericPagu) && numericPagu > 0) {
           updatePayload.nominal_revisi_dipa = numericPagu;
           updatePayload.nilai_rab = numericPagu;
         }
       }
 
-      // JIKA DI TAHAP 9 ATAU 10, KITA MAJUKAN KE TAHAP 11
-      const nextTahap = (activeReq.tahap_sekarang === 9 || activeReq.tahap_sekarang === 10) ? 11 : activeReq.tahap_sekarang + 1;
-
+      // CATATAN: Untuk Tahap 1-8, saat user submit berkas, tahap TIDAK LANGSUNG DI NAIKKAN 
+      // tapi dikirim ke verifikator dengan status 'Diproses'. 
+      // Nanti Verifikator Provinsi yang menekan tombol "Setujui/Validasi" di dashboard verifikator 
+      // agar tahapnya bergeser ke tahap selanjutnya secara resmi.
       const { error } = await supabase.from('hibah_requests')
         .update({ 
           ...updatePayload,
-          tahap_sekarang: nextTahap,
-          status_tahap: 'Perlu Usulan'
+          status_tahap: 'Diproses'
+          // tahap_sekarang dibiarkan tetap di posisi sekarang, menunggu verifikator ACC baru naik tahap
         })
         .eq('id', activeReq.id);
 
       if (error) throw error;
 
-      alert(`Tahap berhasil diselesaikan dan dilanjutkan ke Tahap ${nextTahap}!`);
+      alert(`Berkas Tahap ${activeReq.tahap_sekarang} berhasil dikirim dan menunggu Verifikasi Provinsi!`);
       setIsActionModalOpen(false);
       setActiveReq(null);
       fetchData();

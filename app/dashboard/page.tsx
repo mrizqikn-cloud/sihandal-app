@@ -533,6 +533,20 @@ export default function UserDashboard() {
         updatePayload.nomor_sp2d = formData.nomor_sp2d;
       }
 
+      // KHUSUS TAHAP 8 (Revisi DIPA & Kuncian Pagu Anggaran)
+      if (activeReq.tahap_sekarang === 8) {
+        updatePayload.no_surat_revisi_dipa = formData.no_surat_revisi_dipa;
+        
+        const cleanedPagu = String(formData.nominal_revisi_dipa).replace(/[^0-9]/g, '');
+        const numericPagu = parseFloat(cleanedPagu);
+        
+        if (!isNaN(numericPagu) && numericPagu > 0) {
+          updatePayload.nominal_revisi_dipa = numericPagu;
+          // Mengubah nilai_rab utama agar pagu revisi ini menjadi kuncian di tahap-tahap berikutnya (seperti Tahap 9 Realisasi)
+          updatePayload.nilai_rab = numericPagu; 
+        }
+      }
+
       const { error } = await supabase.from('hibah_requests')
         .update(updatePayload)
         .eq('id', activeReq.id);

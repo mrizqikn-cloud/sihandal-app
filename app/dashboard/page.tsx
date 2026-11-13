@@ -350,6 +350,7 @@ export default function UserDashboard() {
       nama_rekening: req.nama_rekening || '',
       bank_rekening: req.bank_rekening || 'mandiri',
       nominal_revisi_dipa: req.nominal_revisi_dipa || '',
+      // PERBAIKAN: Ambil data dari database agar tidak reset
       no_surat_izin_prinsip: req.no_surat_izin_prinsip || '',
       tgl_surat_izin_prinsip: req.tgl_surat_izin_prinsip || '',
       nomor_nphd: req.nomor_nphd || '',
@@ -492,6 +493,15 @@ export default function UserDashboard() {
         no_surat: formData.no_surat,
         tgl_surat: formData.tgl_surat,
       };
+
+      // Jika di Tahap 4, update juga nilai RAB / Nominal NPHD yang diubah pengguna
+      if (activeReq.tahap_sekarang === 4 && formData.nilai_rab) {
+        const cleanedNilai = formData.nilai_rab.replace(/[^0-9]/g, '');
+        const numericRAB = parseFloat(cleanedNilai);
+        if (!isNaN(numericRAB) && numericRAB > 0) {
+          updatePayload.nilai_rab = numericRAB;
+        }
+      }
 
       const { error } = await supabase.from('hibah_requests')
         .update(updatePayload)

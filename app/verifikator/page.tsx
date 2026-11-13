@@ -123,22 +123,23 @@ export default function VerifikatorDashboard() {
   const handleSetuju = async () => {
     if (!selectedReq) return;
 
-    // Jika status saat ini masih 'Perlu Usulan' atau lainnya, berikan opsi konfirmasi agar verifikator tetap bisa memaksa verifikasi jika diperlukan
     if (selectedReq.status_tahap !== 'Diproses') {
       const lanjut = window.confirm(`Peringatan: Status tahap ini adalah "${selectedReq.status_tahap}" (Kab/Kota belum mengirim ulang berkas). Apakah Anda tetap ingin menyetujui dan melanjutkan ke tahap berikutnya?`);
       if (!lanjut) return;
     }
 
-    if (selectedReq.tahap_sekarang === 10) {
+    // Jika berada di Tahap 9 atau 10 (Mode Paralel SAKTI), verifikasi keberadaan SP4HL sebelum melompat ke Tahap 11
+    if (selectedReq.tahap_sekarang === 9 || selectedReq.tahap_sekarang === 10) {
       const hasSP4HL = transaksiList.some(t => t.tipe === 'SP4HL');
       if (!hasSP4HL) {
-        const lanjutSP4HL = window.confirm('Peringatan: Dokumen SP4HL belum diinput oleh Kabupaten/Kota. Apakah Anda yakin ingin lanjut ke tahap 11 tanpa SP4HL?');
+        const lanjutSP4HL = window.confirm('⚠️ Peringatan: Dokumen SP4HL (Nihil) belum diinput oleh Kabupaten/Kota. Apakah Anda yakin ingin lanjut ke Tahap 11 tanpa SP4HL?');
         if (!lanjutSP4HL) return;
       }
     }
 
-    const nextTahap = selectedReq.tahap_sekarang < 11 ? selectedReq.tahap_sekarang + 1 : 11;
-    const isSelesai = selectedReq.tahap_sekarang === 11;
+    // Jika tahap sekarang 9 atau 10, langsung majukan ke tahap 11. Jika tidak, increment +1 biasa.
+    const nextTahap = (selectedReq.tahap_sekarang === 9 || selectedReq.tahap_sekarang === 10) ? 11 : (selectedReq.tahap_sekarang < 11 ? selectedReq.tahap_sekarang + 1 : 11);
+    const isSelesai = nextTahap > 11 || selectedReq.tahap_sekarang === 11;
 
     setIsSubmitting(true);
     try {
@@ -262,15 +263,14 @@ export default function VerifikatorDashboard() {
           </div>
         );
       case 9:
-        return (
-          <div className="space-y-1">
-            <div>Pagu DIPA Aktif: <b>Rp {Number(req.nominal_revisi_dipa || req.nilai_rab || 0).toLocaleString('id-ID')}</b></div>
-            <div>Total Realisasi Tercatat: <b>Rp {realisasiList.reduce((acc, curr) => acc + Number(curr.nilai_realisasi || 0), 0).toLocaleString('id-ID')}</b></div>
-          </div>
-        );
       case 10:
         return (
-          <div className="space-y-1">
+          <div className="space-y-3">
+            <div className="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-amber-800">
+              ⚡ <b>Mode Paralel SAKTI Aktif:</b> Tahap 9 (Realisasi Bulanan) dan Tahap 10 (SP2HL/SP4HL) berjalan berdampingan.
+            </div>
+            <div>Pagu DIPA Aktif: <b>Rp {Number(req.nominal_revisi_dipa || req.nilai_rab || 0).toLocaleString('id-ID')}</b></div>
+            <div>Total Realisasi Tercatat: <b>Rp {realisasiList.reduce((acc, curr) => acc + Number(curr.nilai_realisasi || 0), 0).toLocaleString('id-ID')}</b></div>
             <div>Total Dokumen SP2HL/SP4HL Tercatat: <b>{transaksiList.length} Dokumen</b></div>
             <div>Status SP4HL: <b className={transaksiList.some(t => t.tipe === 'SP4HL') ? 'text-emerald-600' : 'text-amber-600'}>{transaksiList.some(t => t.tipe === 'SP4HL') ? 'Sudah Diinput (Lengkap)' : 'Belum Diinput (Belum Lengkap)'}</b></div>
           </div>
@@ -470,44 +470,45 @@ export default function VerifikatorDashboard() {
                   </div>
                 )}
 
-                {selectedReq.tahap_sekarang === 9 && (
-                  <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-2">
-                    <div className="font-bold text-blue-900 uppercase text-[11px]">Riwayat Realisasi Bulanan Tercatat ({realisasiList.length} Bulan):</div>
-                    {realisasiList.length === 0 ? (
-                      <div className="italic text-slate-400">Belum ada input realisasi dari Kabupaten/Kota</div>
-                    ) : (
-                      <div className="space-y-1">
-                        {realisasiList.map((r, i) => (
-                          <div key={i} className="bg-white p-2 rounded border flex justify-between">
-                            <span><b>{r.bulan} {r.tahun}</b>: Rp {Number(r.nilai_realisasi).toLocaleString('id-ID')}</span>
-                            <span className="text-slate-500 italic">{r.keterangan_kegiatan}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
+                {(selectedReq.tahap_sekarang === 9 || selectedReq.tahap_sekarang === 10) && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* MODUL 1: REALISASI BULANAN */}
+                    <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-2">
+                      <div className="font-bold text-blue-900 uppercase text-[11px]">Realisasi Bulanan ({realisasiList.length}):</div>
+                      {realisasiList.length === 0 ? (
+                        <div className="italic text-slate-400 text-xs">Belum ada input realisasi</div>
+                      ) : (
+                        <div className="space-y-1 max-h-32 overflow-y-auto">
+                          {realisasiList.map((r, i) => (
+                            <div key={i} className="bg-white p-2 rounded border text-xs flex justify-between">
+                              <span><b>{r.bulan}</b>: Rp {Number(r.nilai_realisasi).toLocaleString('id-ID')}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
 
-                {selectedReq.tahap_sekarang === 10 && (
-                  <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-2">
-                    <div className="font-bold text-emerald-900 uppercase text-[11px]">Riwayat Transaksi SP2HL / SP4HL ({transaksiList.length} Dokumen):</div>
-                    {transaksiList.length === 0 ? (
-                      <div className="italic text-slate-400">Belum ada transaksi SP2HL/SP4HL diinput</div>
-                    ) : (
-                      <div className="space-y-1">
-                        {transaksiList.map((t, i) => (
-                          <div key={i} className="bg-white p-2 rounded border flex justify-between">
-                            <span><b>{t.tipe} {t.tipe === 'SP2HL' ? `(Ke-${t.tahapan_ke})` : ''}</b> ({t.nomor_dokumen})</span>
-                            <span className="font-bold text-emerald-700">Rp {Number(t.nilai_transaksi).toLocaleString('id-ID')}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {!transaksiList.some(t => t.tipe === 'SP4HL') && (
-                      <div className="text-[11px] text-amber-700 bg-amber-50 p-2 rounded border border-amber-200">
-                        ⚠️ Perhatian: Dokumen SP4HL belum diinput. Anda tidak dapat meloloskan ke Tahap 11 sebelum SP4HL lengkap.
-                      </div>
-                    )}
+                    {/* MODUL 2: TRANSAKSI SP2HL / SP4HL */}
+                    <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-2">
+                      <div className="font-bold text-emerald-900 uppercase text-[11px]">Dokumen SP2HL / SP4HL ({transaksiList.length}):</div>
+                      {transaksiList.length === 0 ? (
+                        <div className="italic text-slate-400 text-xs">Belum ada transaksi SP</div>
+                      ) : (
+                        <div className="space-y-1 max-h-32 overflow-y-auto">
+                          {transaksiList.map((t, i) => (
+                            <div key={i} className="bg-white p-2 rounded border text-xs flex justify-between">
+                              <span><b>{t.tipe}</b> ({t.nomor_dokumen})</span>
+                              <span className="font-bold text-emerald-700">Rp {Number(t.nilai_transaksi).toLocaleString('id-ID')}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {!transaksiList.some(t => t.tipe === 'SP4HL') && (
+                        <div className="text-[10px] text-amber-700 bg-amber-50 p-1.5 rounded border border-amber-200 mt-1">
+                          ⚠️ SP4HL belum diinput. Sistem akan meminta konfirmasi jika Anda meloloskan ke Tahap 11.
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
 

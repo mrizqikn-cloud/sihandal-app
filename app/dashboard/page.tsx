@@ -498,21 +498,21 @@ export default function UserDashboard() {
         tgl_surat: formData.tgl_surat,
       };
 
-      // KHUSUS TAHAP 4 (NPHD & Izin Prinsip)
-      if (activeReq.tahap_sekarang === 4) {
-        updatePayload.no_surat_izin_prinsip = formData.no_surat_izin_prinsip;
-        updatePayload.tgl_surat_izin_prinsip = formData.tgl_surat_izin_prinsip;
-        updatePayload.nomor_nphd = formData.nomor_nphd;
-        updatePayload.tanggal_nphd = formData.tanggal_nphd;
+      // KHUSUS TAHAP 4 (NPHD)
+if (activeReq.tahap_sekarang === 4) {
+  updatePayload.no_surat_izin_prinsip = formData.no_surat_izin_prinsip;
+  updatePayload.tgl_surat_izin_prinsip = formData.tgl_surat_izin_prinsip;
+  updatePayload.nomor_nphd = formData.nomor_nphd;
+  updatePayload.tanggal_nphd = formData.tanggal_nphd;
 
-        if (formData.nilai_rab) {
-          const cleanedNilai = String(formData.nilai_rab).replace(/[^0-9]/g, '');
-          const numericRAB = parseFloat(cleanedNilai);
-          if (!isNaN(numericRAB) && numericRAB > 0) {
-            updatePayload.nilai_rab = numericRAB;
-          }
-        }
-      }
+  if (formData.nilai_rab) {
+    const cleanedNilai = String(formData.nilai_rab).replace(/[^0-9]/g, '');
+    const numericNPHD = parseFloat(cleanedNilai);
+    if (!isNaN(numericNPHD) && numericNPHD > 0) {
+      updatePayload.nominal_nphd = numericNPHD; // Disimpan khusus ke nominal_nphd
+    }
+  }
+}
 
       // KHUSUS TAHAP 5 (Permohonan Register Hibah)
       if (activeReq.tahap_sekarang === 5) {
@@ -534,18 +534,17 @@ export default function UserDashboard() {
       }
 
       // KHUSUS TAHAP 8 (Revisi DIPA & Kuncian Pagu Anggaran)
-      if (activeReq.tahap_sekarang === 8) {
-        updatePayload.no_surat_revisi_dipa = formData.no_surat_revisi_dipa;
-        
-        const cleanedPagu = String(formData.nominal_revisi_dipa).replace(/[^0-9]/g, '');
-        const numericPagu = parseFloat(cleanedPagu);
-        
-        if (!isNaN(numericPagu) && numericPagu > 0) {
-          updatePayload.nominal_revisi_dipa = numericPagu;
-          // Mengubah nilai_rab utama agar pagu revisi ini menjadi kuncian di tahap-tahap berikutnya (seperti Tahap 9 Realisasi)
-          updatePayload.nilai_rab = numericPagu; 
-        }
-      }
+if (activeReq.tahap_sekarang === 8) {
+  updatePayload.no_surat_revisi_dipa = formData.no_surat_revisi_dipa;
+  
+  const cleanedPagu = String(formData.nominal_revisi_dipa).replace(/[^0-9]/g, '');
+  const numericPagu = parseFloat(cleanedPagu);
+  
+  if (!isNaN(numericPagu) && numericPagu > 0) {
+    updatePayload.nominal_revisi_dipa = numericPagu;
+    updatePayload.nilai_rab = numericPagu; // Pagu operasional untuk realisasi berikutnya
+  }
+}
 
       const { error } = await supabase.from('hibah_requests')
         .update(updatePayload)
@@ -1208,12 +1207,12 @@ export default function UserDashboard() {
                                           </div>
                                         )}
                                         {stepNum === 4 && (
-                                          <div>
-                                            Nomor NPHD: <b>{req.nomor_nphd || '-'}</b><br />
-                                            Nominal NPHD: <b>Rp {Number(req.nilai_rab || 0).toLocaleString('id-ID')},-</b><br />
-                                            Tanggal NPHD: <b>{req.tanggal_nphd || '-'}</b>
-                                          </div>
-                                        )}
+  <div>
+    Nomor NPHD: <b>{req.nomor_nphd || '-'}</b><br />
+    Nominal NPHD: <b>Rp {Number(req.nominal_nphd || req.nilai_rab || 0).toLocaleString('id-ID')},-</b><br />
+    Tanggal NPHD: <b>{req.tanggal_nphd || '-'}</b>
+  </div>
+)}
                                         {stepNum === 5 && (
                                           <div>
                                             Surat Permohonan Register Hibah: <b>{req.surat_permohonan_register || '-'}</b><br />

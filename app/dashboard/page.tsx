@@ -570,12 +570,21 @@ export default function UserDashboard() {
         return (
           <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Surat Permohonan Persetujuan Penerimaan Hibah *</label>
-              <input type="text" required placeholder="No. Surat Permohonan Persetujuan" value={formData.no_surat} onChange={(e) => setFormData({...formData, no_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Permohonan Persetujuan Penerimaan Hibah ke Bawaslu RI *</label>
+              <input type="text" required placeholder="No. Surat Permohonan ke RI" value={formData.no_surat} onChange={(e) => setFormData({...formData, no_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Surat Permohonan *</label>
+              <input type="date" required value={formData.tgl_surat} onChange={(e) => setFormData({...formData, tgl_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            </div>
+          </div>
+        );
+      case 4: 
+        return (
+          <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Persetujuan (Bawaslu RI) *</label>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Persetujuan / Izin Prinsip (Bawaslu RI) *</label>
                 <input type="text" required placeholder="No. Surat Persetujuan RI" value={formData.no_surat_izin_prinsip} onChange={(e) => setFormData({...formData, no_surat_izin_prinsip: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
               </div>
               <div>
@@ -583,24 +592,19 @@ export default function UserDashboard() {
                 <input type="date" required value={formData.tgl_surat_izin_prinsip} onChange={(e) => setFormData({...formData, tgl_surat_izin_prinsip: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
               </div>
             </div>
-          </div>
-        );
-      case 4: 
-        return (
-          <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
-            <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor NPHD *</label>
-              <input type="text" required placeholder="Nomor NPHD" value={formData.nomor_nphd} onChange={(e) => setFormData({...formData, nomor_nphd: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
               <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nominal NPHD (Rp) *</label>
-                <input type="text" required placeholder="Cth: 500000000" value={formData.nilai_rab} onChange={(e) => setFormData({...formData, nilai_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor NPHD *</label>
+                <input type="text" required placeholder="Nomor NPHD" value={formData.nomor_nphd} onChange={(e) => setFormData({...formData, nomor_nphd: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
               </div>
               <div>
                 <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal NPHD *</label>
                 <input type="date" required value={formData.tanggal_nphd} onChange={(e) => setFormData({...formData, tanggal_nphd: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
               </div>
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nominal NPHD (Rp) *</label>
+              <input type="text" required placeholder="Cth: 500000000" value={formData.nilai_rab} onChange={(e) => setFormData({...formData, nilai_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
           </div>
         );

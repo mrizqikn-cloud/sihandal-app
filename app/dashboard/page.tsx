@@ -487,7 +487,7 @@ export default function UserDashboard() {
 
     setIsSubmitting(true);
     try {
-      // Payload yang disesuaikan murni dengan kolom standar yang aman
+      // 1. Definisikan payload dasar yang selalu ada
       const updatePayload: any = {
         status_tahap: 'Diproses',
         alasan_penolakan: null,
@@ -499,15 +499,23 @@ export default function UserDashboard() {
         tgl_surat: formData.tgl_surat,
       };
 
-      // PERBAIKAN: Bungkus dengan String() agar aman dari error .replace is not a function
-      if (activeReq.tahap_sekarang === 4 && formData.nilai_rab) {
-        const cleanedNilai = String(formData.nilai_rab).replace(/[^0-9]/g, '');
-        const numericRAB = parseFloat(cleanedNilai);
-        if (!isNaN(numericRAB) && numericRAB > 0) {
-          updatePayload.nilai_rab = numericRAB;
+      // 2. KHUSUS TAHAP 4: Masukkan nomor/tanggal izin prinsip & NPHD ke payload!
+      if (activeReq.tahap_sekarang === 4) {
+        updatePayload.no_surat_izin_prinsip = formData.no_surat_izin_prinsip;
+        updatePayload.tgl_surat_izin_prinsip = formData.tgl_surat_izin_prinsip;
+        updatePayload.nomor_nphd = formData.nomor_nphd;
+        updatePayload.tanggal_nphd = formData.tanggal_nphd;
+
+        if (formData.nilai_rab) {
+          const cleanedNilai = String(formData.nilai_rab).replace(/[^0-9]/g, '');
+          const numericRAB = parseFloat(cleanedNilai);
+          if (!isNaN(numericRAB) && numericRAB > 0) {
+            updatePayload.nilai_rab = numericRAB;
+          }
         }
       }
 
+      // Kirim ke database Supabase
       const { error } = await supabase.from('hibah_requests')
         .update(updatePayload)
         .eq('id', activeReq.id);

@@ -1225,12 +1225,12 @@ export default function UserDashboard() {
                                           </div>
                                         )}
                                         {stepNum === 5 && (
-                                          <div>
-                                            Surat Permohonan Register Hibah: <b>{req.surat_permohonan_register || '-'}</b><br />
-                                            Surat Penerbitan Register Hibah: <b>{req.surat_penetapan_register || '-'}</b><br />
-                                            Nomor Register Hibah: <b>{req.nomor_register_hibah || '-'}</b>
-                                          </div>
-                                        )}
+  <div>
+    Surat Permohonan Register Hibah: <b>{req.surat_permohonan_register || '-'}</b><br />
+    Surat Penerbitan Register Hibah: <b>{req.surat_penetapan_register || req.no_surat_register || '-'}</b><br />
+    Nomor Register Hibah: <b>{req.nomor_register_hibah || req.no_register || '-'}</b>
+  </div>
+)}
                                         {stepNum === 6 && (
                                           <div>
                                             No. Surat Permohonan Pembukaan Rekening: <b>{req.no_surat_permohonan_rekening || '-'}</b><br />

@@ -503,6 +503,8 @@ export default function UserDashboard() {
 
       if (activeReq.tahap_sekarang === 6) {
         updatePayload.no_surat_permohonan_rekening = formData.no_surat_permohonan_rekening;
+        updatePayload.surat_penetapan_register = formData.surat_penetapan_register;
+        updatePayload.nomor_register_hibah = formData.nomor_register_hibah;
       }
 
       if (activeReq.tahap_sekarang === 7) {
@@ -707,26 +709,32 @@ export default function UserDashboard() {
       case 6: 
         return (
           <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
-            <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Permohonan Pembukaan Rekening RPDHL/RPDH *</label>
-              <input 
-                type="text" 
-                required 
-                placeholder="No. Surat Permohonan ke KPPN" 
-                value={formData.no_surat_permohonan_rekening || ''} 
-                onChange={(e) => setFormData(prev => ({ ...prev, no_surat_permohonan_rekening: e.target.value }))} 
-                className="w-full px-3 py-2 border rounded-lg text-xs" 
-              />
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Permohonan Rekening *</label>
+                <input type="text" required value={formData.no_surat_permohonan_rekening || ''} onChange={(e) => setFormData(prev => ({ ...prev, no_surat_permohonan_rekening: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Surat *</label>
+                <input type="date" required value={formData.tgl_surat || ''} onChange={(e) => setFormData(prev => ({ ...prev, tgl_surat: e.target.value }))} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              </div>
             </div>
+
+            {/* Tambahan Input Surat Penerbitan Register Hibah & Nomor Register untuk Step 6 */}
+            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">No. Surat Penerbitan Register Hibah *</label>
+                <input type="text" required value={formData.surat_penetapan_register || ''} onChange={(e) => setFormData(prev => ({ ...prev, surat_penetapan_register: e.target.value }))} placeholder="Cth: S-..../PB.6/2026" className="w-full px-3 py-2 border rounded-lg text-xs" />
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Register Hibah *</label>
+                <input type="text" required value={formData.nomor_register_hibah || ''} onChange={(e) => setFormData(prev => ({ ...prev, nomor_register_hibah: e.target.value }))} placeholder="Cth: 442xxxxx" className="w-full px-3 py-2 border rounded-lg text-xs" />
+              </div>
+            </div>
+
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Surat Permohonan *</label>
-              <input 
-                type="date" 
-                required 
-                value={formData.tgl_surat || ''} 
-                onChange={(e) => setFormData(prev => ({ ...prev, tgl_surat: e.target.value }))} 
-                className="w-full px-3 py-2 border rounded-lg text-xs" 
-              />
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Link GDrive BA Pleno Bank & Surat Permohonan *</label>
+              <input type="url" required value={formData.file_surat} onChange={(e) => setFormData({...formData, file_surat: e.target.value})} placeholder="https://drive.google.com/..." className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
           </div>
         );
@@ -1216,12 +1224,10 @@ export default function UserDashboard() {
   </div>
 )}
                                         {stepNum === 6 && (
-                                          <div>
-                                            No. Surat Permohonan Pembukaan Rekening: <b>{req.no_surat_permohonan_rekening || '-'}</b><br />
-                                            No. Surat Persetujuan KPPN: <b>{req.no_surat_izin_penetapan_rekening || '-'}</b><br />
-                                            Nama Bank / Rekening: <span className="uppercase font-bold">{req.nama_bank_padanan || '-'}</span> (No. Rek: {req.no_rekening || '-'})
-                                          </div>
-                                        )}
+  <div>
+    No. Surat Register: <b>{req.surat_penetapan_register || '-'}</b> | Nomor Register Hibah: <b>{req.nomor_register_hibah || '-'}</b>
+  </div>
+)}
                                         {stepNum === 7 && (
                                           <div>
                                             Nomor Surat Permohonan Pencairan: <b>{req.no_surat_pencairan || '-'}</b><br />

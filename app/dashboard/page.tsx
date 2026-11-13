@@ -1270,7 +1270,7 @@ export default function UserDashboard() {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div>
                   <h1 className="text-2xl font-bold text-slate-900">Panduan & Infografis 11 Tahap Hibah</h1>
-                  <p className="text-slate-500 mt-1 text-sm">Standar operasional, alur infografis resmi, dan unduhan ceklis kelengkapan dokumen Bawaslu Jabar.</p>
+                  <p className="text-slate-500 mt-1 text-sm">Infografis resmi alur pengelolaan hibah non-pemilihan Bawaslu Jabar.</p>
                 </div>
                 {/* Tombol Download Master Excel Dokumen */}
                 <a 
@@ -1283,61 +1283,38 @@ export default function UserDashboard() {
                 </a>
               </div>
 
-              <div className="space-y-6">
+              {/* DAFTAR INFOGRAFIS PER TAHAP */}
+              <div className="space-y-8">
                 {DETAIL_PANDUAN_TAHAP.map((item) => (
-                  <div key={item.tahap} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
+                  <div key={item.tahap} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 pb-4 border-b border-slate-100">
                       <div className="flex items-center space-x-3">
                         <span className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
                           {item.tahap}
                         </span>
                         <div>
-                          <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Tahap {item.tahap}</span>
+                          <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Infografis Resmi Tahap {item.tahap}</span>
                           <h3 className="font-bold text-slate-900 text-lg">{item.judul}</h3>
                         </div>
                       </div>
-                      <span className="px-3.5 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold border border-slate-200">
-                        Aplikasi: <b>{item.aplikasi}</b>
-                      </span>
+
+                      <a 
+                        href="/SIHANDAL_Ceklis_Kelengkapan_Dokumen_Penerimaan_Hibah_Non_Pemilihan.xlsx" 
+                        download 
+                        className="bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2"
+                      >
+                        <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Unduh Format Excel Tahap {item.tahap}
+                      </a>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                      {/* Kolom Uraian */}
-                      <div className="md:col-span-2 space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                        <div>
-                          <div className="font-bold text-slate-900 uppercase text-[10px] tracking-wider mb-1 text-blue-700">Uraian Singkat & Alur:</div>
-                          <p className="text-slate-600 leading-relaxed">{item.uraian}</p>
-                        </div>
-
-                        <div>
-                          <div className="font-bold text-slate-900 uppercase text-[10px] tracking-wider mb-2 text-blue-700">Dokumen yang Diperlukan:</div>
-                          <ul className="grid grid-cols-1 gap-1.5">
-                            {item.dokumen.map((doc, idx) => (
-                              <li key={idx} className="flex items-start text-slate-700 bg-white p-2 rounded-lg border border-slate-200/60 shadow-2xs">
-                                <span className="text-blue-600 mr-2 font-bold">•</span>
-                                <span>{doc}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-
-                      {/* Kolom Unduh & Aksi Cepat */}
-                      <div className="bg-blue-50/60 p-4 rounded-xl border border-blue-100 flex flex-col justify-between space-y-4">
-                        <div className="space-y-2">
-                          <div className="font-bold text-blue-900 uppercase text-[10px] tracking-wider">Berkas Ceklis Tahap {item.tahap}:</div>
-                          <p className="text-[11px] text-blue-700 leading-normal">Gunakan format Excel standar Bawaslu Jabar untuk menyusun dan memverifikasi dokumen tahap ini.</p>
-                        </div>
-
-                        <a 
-                          href="/SIHANDAL_Ceklis_Kelengkapan_Dokumen_Penerimaan_Hibah_Non_Pemilihan.xlsx" 
-                          download 
-                          className="w-full bg-white hover:bg-blue-600 hover:text-white text-blue-700 border border-blue-300 font-bold py-2.5 px-3 rounded-xl text-xs shadow-xs transition-all flex items-center justify-center gap-2 text-center group"
-                        >
-                          <svg className="w-4 h-4 text-blue-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                          Unduh Format Excel
-                        </a>
-                      </div>
+                    {/* TAMPILAN GAMBAR INFOGRAFIS */}
+                    <div className="bg-slate-900 rounded-xl overflow-hidden border border-slate-800 p-2 flex justify-center items-center shadow-inner">
+                      <img 
+                        src={`/infografis/tahap-${item.tahap}.png`} 
+                        alt={`Infografis Tahap ${item.tahap} - ${item.judul}`} 
+                        className="w-full h-auto object-contain rounded-lg max-h-[750px] hover:scale-[1.01] transition-transform duration-300"
+                      />
                     </div>
                   </div>
                 ))}

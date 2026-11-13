@@ -331,7 +331,6 @@ export default function UserDashboard() {
     setActiveReq(req);
     fetchChildData(req.id);
     
-    // Helper untuk memotong format tanggal agar menjadi YYYY-MM-DD yang valid untuk input type="date"
     const formatDateForInput = (dateStr: string) => {
       if (!dateStr) return '';
       return dateStr.split('T')[0];
@@ -601,26 +600,59 @@ export default function UserDashboard() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Persetujuan / Izin Prinsip (Bawaslu RI) *</label>
-                <input type="text" required placeholder="No. Surat Persetujuan RI" value={formData.no_surat_izin_prinsip} onChange={(e) => setFormData({...formData, no_surat_izin_prinsip: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                <input 
+                  type="text" 
+                  required 
+                  placeholder="No. Surat Persetujuan RI" 
+                  value={formData.no_surat_izin_prinsip || ''} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, no_surat_izin_prinsip: e.target.value }))} 
+                  className="w-full px-3 py-2 border rounded-lg text-xs" 
+                />
               </div>
               <div>
                 <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Surat Persetujuan *</label>
-                <input type="date" required value={formData.tgl_surat_izin_prinsip} onChange={(e) => setFormData({...formData, tgl_surat_izin_prinsip: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                <input 
+                  type="date" 
+                  required 
+                  value={formData.tgl_surat_izin_prinsip || ''} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, tgl_surat_izin_prinsip: e.target.value }))} 
+                  className="w-full px-3 py-2 border rounded-lg text-xs" 
+                />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
               <div>
                 <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor NPHD *</label>
-                <input type="text" required placeholder="Nomor NPHD" value={formData.nomor_nphd} onChange={(e) => setFormData({...formData, nomor_nphd: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                <input 
+                  type="text" 
+                  required 
+                  placeholder="Nomor NPHD" 
+                  value={formData.nomor_nphd || ''} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, nomor_nphd: e.target.value }))} 
+                  className="w-full px-3 py-2 border rounded-lg text-xs" 
+                />
               </div>
               <div>
                 <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal NPHD *</label>
-                <input type="date" required value={formData.tanggal_nphd} onChange={(e) => setFormData({...formData, tanggal_nphd: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                <input 
+                  type="date" 
+                  required 
+                  value={formData.tanggal_nphd || ''} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, tanggal_nphd: e.target.value }))} 
+                  className="w-full px-3 py-2 border rounded-lg text-xs" 
+                />
               </div>
             </div>
             <div>
               <label className="block text-[11px] font-bold text-slate-700 mb-1">Nominal NPHD (Rp) *</label>
-              <input type="text" required placeholder="Cth: 500000000" value={formData.nilai_rab} onChange={(e) => setFormData({...formData, nilai_rab: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              <input 
+                type="text" 
+                required 
+                placeholder="Cth: 0" 
+                value={formData.nilai_rab || ''} 
+                onChange={(e) => setFormData(prev => ({ ...prev, nilai_rab: e.target.value }))} 
+                className="w-full px-3 py-2 border rounded-lg text-xs" 
+              />
             </div>
           </div>
         );

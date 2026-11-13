@@ -494,9 +494,9 @@ export default function UserDashboard() {
         tgl_surat: formData.tgl_surat,
       };
 
-      // Jika di Tahap 4, update juga nilai RAB / Nominal NPHD yang diubah pengguna
+      // PERBAIKAN: Bungkus dengan String() agar aman dari error .replace is not a function
       if (activeReq.tahap_sekarang === 4 && formData.nilai_rab) {
-        const cleanedNilai = formData.nilai_rab.replace(/[^0-9]/g, '');
+        const cleanedNilai = String(formData.nilai_rab).replace(/[^0-9]/g, '');
         const numericRAB = parseFloat(cleanedNilai);
         if (!isNaN(numericRAB) && numericRAB > 0) {
           updatePayload.nilai_rab = numericRAB;

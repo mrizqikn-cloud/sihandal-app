@@ -23,7 +23,7 @@ const DETAIL_PANDUAN_TAHAP = [
     tahap: 1,
     judul: "Pengajuan Permohonan Hibah",
     aplikasi: "SIPD (Sistem Informasi Pemerintahan Daerah)",
-    uraian: "Bawaslu Kabupaten/Kota mengajukan permohonan hibah non-pemilihan kepada Pemerintah Daerah sebagai dukungan pengawasan.",
+    uraian: "Bawaslu Provinsi/Kabupaten/Kota mengajukan permohonan hibah non pemilihan kepada Pemerintah Daerah sebagai bentuk dukungan pelaksanaan tugas dan fungsi pengawasan pemilu di daerah.",
     dokumen: [
       "BA Pleno persetujuan pengajuan hibah non pemilihan",
       "Surat permohonan hibah non pemilihan",
@@ -33,117 +33,129 @@ const DETAIL_PANDUAN_TAHAP = [
   },
   {
     tahap: 2,
-    judul: "Konsultasi Rencana Penerimaan Hibah",
-    aplikasi: "SRIKANDI (Sistem Informasi Kearsipan Dinamis Terintegrasi)",
-    uraian: "Konsultasi rencana penerimaan hibah kepada Bawaslu RI melalui Biro Keuangan dan BMN (paling lambat 31 Agustus).",
+    judul: "Konsultasi Rencana Penerimaan Hibah Non Pemilihan",
+    aplikasi: "SRIKANDI & Satria Hibah",
+    uraian: "Bawaslu Provinsi/Kabupaten/Kota menyampaikan surat permohonan konsultasi rencana penerimaan hibah non pemilihan kepada Sekretaris Jenderal Bawaslu RI melalui Biro Keuangan dan BMN paling lambat tanggal 31 Agustus tahun anggaran berjalan.",
     dokumen: [
       "Surat permohonan konsultasi rencana penerimaan hibah",
-      "RAB hibah sesuai nilai yang disepakati Pemda",
-      "Data pegawai dan data BMN eksisting",
-      "BA/Surat Penetapan/Perda dari Pemerintah Daerah"
+      "RAB hibah sesuai nilai yang disepakati Pemerintah Daerah",
+      "Data pegawai dan data BMN eksisting (apabila ada pengadaan belanja modal)",
+      "BA/Surat Penetapan/Perda/informasi dari Pemda perihal rencana alokasi hibah",
+      "TOR/KAK atau gambaran penggunaan dana"
     ]
   },
   {
     tahap: 3,
-    judul: "Pengajuan Ijin Prinsip Penerimaan Hibah",
-    aplikasi: "Biro Perencanaan & Inspektorat Wilayah Bawaslu RI",
-    uraian: "Pengajuan permohonan ijin prinsip dan pelaksanaan reviu RAB serta dokumen pendukung kepada Bawaslu RI.",
+    judul: "Tahap Permohonan Persetujuan Penerimaan Hibah",
+    aplikasi: "Biro Keuangan & BMN / Bawaslu RI",
+    uraian: "Bawaslu Provinsi/Kabupaten/Kota mengajukan surat permohonan persetujuan penerimaan hibah non pemilihan kepada Ketua Bawaslu RI, disertai reviu RAB dan dokumen pendukung.",
     dokumen: [
-      "Surat permohonan ijin prinsip penerimaan hibah",
-      "Rencana Kerja & RAB hibah",
-      "TOR/KAK per Rincian Output (RO)",
-      "HPS / Hasil Survei & Data pegawai/BMN"
+      "Surat permohonan persetujuan penerimaan dana hibah",
+      "Perubahan Rencana Kerja",
+      "RAB yang ditandatangani oleh KPA/PPK non satker",
+      "TOR/KAK per RO yang ditandatangani oleh KPA/PPK non satker",
+      "SPTJM yang ditandatangani KPA/PPK non satker",
+      "HPS / Hasil Survei",
+      "Data pegawai dan data BMN eksisting"
     ]
   },
   {
     tahap: 4,
-    judul: "Penandatanganan NPHD",
+    judul: "Tahap Penandatanganan NPHD",
     aplikasi: "Kesbangpol / Pemerintah Daerah",
-    uraian: "Penandatanganan Naskah Perjanjian Hibah Daerah (NPHD) oleh pihak berwenang sebagai dasar hukum.",
+    uraian: "Bawaslu Provinsi/Kabupaten/Kota melakukan penandatanganan Naskah Perjanjian Hibah Daerah (NPHD) dengan Pemerintah Daerah sebagai dasar hukum penerimaan hibah non pemilihan.",
     dokumen: [
-      "Surat Permohonan Penandatanganan & Draf NPHD",
+      "Surat Permohonan Penandatanganan NPHD dan Draf NPHD",
       "RAB Lampiran NPHD",
       "Surat Ijin Prinsip Bawaslu RI"
     ]
   },
   {
     tahap: 5,
-    judul: "Pengajuan Register Hibah",
+    judul: "Tahap Pengajuan Register Hibah",
     aplikasi: "SEHATI (Sistem Pengelolaan Hibah Terintegrasi)",
-    uraian: "Pengajuan permohonan penerbitan Nomor Register Hibah kepada Kanwil DJPb Provinsi.",
+    uraian: "Bawaslu Provinsi/Kabupaten/Kota mengajukan permohonan penerbitan Nomor Register Hibah kepada Kanwil DJPb Provinsi sebagai dasar pencantuman penerimaan hibah non pemilihan dalam DIPA.",
     dokumen: [
       "Surat Permohonan Penerbitan Nomor Register Hibah",
-      "Ringkasan Hibah (Formulir Kemenkeu)",
-      "NPHD yang dilegalisir",
-      "RAB yang dilegalisir (lampiran NPHD)"
+      "Ringkasan Hibah (formulir sesuai ketentuan Kemenkeu)",
+      "NPHD yang dilegalisir (pada halaman tanda tangan)",
+      "RAB yang dilegalisir (menjadi lampiran NPHD)"
     ]
   },
   {
     tahap: 6,
-    judul: "Pembuatan Rekening RPDHL/RPDH",
+    judul: "Tahap Pembukaan Rekening RPDHL/RPDH",
     aplikasi: "KPPN & Bank Pemerintah",
-    uraian: "Permohonan pembukaan rekening Rekening Penerimaan Dana Hibah Langsung (RPDHL) atau RPDH dengan izin KPPN.",
+    uraian: "Bawaslu Provinsi/Kabupaten/Kota mengajukan permohonan pembukaan rekening RPDHL/RPDH melalui Bawaslu RI untuk menampung dana hibah non pemilihan sesuai ketentuan yang berlaku.",
     dokumen: [
-      "BA Pleno penetapan Bank Penampungan",
-      "Surat Permohonan Pembuatan Rekening RPDHL/RPDH",
-      "Nomor Register Hibah"
+      "BA Pleno penetapan Bank Penampungan Dana Hibah",
+      "Surat permohonan pembukaan rekening RPDHL/RPDH",
+      "Surat penerbitan nomor register hibah dari Kanwil DJPb Provinsi"
     ]
   },
   {
     tahap: 7,
-    judul: "Permohonan Pencairan",
-    aplikasi: "BPKAD / Kesbangpol Pemda",
-    uraian: "Pengajuan pencairan anggaran hibah kepada Pemerintah Daerah agar langsung masuk ke rekening RPDHL.",
+    judul: "Tahap Permohonan Pencairan",
+    aplikasi: "Kesbangpol / BPKAD Pemerintah Daerah",
+    uraian: "Bawaslu Provinsi/Kabupaten/Kota mengajukan permohonan pencairan hibah kepada Pemerintah Daerah agar langsung masuk ke rekening penampungan RPDHL.",
     dokumen: [
       "Surat Permohonan Pencairan hibah non pemilihan",
       "NPHD dan RAB",
       "Pakta Integritas / Surat Pernyataan Tanggung Jawab",
-      "Surat Keterangan Bank (Rekening Aktif) & Fotokopi KTP KPA"
+      "Surat Keterangan Bank (rekening aktif) & Fotokopi KTP KPA",
+      "Dokumen lainnya yang termuat dalam NPHD pasal pencairan"
     ]
   },
   {
     tahap: 8,
-    judul: "Revisi DIPA",
+    judul: "Tahap Revisi DIPA",
     aplikasi: "SAKTI & Kanwil DJPb",
-    uraian: "Pengajuan usulan revisi DIPA untuk menganggarkan hibah non-pemilihan (paling lambat 2 bulan setelah dana diterima).",
+    uraian: "Bawaslu Provinsi/Kabupaten/Kota mengajukan revisi DIPA untuk menganggarkan hibah non pemilihan (paling lambat 2 bulan setelah dana hibah diterima).",
     dokumen: [
       "Surat Permohonan Revisi DIPA",
       "NPHD dan RAB yang dilegalisir",
-      "Ringkasan Hibah & Surat Register Hibah",
-      "Surat Izin Pembukaan Rekening dari KPPN"
+      "Ringkasan Hibah (formulir Kemenkeu)",
+      "Surat Penerbitan Nomor Register Hibah",
+      "Surat Ijin Pembukaan Rekening"
     ]
   },
   {
     tahap: 9,
-    judul: "Pelaksanaan Anggaran",
+    judul: "Tahap Pelaksanaan Anggaran",
     aplikasi: "SAKTI (Penatausahaan Belanja & Pajak)",
-    uraian: "Melaksanakan kegiatan sesuai NPHD, DIPA, TOR/KAK, serta melakukan pungut setor pajak secara berkala bulanan.",
+    uraian: "Bawaslu Provinsi/Kabupaten/Kota melaksanakan anggaran hibah yang telah tercantum dalam DIPA sesuai rencana, TOR/KAK, serta melakukan pungut setor pajak.",
     dokumen: [
-      "RAB & TOR / Kerangka Acuan Kerja (KAK)",
-      "Laporan Realisasi Penyerapan Bulanan",
-      "Dokumen Pengadaan / SPK / SPJ"
+      "RAB (Rencana Anggaran Biaya)",
+      "TOR/KAK (Term of Reference/Kerangka Acuan Kerja)",
+      "Kalender Kegiatan (pelaksanaan hibah)",
+      "Kartu Pengawasan Pelaksanaan Anggaran (Karwas)",
+      "SPK / Dokumen Pengadaan"
     ]
   },
   {
     tahap: 10,
-    judul: "Pengajuan SP2HL dan SP4HL",
+    judul: "Tahap Pengajuan SP2HL dan SP4HL",
     aplikasi: "SAKTI ke KPPN Mitra Kerja",
-    uraian: "Pengajuan pengesahan penggunaan hibah (SP2HL) secara periodik dan diakhiri dengan SP4HL.",
+    uraian: "Bawaslu Provinsi/Kabupaten/Kota mengajukan SP2HL dan SP4HL kepada KPPN mitra kerja sebagai pertanggungjawaban atas penggunaan dan/atau pengembalian sisa hibah.",
     dokumen: [
       "DRPP (Daftar Rincian Penggunaan Dana)",
-      "Formulir SP2HL (berkala hingga 6x)",
-      "Formulir SP4HL (Pengesahan Pengembalian)"
+      "SPP (Surat Permintaan Pembayaran)",
+      "SP2HL (Surat Permintaan Pengesahan Hibah Langsung)",
+      "SP4HL (Surat Permintaan Pengesahan Pengembalian Hibah Langsung)",
+      "Bukti setor/transfer pengembalian sisa hibah"
     ]
   },
   {
     tahap: 11,
-    judul: "Pertanggungjawaban dan Pelaporan",
-    aplikasi: "SAKTI & Pelaporan Bawaslu RI / Pemda",
-    uraian: "Penyusunan dan penyampaian laporan penggunaan hibah paling lambat 10 Januari tahun anggaran berikutnya.",
+    judul: "Tahap Pertanggungjawaban dan Pelaporan",
+    aplikasi: "SAKTI & Bawaslu RI / Pemda",
+    uraian: "Menyusun dan menyampaikan laporan penggunaan hibah sesuai ketentuan yang berlaku paling lambat tanggal 10 Januari Tahun Anggaran berikutnya.",
     dokumen: [
       "Surat Laporan Penggunaan Hibah",
-      "Karwas Penggunaan Hibah (Pagu & Realisasi)",
-      "SPHL dan SP3HL"
+      "Karwas Penggunaan Hibah (Pagu, Realisasi dan Sisa)",
+      "SPHL (Surat Pertanggungjawaban Hibah Langsung)",
+      "SP3HL (Surat Pemberitahuan Penyelesaian Hibah Langsung)",
+      "Bukti Pengembalian Sisa Hibah"
     ]
   }
 ];
@@ -582,16 +594,16 @@ export default function UserDashboard() {
         return (
           <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Surat Permohonan Izin Prinsip *</label>
-              <input type="text" required placeholder="No. Surat Permohonan Izin Prinsip" value={formData.no_surat} onChange={(e) => setFormData({...formData, no_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Surat Permohonan Persetujuan Penerimaan Hibah *</label>
+              <input type="text" required placeholder="No. Surat Permohonan Persetujuan" value={formData.no_surat} onChange={(e) => setFormData({...formData, no_surat: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Penetapan Izin Prinsip *</label>
-                <input type="text" required placeholder="No. Penetapan Izin Prinsip" value={formData.no_surat_izin_prinsip} onChange={(e) => setFormData({...formData, no_surat_izin_prinsip: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Persetujuan (Bawaslu RI) *</label>
+                <input type="text" required placeholder="No. Surat Persetujuan RI" value={formData.no_surat_izin_prinsip} onChange={(e) => setFormData({...formData, no_surat_izin_prinsip: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
               </div>
               <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Penetapan *</label>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Surat Persetujuan *</label>
                 <input type="date" required value={formData.tgl_surat_izin_prinsip} onChange={(e) => setFormData({...formData, tgl_surat_izin_prinsip: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
               </div>
             </div>
@@ -624,11 +636,11 @@ export default function UserDashboard() {
               <input type="text" required placeholder="No. Surat Permohonan Register" value={formData.surat_permohonan_register} onChange={(e) => setFormData({...formData, surat_permohonan_register: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Surat Penetapan Register Hibah *</label>
-              <input type="text" required placeholder="No. Surat Penetapan Register" value={formData.surat_penetapan_register} onChange={(e) => setFormData({...formData, surat_penetapan_register: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Surat Penerbitan Nomor Register Hibah (Kanwil DJPb) *</label>
+              <input type="text" required placeholder="No. Surat Penerbitan Register DJPb" value={formData.surat_penetapan_register} onChange={(e) => setFormData({...formData, surat_penetapan_register: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Register Hibah *</label>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Register Hibah Resmi *</label>
               <input type="text" required placeholder="Nomor Register Resmi" value={formData.nomor_register_hibah} onChange={(e) => setFormData({...formData, nomor_register_hibah: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
           </div>
@@ -641,12 +653,18 @@ export default function UserDashboard() {
               <input type="text" required placeholder="No. Surat Permohonan Rekening" value={formData.no_surat_permohonan_rekening} onChange={(e) => setFormData({...formData, no_surat_permohonan_rekening: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Izin Penetapan Rekening *</label>
-              <input type="text" required placeholder="No. Surat Izin Penetapan Rekening" value={formData.no_surat_izin_penetapan_rekening} onChange={(e) => setFormData({...formData, no_surat_izin_penetapan_rekening: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Persetujuan Rekening KPPN *</label>
+              <input type="text" required placeholder="No. Surat Persetujuan KPPN" value={formData.no_surat_izin_penetapan_rekening} onChange={(e) => setFormData({...formData, no_surat_izin_penetapan_rekening: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
-            <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nama Bank Padanan / Penampung *</label>
-              <input type="text" required placeholder="Cth: Bank Mandiri / Bank BJB" value={formData.nama_bank_padanan} onChange={(e) => setFormData({...formData, nama_bank_padanan: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Rekening RPDHL/RPDH *</label>
+                <input type="text" required placeholder="Nomor Rekening Virtual Account" value={formData.no_rekening} onChange={(e) => setFormData({...formData, no_rekening: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nama Bank *</label>
+                <input type="text" required placeholder="Cth: Bank Mandiri / BSI" value={formData.nama_bank_padanan} onChange={(e) => setFormData({...formData, nama_bank_padanan: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              </div>
             </div>
           </div>
         );
@@ -658,7 +676,7 @@ export default function UserDashboard() {
               <input type="text" required placeholder="No. Surat Permohonan Pencairan" value={formData.no_surat_pencairan} onChange={(e) => setFormData({...formData, no_surat_pencairan: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor SP2D *</label>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor SP2D Pemda *</label>
               <input type="text" required placeholder="Nomor SP2D Pencairan" value={formData.nomor_sp2d} onChange={(e) => setFormData({...formData, nomor_sp2d: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
           </div>
@@ -671,7 +689,7 @@ export default function UserDashboard() {
               <input type="text" required placeholder="No. Surat Pengajuan Revisi DIPA" value={formData.no_surat_revisi_dipa} onChange={(e) => setFormData({...formData, no_surat_revisi_dipa: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nominal Revisi DIPA / Pagu Awal (Rp) *</label>
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nominal Revisi DIPA / Pagu (Rp) *</label>
               <input type="text" required placeholder="Cth: 150000000" value={formData.nominal_revisi_dipa} onChange={(e) => setFormData({...formData, nominal_revisi_dipa: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
             </div>
           </div>
@@ -1060,8 +1078,8 @@ export default function UserDashboard() {
                                         {stepNum === 2 && <div>No. Surat Konsultasi: <b>{req.no_surat || '-'}</b> (Tgl: {req.tgl_surat || '-'})</div>}
                                         {stepNum === 3 && (
                                           <div>
-                                            Surat Permohonan Izin Prinsip: <b>{req.no_surat || '-'}</b><br />
-                                            Nomor Penetapan Izin Prinsip: <b>{req.no_surat_izin_prinsip || '-'}</b> (Tgl: {req.tgl_surat_izin_prinsip || '-'})
+                                            Surat Permohonan Persetujuan: <b>{req.no_surat || '-'}</b><br />
+                                            Nomor Surat Persetujuan (Bawaslu RI): <b>{req.no_surat_izin_prinsip || '-'}</b> (Tgl: {req.tgl_surat_izin_prinsip || '-'})
                                           </div>
                                         )}
                                         {stepNum === 4 && (
@@ -1074,15 +1092,15 @@ export default function UserDashboard() {
                                         {stepNum === 5 && (
                                           <div>
                                             Surat Permohonan Register Hibah: <b>{req.surat_permohonan_register || '-'}</b><br />
-                                            Surat Penetapan Register Hibah: <b>{req.surat_penetapan_register || '-'}</b><br />
+                                            Surat Penerbitan Register Hibah: <b>{req.surat_penetapan_register || '-'}</b><br />
                                             Nomor Register Hibah: <b>{req.nomor_register_hibah || '-'}</b>
                                           </div>
                                         )}
                                         {stepNum === 6 && (
                                           <div>
                                             No. Surat Permohonan Pembukaan Rekening: <b>{req.no_surat_permohonan_rekening || '-'}</b><br />
-                                            No. Surat Izin Penetapan Rekening: <b>{req.no_surat_izin_penetapan_rekening || '-'}</b><br />
-                                            Nama Bank Padanan/Penampung: <span className="uppercase font-bold">{req.nama_bank_padanan || '-'}</span> (No. Rek: {req.no_rekening || '-'})
+                                            No. Surat Persetujuan KPPN: <b>{req.no_surat_izin_penetapan_rekening || '-'}</b><br />
+                                            Nama Bank / Rekening: <span className="uppercase font-bold">{req.nama_bank_padanan || '-'}</span> (No. Rek: {req.no_rekening || '-'})
                                           </div>
                                         )}
                                         {stepNum === 7 && (
@@ -1094,7 +1112,7 @@ export default function UserDashboard() {
                                         {stepNum === 8 && (
                                           <div>
                                             Nomor Surat Pengajuan Revisi DIPA: <b>{req.no_surat_revisi_dipa || '-'}</b><br />
-                                            Nominal Revisi DIPA (Pagu Awal): <b>Rp {paguAwal.toLocaleString('id-ID')},-</b>
+                                            Nominal Revisi DIPA (Pagu): <b>Rp {paguAwal.toLocaleString('id-ID')},-</b>
                                           </div>
                                         )}
                                         {stepNum === 9 && (
@@ -1190,7 +1208,6 @@ export default function UserDashboard() {
                               const isSelesai = stepNumber < req.tahap_sekarang;
                               const isAktif = stepNumber === req.tahap_sekarang;
 
-                              // Logika khusus step 10: Tuntas jika SP4HL sudah ada, meski tahap masih aktif
                               const isStep10Tuntas = stepNumber === 10 && transaksiList.some(t => t.tipe === 'SP4HL');
 
                               return (
@@ -1249,35 +1266,79 @@ export default function UserDashboard() {
           )}
 
           {activeMenu === 'panduan' && (
-            <div className="max-w-4xl mx-auto">
-              <div className="mb-6">
-                <h1 className="text-2xl font-bold text-slate-900">Panduan & Dokumen 11 Tahap Hibah</h1>
-                <p className="text-slate-500 mt-1">Standar operasional dan rincian berkas yang perlu disiapkan.</p>
+            <div className="max-w-5xl mx-auto space-y-6">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div>
+                  <h1 className="text-2xl font-bold text-slate-900">Panduan & Infografis 11 Tahap Hibah</h1>
+                  <p className="text-slate-500 mt-1 text-sm">Standar operasional, alur infografis resmi, dan unduhan ceklis kelengkapan dokumen Bawaslu Jabar.</p>
+                </div>
+                {/* Tombol Download Master Excel Dokumen */}
+                <a 
+                  href="/SIHANDAL_Ceklis_Kelengkapan_Dokumen_Penerimaan_Hibah_Non_Pemilihan.xlsx" 
+                  download 
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-xl text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                  Download Master Ceklis Excel (.xlsx)
+                </a>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {DETAIL_PANDUAN_TAHAP.map((item) => (
-                  <div key={item.tahap} className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
-                    <div className="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
+                  <div key={item.tahap} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4 hover:shadow-md transition-shadow">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 pb-4 border-b border-slate-100">
                       <div className="flex items-center space-x-3">
-                        <span className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                        <span className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
                           {item.tahap}
                         </span>
-                        <h3 className="font-bold text-slate-800 text-base">{item.judul}</h3>
+                        <div>
+                          <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Tahap {item.tahap}</span>
+                          <h3 className="font-bold text-slate-900 text-lg">{item.judul}</h3>
+                        </div>
                       </div>
-                      <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">
-                        {item.aplikasi}
+                      <span className="px-3.5 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold border border-slate-200">
+                        Aplikasi: <b>{item.aplikasi}</b>
                       </span>
                     </div>
-                    <p className="text-xs text-slate-600 mb-4">{item.uraian}</p>
-                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {item.dokumen.map((doc, idx) => (
-                        <li key={idx} className="flex items-start text-xs text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100">
-                          <span className="text-blue-600 mr-2 font-bold">•</span>
-                          <span>{doc}</span>
-                        </li>
-                      ))}
-                    </ul>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                      {/* Kolom Uraian */}
+                      <div className="md:col-span-2 space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div>
+                          <div className="font-bold text-slate-900 uppercase text-[10px] tracking-wider mb-1 text-blue-700">Uraian Singkat & Alur:</div>
+                          <p className="text-slate-600 leading-relaxed">{item.uraian}</p>
+                        </div>
+
+                        <div>
+                          <div className="font-bold text-slate-900 uppercase text-[10px] tracking-wider mb-2 text-blue-700">Dokumen yang Diperlukan:</div>
+                          <ul className="grid grid-cols-1 gap-1.5">
+                            {item.dokumen.map((doc, idx) => (
+                              <li key={idx} className="flex items-start text-slate-700 bg-white p-2 rounded-lg border border-slate-200/60 shadow-2xs">
+                                <span className="text-blue-600 mr-2 font-bold">•</span>
+                                <span>{doc}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+
+                      {/* Kolom Unduh & Aksi Cepat */}
+                      <div className="bg-blue-50/60 p-4 rounded-xl border border-blue-100 flex flex-col justify-between space-y-4">
+                        <div className="space-y-2">
+                          <div className="font-bold text-blue-900 uppercase text-[10px] tracking-wider">Berkas Ceklis Tahap {item.tahap}:</div>
+                          <p className="text-[11px] text-blue-700 leading-normal">Gunakan format Excel standar Bawaslu Jabar untuk menyusun dan memverifikasi dokumen tahap ini.</p>
+                        </div>
+
+                        <a 
+                          href="/SIHANDAL_Ceklis_Kelengkapan_Dokumen_Penerimaan_Hibah_Non_Pemilihan.xlsx" 
+                          download 
+                          className="w-full bg-white hover:bg-blue-600 hover:text-white text-blue-700 border border-blue-300 font-bold py-2.5 px-3 rounded-xl text-xs shadow-xs transition-all flex items-center justify-center gap-2 text-center group"
+                        >
+                          <svg className="w-4 h-4 text-blue-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                          Unduh Format Excel
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>

@@ -330,16 +330,13 @@ export default function UserDashboard() {
   const openActionModal = (req: any) => {
     setActiveReq(req);
     fetchChildData(req.id);
-    
-    const formatDateForInput = (dateStr: string) => {
-      if (!dateStr) return '';
-      return dateStr.split('T')[0];
-    };
+    const formatDateForInput = (dateStr: string) => dateStr ? dateStr.split('T')[0] : '';
 
     setFormData({
       nama_kegiatan: req.nama_kegiatan || '',
       tujuan_hibah: req.tujuan_hibah || '',
-      nilai_rab: req.nilai_rab || '',
+      // Pastikan nilai_rab mengambil nominal NPHD yang sudah ada, atau fallback ke nilai_rab awal
+      nilai_rab: req.nominal_nphd ? req.nominal_nphd.toString() : (req.nilai_rab || ''),
       file_ba_pleno: req.file_ba_pleno || '',
       file_surat: req.file_surat || '',
       file_rab: req.file_rab || '',

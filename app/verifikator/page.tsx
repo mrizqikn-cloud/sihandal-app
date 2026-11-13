@@ -241,18 +241,16 @@ export default function VerifikatorDashboard() {
       case 6:
         return (
           <div className="space-y-1">
-            <div>Nomor Surat Penetapan Register (Kanwil DJPb): <b>{req.surat_penetapan_register || '-'}</b></div>
-            <div>Nomor Register Hibah Resmi: <b className="text-blue-600">{req.nomor_register_hibah || '-'}</b></div>
-            <div>No. Surat Permohonan Pembukaan Rekening: <b>{req.no_surat_permohonan_rekening || '-'}</b></div>
-            <div>No. Surat Izin Penetapan Rekening: <b>{req.no_surat_izin_penetapan_rekening || '-'}</b></div>
-            <div>Nama Bank Padanan/Penampung: <span className="uppercase font-bold">{req.nama_bank_padanan || '-'}</span> (No. Rek: {req.no_rekening || '-'})</div>
+            <div>No. Surat Permohonan Pembukaan Rekening ke KPPN: <b>{req.no_surat_permohonan_rekening || '-'}</b> (Tgl: {req.tgl_surat || '-'})</div>
           </div>
         );
       case 7:
         return (
           <div className="space-y-1">
+            <div>No. Surat Persetujuan Rekening KPPN: <b>{req.no_surat_izin_penetapan_rekening || '-'}</b></div>
+            <div>Nomor Rekening RPDHL/RPDH Resmi: <b className="text-emerald-700">{req.no_rekening || '-'}</b> (Bank: <span className="uppercase font-bold">{req.nama_bank_padanan || '-'}</span>)</div>
             <div>Nomor Surat Permohonan Pencairan: <b>{req.no_surat_pencairan || '-'}</b></div>
-            <div>Nomor SP2D: <b>{req.nomor_sp2d || '-'}</b></div>
+            <div>Nomor SP2D Pemda: <b>{req.nomor_sp2d || '-'}</b></div>
           </div>
         );
       case 8:

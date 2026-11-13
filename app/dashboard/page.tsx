@@ -480,8 +480,8 @@ export default function UserDashboard() {
     if (activeReq.tahap_sekarang === 10) {
       const hasSP4HL = transaksiList.some(t => t.tipe === 'SP4HL');
       if (!hasSP4HL) {
-        const lanjut = window.confirm("Anda belum menginput dokumen SP4HL (pengesahan pengembalian/nihil). Apakah Anda yakin ingin lanjut ke tahap berikutnya tanpa SP4HL?");
-        if (!lanjut) return;
+        alert('⚠️ Dokumen SP4HL (Pengesahan Pengembalian / Nihil) belum diinput! Anda baru bisa melanjutkan ke Tahap 11 setelah dokumen SP4HL dimasukkan ke dalam daftar.');
+        return;
       }
     }
 
@@ -498,33 +498,29 @@ export default function UserDashboard() {
         tgl_surat: formData.tgl_surat,
       };
 
-      // KHUSUS TAHAP 4 (NPHD)
-if (activeReq.tahap_sekarang === 4) {
-  updatePayload.no_surat_izin_prinsip = formData.no_surat_izin_prinsip;
-  updatePayload.tgl_surat_izin_prinsip = formData.tgl_surat_izin_prinsip;
-  updatePayload.nomor_nphd = formData.nomor_nphd;
-  updatePayload.tanggal_nphd = formData.tanggal_nphd;
+      if (activeReq.tahap_sekarang === 4) {
+        updatePayload.no_surat_izin_prinsip = formData.no_surat_izin_prinsip;
+        updatePayload.tgl_surat_izin_prinsip = formData.tgl_surat_izin_prinsip;
+        updatePayload.nomor_nphd = formData.nomor_nphd;
+        updatePayload.tanggal_nphd = formData.tanggal_nphd;
 
-  if (formData.nilai_rab) {
-    const cleanedNilai = String(formData.nilai_rab).replace(/[^0-9]/g, '');
-    const numericNPHD = parseFloat(cleanedNilai);
-    if (!isNaN(numericNPHD) && numericNPHD > 0) {
-      updatePayload.nominal_nphd = numericNPHD; // Disimpan khusus ke nominal_nphd
-    }
-  }
-}
+        if (formData.nilai_rab) {
+          const cleanedNilai = String(formData.nilai_rab).replace(/[^0-9]/g, '');
+          const numericNPHD = parseFloat(cleanedNilai);
+          if (!isNaN(numericNPHD) && numericNPHD > 0) {
+            updatePayload.nominal_nphd = numericNPHD;
+          }
+        }
+      }
 
-      // KHUSUS TAHAP 5 (Permohonan Register Hibah)
       if (activeReq.tahap_sekarang === 5) {
         updatePayload.surat_permohonan_register = formData.surat_permohonan_register;
       }
 
-      // KHUSUS TAHAP 6 (Permohonan Pembukaan Rekening)
       if (activeReq.tahap_sekarang === 6) {
         updatePayload.no_surat_permohonan_rekening = formData.no_surat_permohonan_rekening;
       }
 
-      // KHUSUS TAHAP 7 (Persetujuan KPPN, Rekening Jadi, & Pencairan)
       if (activeReq.tahap_sekarang === 7) {
         updatePayload.no_surat_izin_penetapan_rekening = formData.no_surat_izin_penetapan_rekening;
         updatePayload.no_rekening = formData.no_rekening;
@@ -533,26 +529,30 @@ if (activeReq.tahap_sekarang === 4) {
         updatePayload.nomor_sp2d = formData.nomor_sp2d;
       }
 
-      // KHUSUS TAHAP 8 (Revisi DIPA & Kuncian Pagu Anggaran)
-if (activeReq.tahap_sekarang === 8) {
-  updatePayload.no_surat_revisi_dipa = formData.no_surat_revisi_dipa;
-  
-  const cleanedPagu = String(formData.nominal_revisi_dipa).replace(/[^0-9]/g, '');
-  const numericPagu = parseFloat(cleanedPagu);
-  
-  if (!isNaN(numericPagu) && numericPagu > 0) {
-    updatePayload.nominal_revisi_dipa = numericPagu;
-    updatePayload.nilai_rab = numericPagu; // Pagu operasional untuk realisasi berikutnya
-  }
-}
+      if (activeReq.tahap_sekarang === 8) {
+        updatePayload.no_surat_revisi_dipa = formData.no_surat_revisi_dipa;
+        const cleanedPagu = String(formData.nominal_revisi_dipa).replace(/[^0-9]/g, '');
+        const numericPagu = parseFloat(cleanedPagu);
+        if (!isNaN(numericPagu) && numericPagu > 0) {
+          updatePayload.nominal_revisi_dipa = numericPagu;
+          updatePayload.nilai_rab = numericPagu;
+        }
+      }
+
+      // JIKA DI TAHAP 9 ATAU 10, KITA MAJUKAN KE TAHAP 11
+      const nextTahap = (activeReq.tahap_sekarang === 9 || activeReq.tahap_sekarang === 10) ? 11 : activeReq.tahap_sekarang + 1;
 
       const { error } = await supabase.from('hibah_requests')
-        .update(updatePayload)
+        .update({ 
+          ...updatePayload,
+          tahap_sekarang: nextTahap,
+          status_tahap: 'Perlu Usulan'
+        })
         .eq('id', activeReq.id);
 
       if (error) throw error;
 
-      alert(`Dokumen Tahap ${activeReq.tahap_sekarang} berhasil dikirim ke Provinsi!`);
+      alert(`Tahap berhasil diselesaikan dan dilanjutkan ke Tahap ${nextTahap}!`);
       setIsActionModalOpen(false);
       setActiveReq(null);
       fetchData();
@@ -823,108 +823,119 @@ if (activeReq.tahap_sekarang === 8) {
             </div>
           </div>
         );
-      case 9: 
+      case 9:
+      case 10:
         return (
-          <div className="space-y-3 mt-3 pt-3 border-t border-slate-200 bg-blue-50/50 p-4 rounded-xl border border-blue-100">
-            <div className="font-bold text-xs text-blue-900 uppercase">Input Realisasi Penyerapan Bulanan (Dapat Diisi Berulang)</div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">Bulan *</label>
-                <select value={formData.bulan_realisasi} onChange={(e) => setFormData({...formData, bulan_realisasi: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white">
-                  {['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'].map(b => (
-                    <option key={b} value={b}>{b}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">Tahun *</label>
-                <input type="text" value={formData.tahun_realisasi} onChange={(e) => setFormData({...formData, tahun_realisasi: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
-              </div>
+          <div className="space-y-4">
+            <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-800 leading-relaxed">
+              💡 <b>Mode Paralel SAKTI:</b> Tahap 9 (Realisasi Bulanan) dan Tahap 10 (SP2HL/SP4HL) berjalan berdampingan. Anda dapat mengisi kedua modul di bawah secara bergantian sesuai kondisi riil. Tombol final untuk lanjut ke Tahap 11 akan aktif setelah dokumen <b>SP4HL (Nihil)</b> berhasil diinput.
             </div>
-            <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nilai Realisasi (Rp) *</label>
-              <input type="text" placeholder="Cth: 25000000" value={formData.nilai_realisasi_bulan} onChange={(e) => setFormData({...formData, nilai_realisasi_bulan: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
-            </div>
-            <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Keterangan / Uraian Kegiatan</label>
-              <input type="text" placeholder="Cth: Pembayaran honorarium pengawas bulan berjalan" value={formData.keterangan_realisasi} onChange={(e) => setFormData({...formData, keterangan_realisasi: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
-            </div>
-            <button type="button" onClick={handleTambahRealisasiBulanan} disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-xs shadow-sm transition-colors">
-              + Tambah / Simpan Realisasi Bulan Ini
-            </button>
 
-            <div className="mt-3 pt-3 border-t border-blue-200">
-              <div className="text-[11px] font-bold text-slate-700 mb-2">Riwayat Realisasi Tercatat ({realisasiList.length} Bulan):</div>
-              <div className="space-y-1.5 max-h-36 overflow-y-auto">
-                {realisasiList.map((r, idx) => (
-                  <div key={idx} className="bg-white p-2 rounded border border-slate-200 flex justify-between text-xs">
-                    <span><b>{r.bulan} {r.tahun}</b>: Rp {Number(r.nilai_realisasi).toLocaleString('id-ID')}</span>
-                    <span className="text-slate-500 italic truncate max-w-[150px]">{r.keterangan_realisasi}</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* MODUL 1: REALISASI BULANAN (TAHAP 9) */}
+              <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-3">
+                <div className="font-bold text-xs text-blue-900 uppercase">1. Input Realisasi Bulanan (Tahap 9)</div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-600 mb-1">Bulan</label>
+                    <select value={formData.bulan_realisasi} onChange={(e) => setFormData({...formData, bulan_realisasi: e.target.value})} className="w-full px-2 py-1.5 border rounded text-xs bg-white">
+                      {['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'].map(b => (
+                        <option key={b} value={b}>{b}</option>
+                      ))}
+                    </select>
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        );
-      case 10: 
-        return (
-          <div className="space-y-3 mt-3 pt-3 border-t border-slate-200 bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
-            <div className="font-bold text-xs text-emerald-900 uppercase">Input Dokumen SP2HL (Hingga 6x) & SP4HL (Final)</div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">Jenis Dokumen *</label>
-                <select value={formData.tipe_transaksi_sp} onChange={(e) => setFormData({...formData, tipe_transaksi_sp: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white">
-                  <option value="SP2HL">SP2HL (Pengesahan Pendapatan)</option>
-                  <option value="SP4HL">SP4HL (Pengesahan Pengembalian / Nihil)</option>
-                </select>
-              </div>
-              {formData.tipe_transaksi_sp === 'SP2HL' ? (
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Tahapan SP2HL Ke- *</label>
-                  <select value={formData.tahapan_sp2d_ke} onChange={(e) => setFormData({...formData, tahapan_sp2d_ke: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white">
-                    {[1,2,3,4,5,6].map(n => <option key={n} value={n}>SP2HL Ke-{n}</option>)}
-                  </select>
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-600 mb-1">Tahun</label>
+                    <input type="text" value={formData.tahun_realisasi} onChange={(e) => setFormData({...formData, tahun_realisasi: e.target.value})} className="w-full px-2 py-1.5 border rounded text-xs bg-white" />
+                  </div>
                 </div>
-              ) : (
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Status Dokumen</label>
-                  <div className="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-2 rounded-lg">Finalisasi / Nihil</div>
+                  <label className="block text-[10px] font-bold text-slate-600 mb-1">Nilai Realisasi (Rp)</label>
+                  <input type="text" placeholder="Cth: 25000000" value={formData.nilai_realisasi_bulan} onChange={(e) => setFormData({...formData, nilai_realisasi_bulan: e.target.value})} className="w-full px-2 py-1.5 border rounded text-xs bg-white" />
                 </div>
-              )}
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Dokumen *</label>
-                <input type="text" placeholder="Cth: SP2HL-01/..." value={formData.nomor_dokumen_sp} onChange={(e) => setFormData({...formData, nomor_dokumen_sp: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
-              </div>
-              <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nilai Transaksi (Rp) *</label>
-                <input type="text" placeholder="Cth: 50000000" value={formData.nilai_transaksi_sp} onChange={(e) => setFormData({...formData, nilai_transaksi_sp: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
-              </div>
-            </div>
-            <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Dokumen *</label>
-              <input type="date" value={formData.tanggal_sp} onChange={(e) => setFormData({...formData, tanggal_sp: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs bg-white" />
-            </div>
-            <button type="button" onClick={handleTambahTransaksiSP} disabled={isSubmitting} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-lg text-xs shadow-sm transition-colors">
-              + Tambah Transaksi {formData.tipe_transaksi_sp}
-            </button>
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-600 mb-1">Keterangan Kegiatan</label>
+                  <input type="text" placeholder="Uraian realisasi" value={formData.keterangan_realisasi} onChange={(e) => setFormData({...formData, keterangan_realisasi: e.target.value})} className="w-full px-2 py-1.5 border rounded text-xs bg-white" />
+                </div>
+                <button type="button" onClick={handleTambahRealisasiBulanan} disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded text-xs transition-colors shadow-sm">
+                  + Simpan Realisasi Bulan Ini
+                </button>
 
-            <div className="mt-3 pt-3 border-t border-emerald-200">
-              <div className="text-[11px] font-bold text-slate-700 mb-2">Riwayat Transaksi SP Tercatat ({transaksiList.length} Dokumen):</div>
-              <div className="space-y-1.5 max-h-36 overflow-y-auto">
-                {transaksiList.map((t, idx) => (
-                  <div key={idx} className="bg-white p-2 rounded border border-slate-200 flex justify-between text-xs">
-                    <span><b>{t.tipe} {t.tipe === 'SP2HL' ? `(Ke-${t.tahapan_ke})` : ''}</b> - {t.nomor_dokumen}</span>
-                    <span className="font-bold text-emerald-700">Rp {Number(t.nilai_transaksi).toLocaleString('id-ID')}</span>
+                <div className="mt-2 pt-2 border-t border-blue-200">
+                  <div className="text-[10px] font-bold text-slate-700 mb-1">Riwayat Realisasi ({realisasiList.length}):</div>
+                  <div className="space-y-1 max-h-28 overflow-y-auto">
+                    {realisasiList.length === 0 ? (
+                      <div className="text-[11px] text-slate-400 italic text-center py-1">Belum ada data.</div>
+                    ) : (
+                      realisasiList.map((r, i) => (
+                        <div key={i} className="bg-white p-1.5 rounded border text-[11px] flex justify-between items-center">
+                          <span><b>{r.bulan}</b>: Rp {Number(r.nilai_realisasi).toLocaleString('id-ID')}</span>
+                        </div>
+                      ))
+                    )}
                   </div>
-                ))}
-              </div>
-              {!transaksiList.some(t => t.tipe === 'SP4HL') && (
-                <div className="mt-2 text-[10px] text-amber-700 bg-amber-50 p-2 rounded border border-amber-200">
-                  ⚠️ Catatan: Step 10 baru bisa diselesaikan/dilanjut ke Tahap 11 setelah Anda menginput dokumen **SP4HL**.
                 </div>
-              )}
+              </div>
+
+              {/* MODUL 2: DOKUMEN SP2HL / SP4HL (TAHAP 10) */}
+              <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-3">
+                <div className="font-bold text-xs text-emerald-900 uppercase">2. Input Dokumen SP2HL / SP4HL (Tahap 10)</div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-600 mb-1">Jenis Dokumen</label>
+                    <select value={formData.tipe_transaksi_sp} onChange={(e) => setFormData({...formData, tipe_transaksi_sp: e.target.value})} className="w-full px-2 py-1.5 border rounded text-xs bg-white">
+                      <option value="SP2HL">SP2HL</option>
+                      <option value="SP4HL">SP4HL (Nihil)</option>
+                    </select>
+                  </div>
+                  {formData.tipe_transaksi_sp === 'SP2HL' ? (
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-600 mb-1">Tahapan Ke-</label>
+                      <select value={formData.tahapan_sp2d_ke} onChange={(e) => setFormData({...formData, tahapan_sp2d_ke: e.target.value})} className="w-full px-2 py-1.5 border rounded text-xs bg-white">
+                        {[1,2,3,4,5,6].map(n => <option key={n} value={n}>Ke-{n}</option>)}
+                      </select>
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-600 mb-1">Status</label>
+                      <div className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1.5 rounded text-center">Final</div>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-600 mb-1">Nomor Dokumen</label>
+                  <input type="text" placeholder="Nomor Dokumen SP" value={formData.nomor_dokumen_sp} onChange={(e) => setFormData({...formData, nomor_dokumen_sp: e.target.value})} className="w-full px-2 py-1.5 border rounded text-xs bg-white" />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-600 mb-1">Nilai (Rp)</label>
+                    <input type="text" placeholder="Nilai" value={formData.nilai_transaksi_sp} onChange={(e) => setFormData({...formData, nilai_transaksi_sp: e.target.value})} className="w-full px-2 py-1.5 border rounded text-xs bg-white" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-600 mb-1">Tanggal</label>
+                    <input type="date" value={formData.tanggal_sp} onChange={(e) => setFormData({...formData, tanggal_sp: e.target.value})} className="w-full px-2 py-1.5 border rounded text-xs bg-white" />
+                  </div>
+                </div>
+                <button type="button" onClick={handleTambahTransaksiSP} disabled={isSubmitting} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded text-xs transition-colors shadow-sm">
+                  + Simpan Transaksi {formData.tipe_transaksi_sp}
+                </button>
+
+                <div className="mt-2 pt-2 border-t border-emerald-200">
+                  <div className="text-[10px] font-bold text-slate-700 mb-1">Riwayat Dokumen SP ({transaksiList.length}):</div>
+                  <div className="space-y-1 max-h-28 overflow-y-auto">
+                    {transaksiList.length === 0 ? (
+                      <div className="text-[11px] text-slate-400 italic text-center py-1">Belum ada data.</div>
+                    ) : (
+                      transaksiList.map((t, i) => (
+                        <div key={i} className="bg-white p-1.5 rounded border text-[11px] flex justify-between items-center">
+                          <span><b>{t.tipe}</b> ({t.nomor_dokumen})</span>
+                          <span className="font-bold text-emerald-700">Rp {Number(t.nilai_transaksi).toLocaleString('id-ID')}</span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         );
@@ -1207,12 +1218,12 @@ if (activeReq.tahap_sekarang === 8) {
                                           </div>
                                         )}
                                         {stepNum === 4 && (
-  <div>
-    Nomor NPHD: <b>{req.nomor_nphd || '-'}</b><br />
-    Nominal NPHD: <b>Rp {Number(req.nominal_nphd || req.nilai_rab || 0).toLocaleString('id-ID')},-</b><br />
-    Tanggal NPHD: <b>{req.tanggal_nphd || '-'}</b>
-  </div>
-)}
+                                          <div>
+                                            Nomor NPHD: <b>{req.nomor_nphd || '-'}</b><br />
+                                            Nominal NPHD: <b>Rp {Number(req.nominal_nphd || req.nilai_rab || 0).toLocaleString('id-ID')},-</b><br />
+                                            Tanggal NPHD: <b>{req.tanggal_nphd || '-'}</b>
+                                          </div>
+                                        )}
                                         {stepNum === 5 && (
                                           <div>
                                             Surat Permohonan Register Hibah: <b>{req.surat_permohonan_register || '-'}</b><br />
@@ -1506,7 +1517,7 @@ if (activeReq.tahap_sekarang === 8) {
 
         {isActionModalOpen && activeReq && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl overflow-hidden border border-slate-200">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden border border-slate-200">
               <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <h3 className="text-lg font-bold text-slate-800">Kelola Tahap {activeReq.tahap_sekarang}: {TAHAPAN_HIBAH[activeReq.tahap_sekarang - 1]}</h3>
                 <button onClick={() => setIsActionModalOpen(false)} className="text-slate-400 hover:text-slate-600">✕</button>
@@ -1679,7 +1690,20 @@ if (activeReq.tahap_sekarang === 8) {
 
                 <div className="pt-4 border-t flex gap-3">
                   <button type="button" onClick={() => setIsActionModalOpen(false)} className="flex-1 bg-white border py-3 rounded-xl text-sm">Batal</button>
-                  <button type="submit" disabled={isSubmitting} className="flex-[2] bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm shadow-md">Simpan & Majukan Tahap</button>
+                  
+                  {activeReq.tahap_sekarang === 9 || activeReq.tahap_sekarang === 10 ? (
+                    transaksiList.some(t => t.tipe === 'SP4HL') ? (
+                      <button type="submit" disabled={isSubmitting} className="flex-[2] bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs shadow-md transition-all">
+                        🚀 SP4HL Terdeteksi! Selesaikan & Lanjut ke Tahap 11
+                      </button>
+                    ) : (
+                      <div className="flex-[2] bg-slate-100 text-slate-400 border border-slate-200 font-medium py-3 rounded-xl text-xs flex items-center justify-center text-center px-2 cursor-not-allowed">
+                        🔒 Input SP4HL untuk membuka tombol lanjut ke Tahap 11
+                      </div>
+                    )
+                  ) : (
+                    <button type="submit" disabled={isSubmitting} className="flex-[2] bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm shadow-md">Simpan & Majukan Tahap</button>
+                  )}
                 </div>
               </form>
             </div>

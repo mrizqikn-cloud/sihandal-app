@@ -31,7 +31,7 @@ export default function LoginPage() {
 
       if (profileError) throw profileError;
 
-      // LOGIKA REDIRECT DISESUAIKAN DENGAN ROLE BARU
+      // LOGIKA REDIRECT DISESUAIKAN DENGAN ROLE
       const userRole = profileData.role;
 
       if (userRole === 'admin') {
@@ -56,10 +56,16 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#f0f2f5] flex flex-col items-center justify-center p-4 font-sans selection:bg-blue-100">
       <div className="w-full max-w-4xl flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
         
-        {/* Sisi Kiri: Branding / Informasi Singkat */}
-        <div className="flex-1 text-center md:text-left px-4">
-          <h1 className="text-5xl font-black text-blue-600 tracking-tight mb-3">sihandal</h1>
-          <p className="text-lg text-slate-600 leading-relaxed">
+        {/* Sisi Kiri: Logo & Branding Resmi */}
+        <div className="flex-1 text-center md:text-left px-4 space-y-4">
+          <div className="flex justify-center md:justify-start">
+            <img 
+              src="/logo-sihandal.jpeg" 
+              alt="Logo SIHANDAL" 
+              className="h-24 md:h-28 w-auto object-contain bg-white p-2 rounded-2xl shadow-sm border border-slate-200" 
+            />
+          </div>
+          <p className="text-base text-slate-600 leading-relaxed font-medium">
             Sistem Informasi Hibah, Administrasi dan Pengendalian terintegrasi untuk Bawaslu.
           </p>
         </div>

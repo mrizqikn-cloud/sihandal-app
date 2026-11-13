@@ -175,19 +175,19 @@ export default function AtasanKabkotDashboard() {
                 <tr>
                   <td style="text-align: center; font-weight: bold;">1</td>
                   <td><b>Pengajuan Permohonan Hibah</b></td>
-                  <td>No. Surat Permohonan Hibah: ${req.no_surat || '-'} - (Tgl: ${req.tgl_surat || '-'})</td>
+                  <td>No. Surat Permohonan Hibah: ${req.no_surat || '-'} (Tgl: ${req.tgl_surat || '-'})</td>
                 </tr>
                 <tr>
                   <td style="text-align: center; font-weight: bold;">2</td>
                   <td><b>Konsultasi Rencana Penerimaan</b></td>
-                  <td>No. Surat Konsultasi: ${req.no_surat || '-'} - (Tgl: ${req.tgl_surat || '-'})</td>
+                  <td>No. Surat Konsultasi: ${req.no_surat || '-'} (Tgl: ${req.tgl_surat || '-'})</td>
                 </tr>
                 <tr>
                   <td style="text-align: center; font-weight: bold;">3</td>
                   <td><b>Pengajuan Ijin Prinsip</b></td>
                   <td>
                     Surat Permohonan Izin Prinsip: ${req.no_surat || '-'}<br/>
-                    Nomor Penetapan Izin Prinsip: ${req.no_surat_izin_prinsip || '-'} - (Tgl: ${req.tgl_surat_izin_prinsip || '-'})
+                    Nomor Penetapan Izin Prinsip: ${req.no_surat_izin_prinsip || '-'} (Tgl: ${req.tgl_surat_izin_prinsip || '-'})
                   </td>
                 </tr>
                 <tr>
@@ -258,7 +258,7 @@ export default function AtasanKabkotDashboard() {
                   <td style="text-align: center; font-weight: bold;">11</td>
                   <td><b>Pertanggungjawaban & Pelaporan</b></td>
                   <td>
-                    No. Surat Laporan Pertanggungjawaban: ${req.no_surat || '-'} - (Tgl: ${req.tgl_surat || '-'})
+                    No. Surat Laporan Pertanggungjawaban: ${req.no_surat || '-'} (Tgl: ${req.tgl_surat || '-'})
                     ${req.tahap_sekarang < 11 ? '<br/><span style="color:#64748b; font-style:italic;">Belum mencapai tahap ini</span>' : ''}
                   </td>
                 </tr>
@@ -284,9 +284,13 @@ export default function AtasanKabkotDashboard() {
   return (
     <div className="flex h-screen bg-[#f8fafc] font-sans overflow-hidden">
       <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 flex-shrink-0">
+        {/* LOGO RESMI SIHANDAL */}
         <div className="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
-          <div className="w-8 h-8 rounded bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center font-bold text-white mr-3 shadow-sm">A</div>
-          <span className="font-bold text-white text-lg tracking-wide">SIHANDAL KAB/KOTA</span>
+          <img 
+            src="/logo-sihandal.jpeg" 
+            alt="Logo SIHANDAL" 
+            className="h-9 w-auto object-contain bg-white p-1 rounded-lg" 
+          />
         </div>
         
         <div className="px-4 mt-6 mb-2">
@@ -400,10 +404,10 @@ export default function AtasanKabkotDashboard() {
                 <div className="bg-slate-100 p-4 rounded-xl border space-y-2">
                   <div className="font-bold text-slate-900 uppercase text-[11px]">Jejak Audit & Timestamp:</div>
                   <div className="grid grid-cols-2 gap-2 text-[11px]">
-                    <div>• Waktu Pengajuan Awal: <b>{formatTimestamp(selectedReq.created_at)}</b></div>
-                    <div>• Terakhir Diperbarui: <b>{formatTimestamp(selectedReq.updated_at || selectedReq.created_at)}</b></div>
-                    <div>• Posisi Tahap Aktif: <b>Tahap {selectedReq.tahap_sekarang}</b></div>
-                    <div>• Status Berkas: <b className={selectedReq.status_tahap === 'Ditolak' ? 'text-rose-600' : 'text-blue-600'}>{selectedReq.status_tahap}</b></div>
+                    <div>Waktu Pengajuan Awal: <b>{formatTimestamp(selectedReq.created_at)}</b></div>
+                    <div>Terakhir Diperbarui: <b>{formatTimestamp(selectedReq.updated_at || selectedReq.created_at)}</b></div>
+                    <div>Posisi Tahap Aktif: <b>Tahap {selectedReq.tahap_sekarang}</b></div>
+                    <div>Status Berkas: <b className={selectedReq.status_tahap === 'Ditolak' ? 'text-rose-600' : 'text-blue-600'}>{selectedReq.status_tahap}</b></div>
                   </div>
                   {selectedReq.alasan_penolakan && (
                     <div className="mt-2 pt-2 border-t border-slate-200 text-rose-700">

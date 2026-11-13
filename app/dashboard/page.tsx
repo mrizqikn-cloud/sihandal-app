@@ -287,7 +287,7 @@ export default function UserDashboard() {
       });
 
       if (error) throw error;
-
+      
       alert('Berhasil! Addendum NPHD telah diajukan dan sedang menunggu verifikasi Provinsi.');
       setIsAddendumModalOpen(false);
       setAddendumForm({ nomor_addendum: '', tanggal_addendum: '', nominal_baru: '', file_addendum: '' });
@@ -805,9 +805,13 @@ export default function UserDashboard() {
     <div className="flex h-screen bg-[#f8fafc] font-sans overflow-hidden selection:bg-blue-100">
       
       <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 flex-shrink-0 print:hidden">
+        {/* LOGO RESMI DI SIDEBAR */}
         <div className="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
-          <div className="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center font-bold text-white mr-3 shadow-sm">S</div>
-          <span className="font-bold text-white text-lg tracking-wide">SIHANDAL</span>
+          <img 
+            src="/logo-sihandal.jpeg" 
+            alt="Logo SIHANDAL" 
+            className="h-9 w-auto object-contain bg-white p-1 rounded-lg" 
+          />
         </div>
         
         <div className="px-4 mt-6 mb-2">

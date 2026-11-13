@@ -1309,13 +1309,13 @@ export default function UserDashboard() {
                     </div>
 
                     {/* TAMPILAN GAMBAR INFOGRAFIS */}
-                    <div className="bg-slate-900 rounded-xl overflow-hidden border border-slate-800 p-2 flex justify-center items-center shadow-inner">
-                      <img 
-                        src={`/infografis/tahap-${item.tahap}.png`} 
-                        alt={`Infografis Tahap ${item.tahap} - ${item.judul}`} 
-                        className="w-full h-auto object-contain rounded-lg max-h-[750px] hover:scale-[1.01] transition-transform duration-300"
-                      />
-                    </div>
+                      <div className="bg-slate-950 rounded-xl overflow-hidden border border-slate-800 p-3 flex justify-center items-center shadow-inner">
+                        <img 
+                          src={`/infografis/tahap-${item.tahap}.jpg`} 
+                          alt={`Infografis Tahap ${item.tahap} - ${item.judul}`} 
+                          className="w-full h-auto object-cover rounded-lg shadow-sm"
+                        />
+                      </div>
                   </div>
                 ))}
               </div>

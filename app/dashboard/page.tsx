@@ -487,7 +487,6 @@ export default function UserDashboard() {
 
     setIsSubmitting(true);
     try {
-      // 1. Definisikan payload dasar yang selalu ada
       const updatePayload: any = {
         status_tahap: 'Diproses',
         alasan_penolakan: null,
@@ -499,7 +498,7 @@ export default function UserDashboard() {
         tgl_surat: formData.tgl_surat,
       };
 
-      // 2. KHUSUS TAHAP 4: Masukkan nomor/tanggal izin prinsip & NPHD ke payload!
+      // KHUSUS TAHAP 4 (NPHD & Izin Prinsip)
       if (activeReq.tahap_sekarang === 4) {
         updatePayload.no_surat_izin_prinsip = formData.no_surat_izin_prinsip;
         updatePayload.tgl_surat_izin_prinsip = formData.tgl_surat_izin_prinsip;
@@ -515,7 +514,22 @@ export default function UserDashboard() {
         }
       }
 
-      // Kirim ke database Supabase
+      // KHUSUS TAHAP 5 (Permohonan Register Hibah)
+      if (activeReq.tahap_sekarang === 5) {
+        updatePayload.surat_permohonan_register = formData.surat_permohonan_register;
+        // Tanggal surat permohonan menggunakan formData.tgl_surat yang sudah ditangkap di case 5
+      }
+
+      // KHUSUS TAHAP 6 (Penetapan Register & Rekening)
+      if (activeReq.tahap_sekarang === 6) {
+        updatePayload.surat_penetapan_register = formData.surat_penetapan_register;
+        updatePayload.nomor_register_hibah = formData.nomor_register_hibah;
+        updatePayload.no_surat_permohonan_rekening = formData.no_surat_permohonan_rekening;
+        updatePayload.no_surat_izin_penetapan_rekening = formData.no_surat_izin_penetapan_rekening;
+        updatePayload.no_rekening = formData.no_rekening;
+        updatePayload.nama_bank_padanan = formData.nama_bank_padanan;
+      }
+
       const { error } = await supabase.from('hibah_requests')
         .update(updatePayload)
         .eq('id', activeReq.id);

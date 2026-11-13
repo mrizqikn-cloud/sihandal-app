@@ -806,11 +806,11 @@ export default function UserDashboard() {
       
       <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-xl z-20 flex-shrink-0 print:hidden">
         {/* LOGO RESMI DI SIDEBAR */}
-        <div className="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
+        <div className="h-20 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
           <img 
-            src="/logo-sihandal.jpeg" 
+            src="/logo-sihandal.png" 
             alt="Logo SIHANDAL" 
-            className="h-9 w-auto object-contain bg-white p-1 rounded-lg" 
+            className="h-12 md:h-14 w-auto object-contain bg-white px-2.5 py-1.5 rounded-xl shadow-sm" 
           />
         </div>
         

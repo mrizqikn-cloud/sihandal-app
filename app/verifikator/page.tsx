@@ -74,9 +74,9 @@ export default function VerifikatorDashboard() {
     router.push('/login');
   };
 
-  const openVerifyModal = (req: any) => {
+  const openVerifyModal = async (req: any) => {
     setSelectedReq(req);
-    fetchChildData(req.id);
+    await fetchChildData(req.id);
     setAlasanPenolakan(req.alasan_penolakan || '');
     setIsModalOpen(true);
   };
@@ -123,16 +123,17 @@ export default function VerifikatorDashboard() {
   const handleSetuju = async () => {
     if (!selectedReq) return;
 
+    // Jika status saat ini masih 'Perlu Usulan' atau lainnya, berikan opsi konfirmasi agar verifikator tetap bisa memaksa verifikasi jika diperlukan
     if (selectedReq.status_tahap !== 'Diproses') {
-      alert(`Tidak dapat menyetujui. Kabupaten/Kota belum mengirimkan berkas/usulan untuk tahap ini (Status saat ini: "${selectedReq.status_tahap}").`);
-      return;
+      const lanjut = window.confirm(`Peringatan: Status tahap ini adalah "${selectedReq.status_tahap}" (Kab/Kota belum mengirim ulang berkas). Apakah Anda tetap ingin menyetujui dan melanjutkan ke tahap berikutnya?`);
+      if (!lanjut) return;
     }
 
     if (selectedReq.tahap_sekarang === 10) {
       const hasSP4HL = transaksiList.some(t => t.tipe === 'SP4HL');
       if (!hasSP4HL) {
-        alert('Peringatan: Dokumen SP4HL belum diinput oleh Kabupaten/Kota. Sesuai aturan, tahap 10 memerlukan dokumen SP4HL sebelum lanjut ke tahap 11.');
-        return;
+        const lanjutSP4HL = window.confirm('Peringatan: Dokumen SP4HL belum diinput oleh Kabupaten/Kota. Apakah Anda yakin ingin lanjut ke tahap 11 tanpa SP4HL?');
+        if (!lanjutSP4HL) return;
       }
     }
 
@@ -531,14 +532,10 @@ export default function VerifikatorDashboard() {
                   <button 
                     type="button" 
                     onClick={handleSetuju} 
-                    disabled={isSubmitting || selectedReq.status_tahap !== 'Diproses'} 
-                    className={`flex-1 font-bold py-3 rounded-xl shadow-md transition-colors ${
-                      selectedReq.status_tahap === 'Diproses' 
-                        ? 'bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer' 
-                        : 'bg-slate-300 text-slate-500 cursor-not-allowed'
-                    }`}
+                    disabled={isSubmitting} 
+                    className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-md transition-colors cursor-pointer"
                   >
-                    {selectedReq.status_tahap === 'Diproses' ? 'Setujui & Lanjut Tahap' : 'Menunggu Usulan User'}
+                    Setujui & Lanjut Tahap
                   </button>
                 </div>
               </div>

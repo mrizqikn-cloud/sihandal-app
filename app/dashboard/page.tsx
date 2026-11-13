@@ -517,17 +517,20 @@ export default function UserDashboard() {
       // KHUSUS TAHAP 5 (Permohonan Register Hibah)
       if (activeReq.tahap_sekarang === 5) {
         updatePayload.surat_permohonan_register = formData.surat_permohonan_register;
-        // Tanggal surat permohonan menggunakan formData.tgl_surat yang sudah ditangkap di case 5
       }
 
-      // KHUSUS TAHAP 6 (Penetapan Register & Rekening)
+      // KHUSUS TAHAP 6 (Permohonan Pembukaan Rekening)
       if (activeReq.tahap_sekarang === 6) {
-        updatePayload.surat_penetapan_register = formData.surat_penetapan_register;
-        updatePayload.nomor_register_hibah = formData.nomor_register_hibah;
         updatePayload.no_surat_permohonan_rekening = formData.no_surat_permohonan_rekening;
+      }
+
+      // KHUSUS TAHAP 7 (Persetujuan KPPN, Rekening Jadi, & Pencairan)
+      if (activeReq.tahap_sekarang === 7) {
         updatePayload.no_surat_izin_penetapan_rekening = formData.no_surat_izin_penetapan_rekening;
         updatePayload.no_rekening = formData.no_rekening;
         updatePayload.nama_bank_padanan = formData.nama_bank_padanan;
+        updatePayload.no_surat_pencairan = formData.no_surat_pencairan;
+        updatePayload.nomor_sp2d = formData.nomor_sp2d;
       }
 
       const { error } = await supabase.from('hibah_requests')
@@ -733,7 +736,6 @@ export default function UserDashboard() {
       case 7: 
         return (
           <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
-            {/* Surat persetujuan KPPN & nomor rekening yang sudah terbit dipindah ke sini */}
             <div>
               <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Persetujuan Rekening KPPN *</label>
               <input 

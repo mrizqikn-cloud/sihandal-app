@@ -668,38 +668,103 @@ export default function UserDashboard() {
         return (
           <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Surat Permohonan Register Hibah *</label>
-              <input type="text" required placeholder="No. Surat Permohonan Register" value={formData.surat_permohonan_register} onChange={(e) => setFormData({...formData, surat_permohonan_register: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Permohonan Register Hibah ke Kanwil DJPb *</label>
+              <input 
+                type="text" 
+                required 
+                placeholder="No. Surat Permohonan Register" 
+                value={formData.surat_permohonan_register} 
+                onChange={(e) => setFormData(prev => ({ ...prev, surat_permohonan_register: e.target.value }))} 
+                className="w-full px-3 py-2 border rounded-lg text-xs" 
+              />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Surat Penerbitan Nomor Register Hibah (Kanwil DJPb) *</label>
-              <input type="text" required placeholder="No. Surat Penerbitan Register DJPb" value={formData.surat_penetapan_register} onChange={(e) => setFormData({...formData, surat_penetapan_register: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
-            </div>
-            <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Register Hibah Resmi *</label>
-              <input type="text" required placeholder="Nomor Register Resmi" value={formData.nomor_register_hibah} onChange={(e) => setFormData({...formData, nomor_register_hibah: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+              <label className="block text-[11px] font-bold text-slate-700 mb-1">Tanggal Surat Permohonan *</label>
+              <input 
+                type="date" 
+                required 
+                value={formData.tgl_surat} 
+                onChange={(e) => setFormData(prev => ({ ...prev, tgl_surat: e.target.value }))} 
+                className="w-full px-3 py-2 border rounded-lg text-xs" 
+              />
             </div>
           </div>
         );
       case 6: 
         return (
           <div className="space-y-3 mt-3 pt-3 border-t border-slate-200">
-            <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Permohonan Pembukaan Rekening *</label>
-              <input type="text" required placeholder="No. Surat Permohonan Rekening" value={formData.no_surat_permohonan_rekening} onChange={(e) => setFormData({...formData, no_surat_permohonan_rekening: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
-            </div>
-            <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Persetujuan Rekening KPPN *</label>
-              <input type="text" required placeholder="No. Surat Persetujuan KPPN" value={formData.no_surat_izin_penetapan_rekening} onChange={(e) => setFormData({...formData, no_surat_izin_penetapan_rekening: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
-            </div>
+            {/* Input Register yang tadinya di Tahap 5, sekarang ditaruh di sini karena sudah diterbitkan */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Rekening RPDHL/RPDH *</label>
-                <input type="text" required placeholder="Nomor Rekening Virtual Account" value={formData.no_rekening} onChange={(e) => setFormData({...formData, no_rekening: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Penerbitan Register (Kanwil DJPb) *</label>
+                <input 
+                  type="text" 
+                  required 
+                  placeholder="No. Surat Penetapan Register" 
+                  value={formData.surat_penetapan_register} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, surat_penetapan_register: e.target.value }))} 
+                  className="w-full px-3 py-2 border rounded-lg text-xs" 
+                />
               </div>
               <div>
-                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nama Bank *</label>
-                <input type="text" required placeholder="Cth: Bank Mandiri / BSI" value={formData.nama_bank_padanan} onChange={(e) => setFormData({...formData, nama_bank_padanan: e.target.value})} className="w-full px-3 py-2 border rounded-lg text-xs" />
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Register Hibah Resmi *</label>
+                <input 
+                  type="text" 
+                  required 
+                  placeholder="Nomor Register Resmi" 
+                  value={formData.nomor_register_hibah} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, nomor_register_hibah: e.target.value }))} 
+                  className="w-full px-3 py-2 border rounded-lg text-xs" 
+                />
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-slate-100 space-y-3">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Permohonan Pembukaan Rekening *</label>
+                <input 
+                  type="text" 
+                  required 
+                  placeholder="No. Surat Permohonan Rekening" 
+                  value={formData.no_surat_permohonan_rekening} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, no_surat_permohonan_rekening: e.target.value }))} 
+                  className="w-full px-3 py-2 border rounded-lg text-xs" 
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Surat Persetujuan Rekening KPPN *</label>
+                <input 
+                  type="text" 
+                  required 
+                  placeholder="No. Surat Persetujuan KPPN" 
+                  value={formData.no_surat_izin_penetapan_rekening} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, no_surat_izin_penetapan_rekening: e.target.value }))} 
+                  className="w-full px-3 py-2 border rounded-lg text-xs" 
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Nomor Rekening RPDHL/RPDH *</label>
+                  <input 
+                    type="text" 
+                    required 
+                    placeholder="Nomor Rekening" 
+                    value={formData.no_rekening} 
+                    onChange={(e) => setFormData(prev => ({ ...prev, no_rekening: e.target.value }))} 
+                    className="w-full px-3 py-2 border rounded-lg text-xs" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Nama Bank *</label>
+                  <input 
+                    type="text" 
+                    required 
+                    placeholder="Cth: Bank Mandiri / BSI" 
+                    value={formData.nama_bank_padanan} 
+                    onChange={(e) => setFormData(prev => ({ ...prev, nama_bank_padanan: e.target.value }))} 
+                    className="w-full px-3 py-2 border rounded-lg text-xs" 
+                  />
+                </div>
               </div>
             </div>
           </div>

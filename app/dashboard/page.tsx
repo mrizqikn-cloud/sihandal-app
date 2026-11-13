@@ -481,6 +481,7 @@ export default function UserDashboard() {
 
     setIsSubmitting(true);
     try {
+      // Payload yang disesuaikan murni dengan kolom standar yang aman
       const updatePayload: any = {
         status_tahap: 'Diproses',
         alasan_penolakan: null,
@@ -490,29 +491,6 @@ export default function UserDashboard() {
         file_tor: formData.file_tor,
         no_surat: formData.no_surat,
         tgl_surat: formData.tgl_surat,
-        no_izin_prinsip: formData.no_izin_prinsip,
-        no_surat_permohonan_ttd: formData.no_surat_permohonan_ttd,
-        no_register: formData.no_register,
-        no_surat_register: formData.no_surat_register,
-        no_surat_pengusulan_rekening: formData.no_surat_pengusulan_rekening,
-        no_surat_persetujuan_rekening: formData.no_surat_persetujuan_rekening,
-        no_rekening: formData.no_rekening,
-        nama_rekening: formData.nama_rekening,
-        bank_rekening: formData.bank_rekening,
-        nominal_revisi_dipa: formData.nominal_revisi_dipa,
-        no_surat_izin_prinsip: formData.no_surat_izin_prinsip,
-        tgl_surat_izin_prinsip: formData.tgl_surat_izin_prinsip,
-        nomor_nphd: formData.nomor_nphd,
-        tanggal_nphd: formData.tanggal_nphd,
-        surat_permohonan_register: formData.surat_permohonan_register,
-        surat_penetapan_register: formData.surat_penetapan_register,
-        nomor_register_hibah: formData.nomor_register_hibah,
-        no_surat_permohonan_rekening: formData.no_surat_permohonan_rekening,
-        no_surat_izin_penetapan_rekening: formData.no_surat_izin_penetapan_rekening,
-        nama_bank_padanan: formData.nama_bank_padanan,
-        no_surat_pencairan: formData.no_surat_pencairan,
-        nomor_sp2d: formData.nomor_sp2d,
-        no_surat_revisi_dipa: formData.no_surat_revisi_dipa
       };
 
       const { error } = await supabase.from('hibah_requests')

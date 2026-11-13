@@ -330,6 +330,13 @@ export default function UserDashboard() {
   const openActionModal = (req: any) => {
     setActiveReq(req);
     fetchChildData(req.id);
+    
+    // Helper untuk memotong format tanggal agar menjadi YYYY-MM-DD yang valid untuk input type="date"
+    const formatDateForInput = (dateStr: string) => {
+      if (!dateStr) return '';
+      return dateStr.split('T')[0];
+    };
+
     setFormData({
       nama_kegiatan: req.nama_kegiatan || '',
       tujuan_hibah: req.tujuan_hibah || '',
@@ -339,7 +346,7 @@ export default function UserDashboard() {
       file_rab: req.file_rab || '',
       file_tor: req.file_tor || '',
       no_surat: req.no_surat || '',
-      tgl_surat: req.tgl_surat || '',
+      tgl_surat: formatDateForInput(req.tgl_surat),
       no_izin_prinsip: req.no_izin_prinsip || '',
       no_surat_permohonan_ttd: req.no_surat_permohonan_ttd || '',
       no_register: req.no_register || '',
@@ -350,11 +357,10 @@ export default function UserDashboard() {
       nama_rekening: req.nama_rekening || '',
       bank_rekening: req.bank_rekening || 'mandiri',
       nominal_revisi_dipa: req.nominal_revisi_dipa || '',
-      // PERBAIKAN: Ambil data dari database agar tidak reset
       no_surat_izin_prinsip: req.no_surat_izin_prinsip || '',
-      tgl_surat_izin_prinsip: req.tgl_surat_izin_prinsip || '',
+      tgl_surat_izin_prinsip: formatDateForInput(req.tgl_surat_izin_prinsip),
       nomor_nphd: req.nomor_nphd || '',
-      tanggal_nphd: req.tanggal_nphd || '',
+      tanggal_nphd: formatDateForInput(req.tanggal_nphd),
       surat_permohonan_register: req.surat_permohonan_register || '',
       surat_penetapan_register: req.surat_penetapan_register || '',
       nomor_register_hibah: req.nomor_register_hibah || '',
